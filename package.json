@@ -1,0 +1,12 @@
+{
+  "name": "typedecs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Leon Si <leonzalion@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "immer": "^9.0.6",
+    "just-extend": "^4.2.1",
+    "nanoid": "^3.1.25"
+  }
+}
