@@ -1,8 +1,8 @@
 import type {
 	Component,
 	Entity,
+	LionecsState,
 	RegisterModuleContext,
-	TypedecsState,
 } from './types';
 
 type OptionalExtras<X extends Record<string, unknown> | undefined> =
@@ -14,7 +14,7 @@ export type ComponentStateListener<
 > = (
 	props: {
 		component: C;
-		oldState: TypedecsState;
+		oldState: LionecsState;
 		entities: Entity[];
 	} & OptionalExtras<X>
 ) => void;
@@ -25,7 +25,7 @@ export type EntityStateListener<
 > = (
 	props: {
 		entity: E;
-		oldState: TypedecsState;
+		oldState: LionecsState;
 		components: Component[];
 	} & OptionalExtras<X>
 ) => void;

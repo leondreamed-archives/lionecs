@@ -8,18 +8,18 @@ import { registerListenersModule } from './listeners';
 import type {
 	Component,
 	Entity,
+	LionecsState,
 	RegisterModuleContext,
-	TypedecsState,
 } from './types';
 
-export function createTypedecs() {
+export function createLionecs() {
 	/**
-	 * An object that represents the typedecs state.
+	 * An object that represents the lionecs state.
 	 */
-	const typedecsState = {
+	const lionecsState = {
 		components: {},
 		entities: {},
-	} as TypedecsState;
+	} as LionecsState;
 
 	/**
 	 * A map where the keys are entities and the value is an array of all the entity
@@ -40,7 +40,7 @@ export function createTypedecs() {
 	>();
 
 	const registerModuleContext: RegisterModuleContext = {
-		typedecsState,
+		lionecsState,
 		entityListenerContexts,
 		componentListenerContexts,
 		handlersModule: undefined as any,
@@ -63,7 +63,10 @@ export function createTypedecs() {
 	return {
 		...registerModuleContext.accessModule,
 		...registerModuleContext.handlersModule,
-		...registerModuleContext.componentListenerContexts,
-		state: typedecsState,
+		...registerModuleContext.listenersModule,
+		state: lionecsState,
 	};
 }
+
+export type { ComponentStateListener, EntityStateListener } from './listeners';
+export * from './types';

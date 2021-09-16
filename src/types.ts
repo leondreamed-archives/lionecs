@@ -25,7 +25,7 @@ export type TypedEntity<
 	__optionalComponents: O;
 };
 
-export type TypedecsState = {
+export type LionecsState = {
 	components: {
 		[K in Component]: EntityMap<K>;
 	};
@@ -33,7 +33,7 @@ export type TypedecsState = {
 };
 
 export type RegisterModuleContext = {
-	typedecsState: TypedecsState;
+	lionecsState: LionecsState;
 	entityListenerContexts: Map<Entity, EntityStateListenerContext<any, any>[]>;
 	componentListenerContexts: Map<
 		Component,

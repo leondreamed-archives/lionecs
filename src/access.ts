@@ -7,13 +7,13 @@ import type {
 	Component,
 	ComponentState,
 	Entity,
+	LionecsState,
 	RegisterModuleContext,
-	TypedecsState,
 	TypedEntity,
 } from './types';
 
 export function registerAccessModule({
-	typedecsState,
+	lionecsState,
 	componentListenerContexts,
 	entityListenerContexts,
 }: RegisterModuleContext) {
@@ -82,7 +82,7 @@ export function registerAccessModule({
 		stateUpdates: StateUpdate[]
 	): [StateListener, Parameters<StateListener>][] {
 		// Construct the old state object
-		const oldState = produce(typedecsState, (state) => {
+		const oldState = produce(lionecsState, (state) => {
 			for (const stateUpdate of stateUpdates) {
 				const { component, entity, type } = stateUpdate;
 				if (type === StateUpdateType.set) {
@@ -202,7 +202,7 @@ export function registerAccessModule({
 				: { optional: false }
 			: GetOptions
 	>(
-		state: TypedecsState,
+		state: LionecsState,
 		entity: E,
 		component: C,
 		options?: O
@@ -245,7 +245,7 @@ export function registerAccessModule({
 			];
 			const optional = options?.optional ?? true;
 
-			const componentState = typedecsState.components[component][entity];
+			const componentState = lionecsState.components[component][entity];
 
 			if (!optional && componentState === undefined) {
 				throw new Error(
@@ -258,7 +258,7 @@ export function registerAccessModule({
 		// get(state, entity, component, options)
 		else {
 			const [state, entity, component, options] = args as [
-				TypedecsState,
+				LionecsState,
 				Entity,
 				C,
 				GetOptions | undefined
@@ -277,7 +277,7 @@ export function registerAccessModule({
 	}
 
 	function getOpt<C extends Component>(
-		state: TypedecsState,
+		state: LionecsState,
 		entity: Entity,
 		component: C
 	): ComponentState[C] | undefined;
@@ -292,16 +292,16 @@ export function registerAccessModule({
 	): ComponentState[C] | undefined {
 		// getOpt(state, entity, component)
 		if (args.length === 3) {
-			const [state, entity, component] = args as [TypedecsState, Entity, C];
+			const [state, entity, component] = args as [LionecsState, Entity, C];
 			return state.components[component][entity] as ComponentState[C];
 		} else {
 			const [entity, component] = args as [Entity, C];
-			return typedecsState.components[component][entity] as ComponentState[C];
+			return lionecsState.components[component][entity] as ComponentState[C];
 		}
 	}
 
 	function del<C extends Component>(entity: Entity, component: C) {
-		delete typedecsState.components[component][entity];
+		delete lionecsState.components[component][entity];
 	}
 
 	function set<C extends Component>(
@@ -312,7 +312,7 @@ export function registerAccessModule({
 		const component = componentEnum as Component;
 
 		const oldComponentState = get(entity, component);
-		typedecsState.components[component][entity] = newComponentState;
+		lionecsState.components[component][entity] = newComponentState;
 
 		const stateUpdate: StateUpdate = {
 			type: StateUpdateType.set,
@@ -389,7 +389,7 @@ export function registerAccessModule({
 		const entity = createEntity() as E;
 
 		update(() => {
-			for (const componentString of Object.keys(typedecsState.components)) {
+			for (const componentString of Object.keys(lionecsState.components)) {
 				const component = componentString as Component;
 				const componentState = getOpt(entityToClone, component);
 				if (componentState !== undefined) {
