@@ -9,31 +9,33 @@ import type {
 export type MultiComponentStateChangeHandler<
 	C extends ComponentBase,
 	S extends ComponentState<C>,
+	K extends readonly ComponentKey<C>[],
 	E extends Entity,
 	R extends Record<string, unknown>
 > = {
-	oldComponentStates: ComponentStateTypes<C, S, readonly ComponentKey<C>[]>;
-	components: readonly ComponentKey<C>[];
+	oldComponentStates: ComponentStateTypes<C, S, K>;
+	components: K;
 	callback(props: {
 		entity: E;
 		extras: R;
-		oldComponentStates: ComponentStateTypes<C, S, readonly ComponentKey<C>[]>;
-		newComponentStates: ComponentStateTypes<C, S, readonly ComponentKey<C>[]>;
+		oldComponentStates: ComponentStateTypes<C, S, K>;
+		newComponentStates: ComponentStateTypes<C, S, K>;
 	}): void;
 };
 
 export type SingleComponentStateChangeHandler<
 	C extends ComponentBase,
 	S extends ComponentState<C>,
+	K extends ComponentKey<C>,
 	E extends Entity,
 	R extends Record<string, unknown>
 > = {
-	oldComponentState: S[ComponentKey<C>] | undefined;
-	component: ComponentKey<C>;
+	oldComponentState: S[K] | undefined;
+	component: K;
 	callback(props: {
 		entity: E;
 		extras: R;
-		oldComponentState: S[ComponentKey<C>] | undefined;
-		newComponentState: S[ComponentKey<C>] | undefined;
+		oldComponentState: S[K] | undefined;
+		newComponentState: S[K] | undefined;
 	}): void;
 };

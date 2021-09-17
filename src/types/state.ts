@@ -10,7 +10,10 @@ export type LionecsState<
 	entities: Record<string, Entity[]>;
 };
 
-export type ComponentBase = Record<string, string>;
+export type ComponentBase = {
+	[id: string]: string;
+	[nu: number]: string;
+}
 
 export type ComponentContext<
 	Component extends ComponentBase,

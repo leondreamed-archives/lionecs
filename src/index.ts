@@ -28,12 +28,17 @@ type CreateLionecsProps<C extends ComponentBase> = {
 export function createLionecs<
 	C extends ComponentBase,
 	S extends ComponentState<C>
->({ components: _components }: CreateLionecsProps<C>) {
+>({ components: componentsList }: CreateLionecsProps<C>) {
 	/**
 	 * An object that represents the lionecs state.
 	 */
+	const components = {} as Record<string, EntityMap<C, S, ComponentKey<C>>>;
+	for (const component of Object.keys(componentsList)) {
+		components[component] = {};
+	}
+
 	const lionecsState = {
-		components: {},
+		components,
 		entities: {},
 	} as LionecsState<C, S>;
 
@@ -453,8 +458,8 @@ export function createLionecs<
 		R extends Record<string, unknown> = Record<never, never>
 	>() {
 		const handlers: (
-			| SingleComponentStateChangeHandler<C, S, E, R>
-			| MultiComponentStateChangeHandler<C, S, E, R>
+			| SingleComponentStateChangeHandler<C, S, ComponentKey<C>, E, R>
+			| MultiComponentStateChangeHandler<C, S, readonly ComponentKey<C>[], E, R>
 		)[] = [];
 
 		type ExecuteHandlerProps = {
@@ -532,7 +537,7 @@ export function createLionecs<
 
 		function createMultiComponentHandler<K extends readonly ComponentKey<C>[]>(
 			components: K,
-			callback: MultiComponentStateChangeHandler<C, S, E, R>['callback']
+			callback: MultiComponentStateChangeHandler<C, S, K, E, R>['callback']
 		) {
 			handlers.push({
 				components,
@@ -543,7 +548,7 @@ export function createLionecs<
 
 		function createSingleComponentHandler<K extends ComponentKey<C>>(
 			component: K,
-			callback: SingleComponentStateChangeHandler<C, S, E, R>['callback']
+			callback: SingleComponentStateChangeHandler<C, S, K, E, R>['callback']
 		) {
 			handlers.push({
 				component,
@@ -557,162 +562,174 @@ export function createLionecs<
 		>(
 			componentOrComponents: K,
 			callback: K extends ComponentKey<C>
-				? SingleComponentStateChangeHandler<C, S, E, R>['callback']
-				: C extends readonly ComponentKey<C>[]
-				? MultiComponentStateChangeHandler<C, S, E, R>['callback']
+				? SingleComponentStateChangeHandler<C, S, K, E, R>['callback']
+				: K extends readonly ComponentKey<C>[]
+				? MultiComponentStateChangeHandler<C, S, K, E, R>['callback']
 				: never
 		) {
 			if (typeof componentOrComponents === 'string') {
 				createSingleComponentHandler(
 					componentOrComponents,
-					callback as SingleComponentStateChangeHandler<C, S, E, R>['callback']
+					callback as SingleComponentStateChangeHandler<
+						C,
+						S,
+						ComponentKey<C>,
+						E,
+						R
+					>['callback']
 				);
 			} else {
 				createMultiComponentHandler(
 					componentOrComponents as readonly ComponentKey<C>[],
-					callback as MultiComponentStateChangeHandler<C, S, E, R>['callback']
+					callback as MultiComponentStateChangeHandler<
+						C,
+						S,
+						ComponentKey<C>[],
+						E,
+						R
+					>['callback']
 				);
 			}
-		}
-
-		function addEntityStateListener<
-			E extends Entity,
-			R extends Record<string, unknown> | undefined = undefined
-		>({
-			entity,
-			listener,
-			extras,
-		}: {
-			entity: E;
-			listener: EntityStateListener<E, C, S, R>;
-			extras?: R;
-		}) {
-			if (!entityListenerContexts.has(entity)) {
-				entityListenerContexts.set(entity, []);
-			}
-
-			entityListenerContexts.get(entity)!.push({
-				listener: listener as any,
-				extras,
-			});
-		}
-
-		function addComponentStateListener<
-			K extends ComponentKey<C>,
-			R extends Record<string, unknown> | undefined = undefined
-		>({
-			component,
-			listener,
-			extras,
-		}: {
-			component: K;
-			listener: ComponentStateListener<C, S, K, R>;
-			extras?: R;
-		}) {
-			if (!componentListenerContexts.has(component)) {
-				componentListenerContexts.set(component, []);
-			}
-
-			componentListenerContexts.get(component)!.push({
-				listener: listener as any,
-				extras,
-			});
-		}
-
-		function removeEntityStateListener<
-			E extends Entity,
-			R extends Record<string, unknown> | undefined = undefined
-		>({
-			entity,
-			listener,
-		}: {
-			entity: Entity;
-			listener: EntityStateListener<E, C, S, R>;
-		}) {
-			const index =
-				entityListenerContexts
-					.get(entity)
-					?.findIndex((e) => e.listener === listener) ?? -1;
-
-			if (index !== -1) {
-				entityListenerContexts.get(entity)!.splice(index, 1);
-			}
-		}
-
-		function removeComponentStateListener<
-			K extends ComponentKey<C>,
-			R extends Record<string, unknown> | undefined = undefined
-		>({
-			component,
-			listener,
-		}: {
-			component: K;
-			listener: ComponentStateListener<C, S, K, R>;
-		}) {
-			const index =
-				componentListenerContexts
-					.get(component)
-					?.findIndex((e) => e.listener === listener) ?? -1;
-
-			if (index !== -1) {
-				componentListenerContexts.get(component)!.splice(index, 1);
-			}
-		}
-
-		function createEntityStateListenerManager<
-			E extends Entity,
-			R extends Record<string, unknown> | undefined = undefined
-		>(listener: EntityStateListener<E, C, S, R>) {
-			const listeners = new Map<Entity, EntityStateListener<E, C, S, R>>();
-
-			function registerEntityStateListener(entity: E, extras?: R) {
-				if (!listeners.has(entity)) {
-					addEntityStateListener({ entity, listener, extras });
-					listeners.set(entity, listener);
-				}
-			}
-
-			function deleteEntityStateListener(entity: E) {
-				removeEntityStateListener({ entity, listener });
-				listeners.delete(entity);
-			}
-
-			return { registerEntityStateListener, deleteEntityStateListener };
-		}
-
-		function createComponentStateListenerManager<
-			K extends ComponentKey<C>,
-			R extends Record<string, unknown> | undefined = undefined
-		>(listener: ComponentStateListener<C, S, K, R>) {
-			const listeners = new Map<
-				ComponentKey<C>,
-				ComponentStateListener<C, S, K, R>
-			>();
-
-			function registerComponentStateListener(component: K) {
-				if (!listeners.has(component)) {
-					addComponentStateListener({ component, listener });
-					listeners.set(component, listener);
-				}
-			}
-
-			function deleteComponentStateListener(component: K) {
-				removeComponentStateListener({ component, listener });
-				listeners.delete(component);
-			}
-
-			return { registerComponentStateListener, deleteComponentStateListener };
 		}
 
 		return {
 			executeHandlers,
 			createHandler,
-			createComponentStateListenerManager,
-			createEntityStateListenerManager,
 		};
 	}
 
+	function addEntityStateListener<
+		E extends Entity,
+		R extends Record<string, unknown> | undefined = undefined
+	>({
+		entity,
+		listener,
+		extras,
+	}: {
+		entity: E;
+		listener: EntityStateListener<E, C, S, R>;
+		extras?: R;
+	}) {
+		if (!entityListenerContexts.has(entity)) {
+			entityListenerContexts.set(entity, []);
+		}
+
+		entityListenerContexts.get(entity)!.push({
+			listener: listener as any,
+			extras,
+		});
+	}
+
+	function removeComponentStateListener<
+		K extends ComponentKey<C>,
+		R extends Record<string, unknown> | undefined = undefined
+	>({
+		component,
+		listener,
+	}: {
+		component: K;
+		listener: ComponentStateListener<C, S, K, R>;
+	}) {
+		const index =
+			componentListenerContexts
+				.get(component)
+				?.findIndex((e) => e.listener === listener) ?? -1;
+
+		if (index !== -1) {
+			componentListenerContexts.get(component)!.splice(index, 1);
+		}
+	}
+
+	function createEntityStateListenerManager<
+		E extends Entity,
+		R extends Record<string, unknown> | undefined = undefined
+	>(listener: EntityStateListener<E, C, S, R>) {
+		const listeners = new Map<Entity, EntityStateListener<E, C, S, R>>();
+
+		function registerEntityStateListener(entity: E, extras?: R) {
+			if (!listeners.has(entity)) {
+				addEntityStateListener({ entity, listener, extras });
+				listeners.set(entity, listener);
+			}
+		}
+
+		function deleteEntityStateListener(entity: E) {
+			removeEntityStateListener({ entity, listener });
+			listeners.delete(entity);
+		}
+
+		return { registerEntityStateListener, deleteEntityStateListener };
+	}
+
+	function addComponentStateListener<
+		K extends ComponentKey<C>,
+		R extends Record<string, unknown> | undefined = undefined
+	>({
+		component,
+		listener,
+		extras,
+	}: {
+		component: K;
+		listener: ComponentStateListener<C, S, K, R>;
+		extras?: R;
+	}) {
+		if (!componentListenerContexts.has(component)) {
+			componentListenerContexts.set(component, []);
+		}
+
+		componentListenerContexts.get(component)!.push({
+			listener: listener as any,
+			extras,
+		});
+	}
+
+	function removeEntityStateListener<
+		E extends Entity,
+		R extends Record<string, unknown> | undefined = undefined
+	>({
+		entity,
+		listener,
+	}: {
+		entity: Entity;
+		listener: EntityStateListener<E, C, S, R>;
+	}) {
+		const index =
+			entityListenerContexts
+				.get(entity)
+				?.findIndex((e) => e.listener === listener) ?? -1;
+
+		if (index !== -1) {
+			entityListenerContexts.get(entity)!.splice(index, 1);
+		}
+	}
+
+	function createComponentStateListenerManager<
+		K extends ComponentKey<C>,
+		R extends Record<string, unknown> | undefined = undefined
+	>(listener: ComponentStateListener<C, S, K, R>) {
+		const listeners = new Map<
+			ComponentKey<C>,
+			ComponentStateListener<C, S, K, R>
+		>();
+
+		function registerComponentStateListener(component: K) {
+			if (!listeners.has(component)) {
+				addComponentStateListener({ component, listener });
+				listeners.set(component, listener);
+			}
+		}
+
+		function deleteComponentStateListener(component: K) {
+			removeComponentStateListener({ component, listener });
+			listeners.delete(component);
+		}
+
+		return { registerComponentStateListener, deleteComponentStateListener };
+	}
+
 	return {
+		state: lionecsState,
+
 		get,
 		getOpt,
 		set,
@@ -724,5 +741,15 @@ export function createLionecs<
 		cloneEntity,
 
 		createHandlerManager,
+
+		createComponentStateListenerManager,
+		createEntityStateListenerManager,
+		addComponentStateListener,
+		removeComponentStateListener,
 	};
 }
+
+export * from './types/context';
+export * from './types/entity';
+export * from './types/handlers';
+export * from './types/state';
