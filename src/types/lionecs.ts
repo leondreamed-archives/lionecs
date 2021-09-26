@@ -1,3 +1,4 @@
+import { LionecsState } from "..";
 import type * as lionecsMethods from "../methods";
 import {
 	ComponentStateListenerContext,
@@ -16,18 +17,13 @@ type LionecsMethods = typeof lionecsMethods;
 
 export type Lionecs<
 	C extends ComponentBase,
-	S extends ComponentState<C>
+	S extends ComponentState<C>,
+	X extends Record<string, unknown> = Record<string, unknown>
 > = LionecsMethods & {
 	/**
 	 * An object that represents the lionecs state.
 	 */
-	state: {
-		components: {
-			[K in ComponentKey<C>]: EntityMap<C, S, K>;
-		};
-		entities: Record<string, Entity[]>;
-	};
-
+	state: LionecsState<C, S, X>;
 	/**
 	 * A map where the keys are entities and the value is an array of all the entity
 	 * listener contexts.

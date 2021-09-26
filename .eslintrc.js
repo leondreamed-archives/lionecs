@@ -10,6 +10,13 @@ module.exports = {
 		"prettier",
 	],
 	plugins: ["@typescript-eslint", "simple-import-sort", "import", "unicorn"],
+	parserOptions: {
+		parser: '@typescript-eslint/parser',
+		project: ['./tsconfig.eslint.json'],
+		tsconfigRootDir: __dirname,
+		ecmaVersion: 2018,
+		sourceType: 'module',
+	},
 	rules: {
 		// eslint rules
 		"no-unused-vars": "off",

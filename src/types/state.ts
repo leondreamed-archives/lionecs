@@ -2,13 +2,13 @@ import type { Entity, EntityMap } from "./entity";
 
 export type LionecsState<
 	C extends ComponentBase,
-	S extends ComponentState<C>
+	S extends ComponentState<C>,
+	X extends Record<string, unknown> = Record<string, unknown>
 > = {
 	components: {
 		[K in ComponentKey<C>]: EntityMap<C, S, K>;
 	};
-	entities: Record<string, Entity[]>;
-};
+} & X;
 
 export type ComponentBase = {
 	[id: string]: string;
