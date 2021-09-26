@@ -1,4 +1,4 @@
-import * as lionecsMethods from './methods';
+import * as lionecsMethods from './modules';
 import type { EntityMap } from './types/entity';
 import type { Lionecs } from './types/lionecs';
 import type {

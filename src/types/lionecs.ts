@@ -1,5 +1,7 @@
+import type { UnionToIntersection } from 'utility-types';
+
 import type { LionecsState } from '..';
-import type * as lionecsMethods from '../methods';
+import { entityModule } from '../modules';
 import type {
 	ComponentStateListenerContext,
 	EntityStateListenerContext,
@@ -13,7 +15,10 @@ import type {
 	StateUpdate,
 } from './state';
 
-type LionecsMethods = typeof lionecsMethods;
+const _modules = { entityModule };
+
+type M = typeof _modules;
+export type LionecsMethods = UnionToIntersection<ReturnType<M[keyof M]>>;
 
 export type Lionecs<
 	C extends ComponentBase,
