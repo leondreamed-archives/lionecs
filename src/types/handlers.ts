@@ -1,10 +1,10 @@
-import type { Entity } from "./entity";
+import type { Entity } from './entity';
 import type {
 	ComponentBase,
 	ComponentKey,
 	ComponentState,
 	ComponentStateTypes,
-} from "./state";
+} from './state';
 
 export type MultiComponentStateChangeHandler<
 	C extends ComponentBase,

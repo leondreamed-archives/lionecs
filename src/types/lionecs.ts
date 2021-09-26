@@ -1,17 +1,17 @@
-import { LionecsState } from "..";
-import type * as lionecsMethods from "../methods";
-import {
+import type { LionecsState } from '..';
+import type * as lionecsMethods from '../methods';
+import type {
 	ComponentStateListenerContext,
 	EntityStateListenerContext,
 	StateListener,
-} from "./context";
-import { Entity, EntityMap } from "./entity";
-import {
+} from './context';
+import type { Entity } from './entity';
+import type {
 	ComponentBase,
 	ComponentKey,
 	ComponentState,
 	StateUpdate,
-} from "./state";
+} from './state';
 
 type LionecsMethods = typeof lionecsMethods;
 

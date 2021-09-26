@@ -1,14 +1,15 @@
-import { produce } from "immer";
-import extend from "just-extend";
-import { Entity } from "~/types/entity";
-import { Lionecs } from "~/types/lionecs";
-import {
+import { produce } from 'immer';
+import extend from 'just-extend';
+
+import type { Entity } from '~/types/entity';
+import type { Lionecs } from '~/types/lionecs';
+import type {
 	ComponentBase,
 	ComponentKey,
 	ComponentState,
 	StateUpdate,
-	StateUpdateType,
-} from "~/types/state";
+} from '~/types/state';
+import { StateUpdateType } from '~/types/state';
 
 /**
  * Batch update the state and trigger listeners only when the callback has finished

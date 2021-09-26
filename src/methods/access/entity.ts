@@ -1,7 +1,12 @@
-import { nanoid } from "nanoid";
-import { Entity, EntityMap, TypedEntity } from "~/types/entity";
-import { Lionecs } from "~/types/lionecs";
-import { ComponentBase, ComponentKey, ComponentState } from "~/types/state";
+import { nanoid } from 'nanoid';
+
+import type { Entity, EntityMap, TypedEntity } from '~/types/entity';
+import type { Lionecs } from '~/types/lionecs';
+import type {
+	ComponentBase,
+	ComponentKey,
+	ComponentState,
+} from '~/types/state';
 
 export function getEntityMap<
 	C extends ComponentBase,

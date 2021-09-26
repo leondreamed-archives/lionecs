@@ -1,11 +1,11 @@
-import { Entity, TypedEntity } from "~/types/entity";
-import { Lionecs } from "~/types/lionecs";
-import {
+import type { Entity, TypedEntity } from '~/types/entity';
+import type { Lionecs } from '~/types/lionecs';
+import type {
 	ComponentBase,
 	ComponentKey,
 	ComponentState,
 	LionecsState,
-} from "~/types/state";
+} from '~/types/state';
 
 type GetOptions = {
 	optional?: boolean;
@@ -18,11 +18,11 @@ export function get<
 	E extends Entity,
 	K extends E extends TypedEntity<infer Req, infer Opt>
 		?
-				| TypedEntity<Req, Opt>["__requiredComponents"]
-				| TypedEntity<Req, Opt>["__optionalComponents"]
+				| TypedEntity<Req, Opt>['__requiredComponents']
+				| TypedEntity<Req, Opt>['__optionalComponents']
 		: ComponentKey<C>,
 	O extends E extends TypedEntity<infer Req, infer Opt>
-		? C extends TypedEntity<Req, Opt>["__optionalComponents"]
+		? C extends TypedEntity<Req, Opt>['__optionalComponents']
 			? { optional: true }
 			: { optional: false }
 		: GetOptions
@@ -32,7 +32,7 @@ export function get<
 	component: K,
 	options?: O
 ): O extends GetOptions
-	? O["optional"] extends true
+	? O['optional'] extends true
 		? S[K] | undefined
 		: S[K]
 	: S[K] | undefined;
@@ -44,11 +44,11 @@ export function get<
 	E extends Entity,
 	K extends E extends TypedEntity<infer Req, infer Opt>
 		?
-				| TypedEntity<Req, Opt>["__requiredComponents"]
-				| TypedEntity<Req, Opt>["__optionalComponents"]
+				| TypedEntity<Req, Opt>['__requiredComponents']
+				| TypedEntity<Req, Opt>['__optionalComponents']
 		: ComponentKey<C>,
 	O extends E extends TypedEntity<infer Req, infer Opt>
-		? C extends TypedEntity<Req, Opt>["__optionalComponents"]
+		? C extends TypedEntity<Req, Opt>['__optionalComponents']
 			? { optional: true }
 			: { optional: false }
 		: GetOptions
@@ -57,7 +57,7 @@ export function get<
 	component: K,
 	options?: O
 ): O extends GetOptions
-	? O["optional"] extends true
+	? O['optional'] extends true
 		? S[K] | undefined
 		: S[K]
 	: S[K] | undefined;
@@ -68,7 +68,7 @@ export function get<
 	K extends ComponentKey<C>
 >(this: Lionecs<C, S>, ...args: unknown[]): S[K] {
 	// get(entity, component, options)
-	if (typeof args[0] === "string") {
+	if (typeof args[0] === 'string') {
 		const [entity, component, options] = args as [
 			Entity,
 			K,

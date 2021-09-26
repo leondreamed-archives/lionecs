@@ -1,1 +1,1 @@
-export * from "./create-handler-manager";
+export * from './create-handler-manager';

@@ -1,6 +1,10 @@
-import { ComponentStateListener } from "~/types/context";
-import { Lionecs } from "~/types/lionecs";
-import { ComponentBase, ComponentKey, ComponentState } from "~/types/state";
+import type { ComponentStateListener } from '~/types/context';
+import type { Lionecs } from '~/types/lionecs';
+import type {
+	ComponentBase,
+	ComponentKey,
+	ComponentState,
+} from '~/types/state';
 
 export function removeComponentStateListener<
 	C extends ComponentBase,

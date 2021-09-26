@@ -1,7 +1,7 @@
-import { EntityStateListener } from "~/types/context";
-import { Entity } from "~/types/entity";
-import { Lionecs } from "~/types/lionecs";
-import { ComponentBase, ComponentState } from "~/types/state";
+import type { EntityStateListener } from '~/types/context';
+import type { Entity } from '~/types/entity';
+import type { Lionecs } from '~/types/lionecs';
+import type { ComponentBase, ComponentState } from '~/types/state';
 
 export function addEntityStateListener<
 	C extends ComponentBase,

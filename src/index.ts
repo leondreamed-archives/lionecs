@@ -1,12 +1,12 @@
-import type { EntityMap } from "./types/entity";
-import { Lionecs } from "./types/lionecs";
+import * as lionecsMethods from './methods';
+import type { EntityMap } from './types/entity';
+import type { Lionecs } from './types/lionecs';
 import type {
 	ComponentBase,
 	ComponentKey,
 	ComponentState,
 	LionecsState,
-} from "./types/state";
-import * as lionecsMethods from "./methods";
+} from './types/state';
 
 type CreateLionecsProps<C extends ComponentBase> = {
 	components: C[];
@@ -41,13 +41,13 @@ export type {
 	EntityStateListener,
 	EntityStateListenerContext,
 	StateListener,
-} from "./types/context";
-export type { Entity, EntityMap, TypedEntity } from "./types/entity";
+} from './types/context';
+export type { Entity, EntityMap, TypedEntity } from './types/entity';
 export type {
 	MultiComponentStateChangeHandler,
 	SingleComponentStateChangeHandler,
-} from "./types/handlers";
-export type { Lionecs } from "./types/lionecs";
+} from './types/handlers';
+export type { Lionecs } from './types/lionecs';
 export type {
 	ComponentBase,
 	ComponentContext,
@@ -56,4 +56,4 @@ export type {
 	LionecsState,
 	StateUpdate,
 	StateUpdateType,
-} from "./types/state";
+} from './types/state';

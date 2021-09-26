@@ -1,10 +1,10 @@
-import type { Entity } from "./entity";
+import type { Entity } from './entity';
 import type {
 	ComponentBase,
 	ComponentKey,
 	ComponentState,
 	LionecsState,
-} from "./state";
+} from './state';
 
 type OptionalExtras<R extends Record<string, unknown> | undefined> =
 	R extends Record<string, unknown> ? { extras: R } : { extras?: R };

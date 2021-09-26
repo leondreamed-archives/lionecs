@@ -1,10 +1,14 @@
-import { Entity } from "~/types/entity";
-import {
+import type { Entity } from '~/types/entity';
+import type {
 	MultiComponentStateChangeHandler,
 	SingleComponentStateChangeHandler,
-} from "~/types/handlers";
-import { Lionecs } from "~/types/lionecs";
-import { ComponentBase, ComponentKey, ComponentState } from "~/types/state";
+} from '~/types/handlers';
+import type { Lionecs } from '~/types/lionecs';
+import type {
+	ComponentBase,
+	ComponentKey,
+	ComponentState,
+} from '~/types/state';
 
 /**
  * Handlers should be responsible for applying changes to the ECS data to the DOM.
@@ -42,7 +46,7 @@ export function createHandlerManager<
 		for (const handler of handlers) {
 			let didComponentsChange = false;
 
-			const isMultiComponentHandler = "components" in handler;
+			const isMultiComponentHandler = 'components' in handler;
 			const handlerComponents = isMultiComponentHandler
 				? handler.components
 				: [handler.component];
@@ -103,7 +107,7 @@ export function createHandlerManager<
 
 	const createMultiComponentHandler = <K extends readonly ComponentKey<C>[]>(
 		components: K,
-		callback: MultiComponentStateChangeHandler<C, S, K, E, R>["callback"]
+		callback: MultiComponentStateChangeHandler<C, S, K, E, R>['callback']
 	) => {
 		handlers.push({
 			components,
@@ -114,7 +118,7 @@ export function createHandlerManager<
 
 	const createSingleComponentHandler = <K extends ComponentKey<C>>(
 		component: K,
-		callback: SingleComponentStateChangeHandler<C, S, K, E, R>["callback"]
+		callback: SingleComponentStateChangeHandler<C, S, K, E, R>['callback']
 	) => {
 		handlers.push({
 			component,
@@ -128,12 +132,12 @@ export function createHandlerManager<
 	>(
 		componentOrComponents: K,
 		callback: K extends ComponentKey<C>
-			? SingleComponentStateChangeHandler<C, S, K, E, R>["callback"]
+			? SingleComponentStateChangeHandler<C, S, K, E, R>['callback']
 			: K extends readonly ComponentKey<C>[]
-			? MultiComponentStateChangeHandler<C, S, K, E, R>["callback"]
+			? MultiComponentStateChangeHandler<C, S, K, E, R>['callback']
 			: never
 	) => {
-		if (typeof componentOrComponents === "string") {
+		if (typeof componentOrComponents === 'string') {
 			createSingleComponentHandler(
 				componentOrComponents,
 				callback as SingleComponentStateChangeHandler<
@@ -142,7 +146,7 @@ export function createHandlerManager<
 					ComponentKey<C>,
 					E,
 					R
-				>["callback"]
+				>['callback']
 			);
 		} else {
 			createMultiComponentHandler(
@@ -153,7 +157,7 @@ export function createHandlerManager<
 					ComponentKey<C>[],
 					E,
 					R
-				>["callback"]
+				>['callback']
 			);
 		}
 	};

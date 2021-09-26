@@ -1,4 +1,4 @@
-import type { ComponentBase, ComponentKey, ComponentState } from "./state";
+import type { ComponentBase, ComponentKey, ComponentState } from './state';
 
 export type Entity = string;
 

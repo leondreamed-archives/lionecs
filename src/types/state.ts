@@ -1,4 +1,4 @@
-import type { Entity, EntityMap } from "./entity";
+import type { Entity, EntityMap } from './entity';
 
 export type LionecsState<
 	C extends ComponentBase,
@@ -39,11 +39,11 @@ export type ComponentStateTypes<
 	Tuple extends readonly [...any[]]
 > = {
 	[Index in keyof Tuple]: ComponentStateType<C, S, Tuple[Index]> | undefined;
-} & { length: Tuple["length"] };
+} & { length: Tuple['length'] };
 
 export enum StateUpdateType {
-	set = "set",
-	del = "del",
+	set = 'set',
+	del = 'del',
 }
 
 export type StateUpdate<

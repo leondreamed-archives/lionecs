@@ -1,18 +1,19 @@
-import { produce } from "immer";
-import {
+import { produce } from 'immer';
+
+import type {
 	ComponentStateListener,
 	EntityStateListener,
 	StateListener,
-} from "~/types/context";
-import { Entity, EntityMap } from "~/types/entity";
-import { Lionecs } from "~/types/lionecs";
-import {
+} from '~/types/context';
+import type { Entity, EntityMap } from '~/types/entity';
+import type { Lionecs } from '~/types/lionecs';
+import type {
 	ComponentBase,
 	ComponentKey,
 	ComponentState,
 	StateUpdate,
-	StateUpdateType,
-} from "~/types/state";
+} from '~/types/state';
+import { StateUpdateType } from '~/types/state';
 
 export function retrieveStateListeners<
 	C extends ComponentBase,

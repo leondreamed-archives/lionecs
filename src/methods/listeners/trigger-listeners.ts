@@ -1,10 +1,10 @@
-import { Lionecs } from "~/types/lionecs";
-import {
+import type { Lionecs } from '~/types/lionecs';
+import type {
 	ComponentBase,
 	ComponentKey,
 	ComponentState,
 	StateUpdate,
-} from "~/types/state";
+} from '~/types/state';
 
 export function triggerListeners<
 	C extends ComponentBase,
