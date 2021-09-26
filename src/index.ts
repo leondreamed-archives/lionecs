@@ -4,6 +4,7 @@ import type {
 	ComponentBase,
 	ComponentKey,
 	ComponentState,
+	LionecsState,
 } from "./types/state";
 import * as lionecsMethods from "./methods";
 
@@ -12,28 +13,25 @@ type CreateLionecsProps<C extends ComponentBase> = {
 };
 export function createLionecs<
 	C extends ComponentBase,
-	S extends ComponentState<C>
+	S extends ComponentState<C>,
+	X extends Record<string, unknown> = Record<string, unknown>
 >({ components: componentsList }: CreateLionecsProps<C>) {
 	const components = {} as Record<string, EntityMap<C, S, ComponentKey<C>>>;
 	for (const component of Object.keys(componentsList)) {
 		components[component] = {};
 	}
 
-	const lionecs: Lionecs<C, S> = Object.create({
+	const lionecs: Lionecs<C, S, X> = {
 		...lionecsMethods,
-		state: {
-			components: components as Lionecs<C, S>["state"]["components"],
-			entities: {},
-		},
+		state: { components } as LionecsState<C, S, X>,
 		entityListenerContexts: new Map(),
 		componentListenerContexts: new Map(),
 		activeUpdateCallCount: 0,
 		activeUpdates: [],
 		untriggeredListeners: new Map(),
 		areListenersBeingTriggered: false,
-	});
+	};
 
-	/* Handlers */
 	return lionecs;
 }
 
