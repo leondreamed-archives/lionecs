@@ -19,7 +19,7 @@ export function entityModule<
 	>
 		? { [K in Req]: S[K] } & (Opt extends ComponentKey<C>
 				? { [K in Opt]: S[K] }
-				: Record<string, never>)
+				: Record<string, unknown>)
 		: { [K in ComponentKey<C>]?: S[K] };
 
 	type CreateEntityProps<E extends Entity> = {
