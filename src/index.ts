@@ -1,6 +1,7 @@
-import * as lionecsMethods from './modules';
+import * as lionecsModules from './modules';
 import type { EntityMap } from './types/entity';
 import type { Lionecs } from './types/lionecs';
+import type { LionecsMethods } from './types/modules';
 import type {
 	ComponentBase,
 	ComponentKey,
@@ -21,7 +22,15 @@ export function createLionecs<
 		components[component] = {};
 	}
 
-	const lionecs: Lionecs<C, S, X> = {
+	const lionecsModulesObj = { ...lionecsModules };
+	const lionecsMethods = {} as LionecsMethods<C, S>;
+	for (const module of Object.values(lionecsModulesObj)) {
+		for (const [fn, value] of Object.entries(module())) {
+			lionecsMethods[fn as keyof LionecsMethods<C, S>] = value;
+		}
+	}
+
+	const lionecs: Lionecs<C, S> = {
 		...lionecsMethods,
 		state: { components } as LionecsState<C, S, X>,
 		entityListenerContexts: new Map(),

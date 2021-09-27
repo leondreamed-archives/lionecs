@@ -52,11 +52,10 @@ export function entityModule<
 		return this.state.components[componentKey];
 	}
 
-	function cloneEntity<
-		C extends ComponentBase,
-		S extends ComponentState<C>,
-		E extends Entity
-	>(this: Lionecs<C, S>, entityToClone: E): E {
+	function cloneEntity<E extends Entity>(
+		this: Lionecs<C, S>,
+		entityToClone: E
+	): E {
 		const entity = this.createEntity() as E;
 
 		this.update(() => {

@@ -1,3 +1,3 @@
-export { entityModule } from './entity';
-export { getModule } from './get';
-export { mutationsModule } from './mutations';
+export * from './entity';
+export * from './get';
+export * from './mutations';

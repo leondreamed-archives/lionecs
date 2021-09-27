@@ -1,34 +1,24 @@
-import type { UnionToIntersection } from 'utility-types';
-
-import type { LionecsState } from '..';
-import { entityModule } from '../modules';
 import type {
 	ComponentStateListenerContext,
 	EntityStateListenerContext,
 	StateListener,
 } from './context';
 import type { Entity } from './entity';
+import type { LionecsMethods } from './modules';
 import type {
 	ComponentBase,
 	ComponentKey,
 	ComponentState,
+	LionecsState,
 	StateUpdate,
 } from './state';
 
-const _modules = { entityModule };
-
-type M = typeof _modules;
-export type LionecsMethods = UnionToIntersection<ReturnType<M[keyof M]>>;
-
-export type Lionecs<
-	C extends ComponentBase,
-	S extends ComponentState<C>,
-	X extends Record<string, unknown> = Record<string, unknown>
-> = LionecsMethods & {
+export interface Lionecs<C extends ComponentBase, S extends ComponentState<C>>
+	extends LionecsMethods<C, S> {
 	/**
 	 * An object that represents the lionecs state.
 	 */
-	state: LionecsState<C, S, X>;
+	state: LionecsState<C, S>;
 	/**
 	 * A map where the keys are entities and the value is an array of all the entity
 	 * listener contexts.
@@ -81,4 +71,4 @@ export type Lionecs<
 		StateListener<C, S>,
 		Parameters<StateListener<C, S>>
 	>;
-};
+}

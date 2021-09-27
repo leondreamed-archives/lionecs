@@ -1,1 +1,1 @@
-export { handlerManagerModule } from './handler-manager';
+export * from './handler-manager';

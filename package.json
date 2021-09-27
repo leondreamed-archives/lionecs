@@ -11,6 +11,7 @@
 	"scripts": {
 		"build": "rimraf dist && tsc && tsc-alias -p tsconfig.json",
 		"lint": "eslint --fix src",
+		"tc": "tsc --noEmit",
 		"prettier": "prettier --write src",
 		"prepublish": "yarn build"
 	},

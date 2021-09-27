@@ -6,13 +6,6 @@ import type {
 	StateUpdate,
 } from '~/types/state';
 
-export type TriggerListenersModule<
-	C extends ComponentBase,
-	S extends ComponentState<C>
-> = ThisType<Lionecs<C, S>> & {
-	triggerListeners(stateUpdates: StateUpdate<C, S, ComponentKey<C>>[]): void;
-};
-
 export function triggerListenersModule<
 	C extends ComponentBase,
 	S extends ComponentState<C>
