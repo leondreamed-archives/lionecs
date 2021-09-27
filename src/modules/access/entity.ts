@@ -29,8 +29,8 @@ export function entityModule<
 	function createEntity<E extends Entity>(
 		this: Lionecs<C, S>,
 		props?: CreateEntityProps<E>
-	): Entity {
-		const entity = nanoid();
+	): E {
+		const entity = nanoid() as E;
 
 		if (props !== undefined) {
 			this.update(() => {
@@ -56,7 +56,7 @@ export function entityModule<
 		this: Lionecs<C, S>,
 		entityToClone: E
 	): E {
-		const entity = this.createEntity() as E;
+		const entity = this.createEntity<E>();
 
 		this.update(() => {
 			for (const componentString of Object.keys(this.state.components)) {
