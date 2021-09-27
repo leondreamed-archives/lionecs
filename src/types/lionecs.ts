@@ -4,7 +4,7 @@ import type {
 	StateListener,
 } from './context';
 import type { Entity } from './entity';
-import type { LionecsMethods } from './modules';
+import type { LionecsMethods } from './methods';
 import type {
 	ComponentBase,
 	ComponentKey,

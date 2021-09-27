@@ -1,7 +1,7 @@
 import * as lionecsModules from './modules';
 import type { EntityMap } from './types/entity';
 import type { Lionecs } from './types/lionecs';
-import type { LionecsMethods } from './types/modules';
+import type { LionecsMethods } from './types/methods';
 import type {
 	ComponentBase,
 	ComponentKey,
