@@ -13,7 +13,7 @@
 		"lint": "eslint --fix src",
 		"tc": "tsc --noEmit",
 		"prettier": "prettier --write src",
-		"prepublish": "yarn build"
+		"prepublish": "pnpm build"
 	},
 	"dependencies": {
 		"immer": "^9.0.6",
