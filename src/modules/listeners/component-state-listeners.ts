@@ -34,8 +34,6 @@ export function componentStateListenersModule<
 	}
 
 	function addComponentStateListener<
-		C extends ComponentBase,
-		S extends ComponentState<C>,
 		K extends ComponentKey<C>,
 		R extends Record<string, unknown> | undefined = undefined
 	>(
@@ -61,8 +59,6 @@ export function componentStateListenersModule<
 	}
 
 	function createComponentStateListenerManager<
-		C extends ComponentBase,
-		S extends ComponentState<C>,
 		K extends ComponentKey<C>,
 		R extends Record<string, unknown> | undefined = undefined
 	>(this: Lionecs<C, S>, listener: ComponentStateListener<C, S, K, R>) {

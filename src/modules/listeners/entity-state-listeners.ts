@@ -33,8 +33,6 @@ export function entityStateListenersModule<
 	}
 
 	function createEntityStateListenerManager<
-		C extends ComponentBase,
-		S extends ComponentState<C>,
 		E extends Entity,
 		R extends Record<string, unknown> | undefined = undefined
 	>(this: Lionecs<C, S>, listener: EntityStateListener<E, C, S, R>) {
@@ -56,8 +54,6 @@ export function entityStateListenersModule<
 	}
 
 	function removeEntityStateListener<
-		C extends ComponentBase,
-		S extends ComponentState<C>,
 		E extends Entity,
 		R extends Record<string, unknown> | undefined = undefined
 	>(
