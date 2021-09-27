@@ -13,11 +13,11 @@ import type {
 	StateUpdate,
 } from './state';
 
-export type Lionecs<
+export interface Lionecs<
 	C extends ComponentBase,
 	S extends ComponentState<C>,
 	X extends Record<string, unknown> = Record<string, unknown>
-> = LionecsMethods<C, S> & {
+> extends LionecsMethods<C, S> {
 	/**
 	 * An object that represents the lionecs state.
 	 */
@@ -76,4 +76,4 @@ export type Lionecs<
 	>;
 
 	extras: X;
-};
+}

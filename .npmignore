@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+
+# pnpm
+node_modules
+pnpm-lock.yaml
+pnpm-workspace.yaml
+
+# TypeScript
+tsconfig.eslint.json
+tsconfig.json
+
+# dev
+src
+.editorconfig
+.prettierrc
+.eslintrc.js
