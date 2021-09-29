@@ -4,11 +4,13 @@ import type {
 	ComponentBase,
 	ComponentKey,
 	ComponentState,
+	LionecsExtras,
 } from '~/types/state';
 
 export function componentStateListenersModule<
 	C extends ComponentBase,
-	S extends ComponentState<C>
+	S extends ComponentState<C>,
+	_X extends LionecsExtras
 >() {
 	function removeComponentStateListener<
 		K extends ComponentKey<C>,

@@ -6,32 +6,29 @@ import type {
 	ComponentBase,
 	ComponentKey,
 	ComponentState,
+	LionecsExtras,
 	LionecsState,
 } from './types/state';
 
-type CreateLionecsProps<
-	C extends ComponentBase,
-	X extends Record<string, unknown>
-> = {
+type CreateLionecsProps<C extends ComponentBase> = {
 	components: C[];
-	extras: X;
 };
 
 export function createLionecs<
 	C extends ComponentBase,
 	S extends ComponentState<C>,
-	X extends Record<string, unknown> = Record<string, unknown>
->({ components: componentsList, extras }: CreateLionecsProps<C, X>) {
+	X extends LionecsExtras = LionecsExtras
+>({ components: componentsList }: CreateLionecsProps<C>) {
 	const components = {} as Record<string, EntityMap<C, S, ComponentKey<C>>>;
 	for (const component of Object.keys(componentsList)) {
 		components[component] = {};
 	}
 
 	const lionecsModulesObj = { ...lionecsModules };
-	const lionecsMethods = {} as LionecsMethods<C, S>;
+	const lionecsMethods = {} as LionecsMethods<C, S, X>;
 	for (const module of Object.values(lionecsModulesObj)) {
-		for (const [fn, value] of Object.entries(module<C, S>())) {
-			lionecsMethods[fn as keyof LionecsMethods<C, S>] = value;
+		for (const [fn, value] of Object.entries(module<C, S, X>())) {
+			lionecsMethods[fn as keyof LionecsMethods<C, S, X>] = value;
 		}
 	}
 
@@ -44,7 +41,6 @@ export function createLionecs<
 		activeUpdates: [],
 		untriggeredListeners: new Map(),
 		areListenersBeingTriggered: false,
-		extras,
 	};
 
 	return lionecs;

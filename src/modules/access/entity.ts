@@ -6,11 +6,13 @@ import type {
 	ComponentBase,
 	ComponentKey,
 	ComponentState,
+	LionecsExtras,
 } from '~/types/state';
 
 export function entityModule<
 	C extends ComponentBase,
-	S extends ComponentState<C>
+	S extends ComponentState<C>,
+	_X extends LionecsExtras
 >() {
 	type CreateEntityComponentsProp<E extends Entity> = E extends TypedEntity<
 		C,

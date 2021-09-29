@@ -1,44 +1,28 @@
-import type { UnionToIntersection } from 'utility-types';
-
 import type { Lionecs } from '~/types/lionecs';
-import type { ComponentBase, ComponentState } from '~/types/state';
+import type {
+	ComponentBase,
+	ComponentState,
+	LionecsExtras,
+} from '~/types/state';
 
 import * as elementModules from './modules';
-import type { ElementProperty } from './types';
-
-// https://stackoverflow.com/questions/50321419/typescript-returntype-of-generic-function
-class ElementMethodsWrapper<
-	C extends ComponentBase,
-	S extends ComponentState<C>
-> {
-	// eslint-disable-next-line class-methods-use-this
-	wrapped() {
-		return elementModules['' as keyof typeof elementModules]<C, S>();
-	}
-}
-
-export type ElementMethods<
-	C extends ComponentBase,
-	S extends ComponentState<C>
-> = UnionToIntersection<ReturnType<ElementMethodsWrapper<C, S>['wrapped']>>;
-
-declare module '~/types/lionecs' {
-	export interface Lionecs<C extends ComponentBase, S extends ComponentState<C>>
-		extends ElementMethods<C, S> {
-		elements: Map<ElementProperty, Element>;
-	}
-}
+import type { ElementExtras, ElementMethods, ElementProperty } from './types';
 
 export function elementPlugin<
 	C extends ComponentBase,
-	S extends ComponentState<C>
->(ecs: Lionecs<C, S>) {
+	S extends ComponentState<C>,
+	X extends LionecsExtras
+>(ecs: Lionecs<C, S, X>): Lionecs<C, S, X & ElementExtras<C, S>> {
+	const elementEcs = ecs as unknown as Lionecs<C, S, X & ElementExtras<C, S>>;
+
 	const elementModulesObj = { ...elementModules };
 	for (const module of Object.values(elementModulesObj)) {
 		for (const [fn, value] of Object.entries(module<C, S>())) {
-			ecs[fn as keyof ElementMethods<C, S>] = value;
+			elementEcs[fn as keyof ElementMethods<C, S>] = value;
 		}
 	}
 
-	ecs.elements = new Map<ElementProperty, Element>();
+	elementEcs.elements = new Map<ElementProperty, Element>();
+
+	return elementEcs;
 }

@@ -1,11 +1,12 @@
 import type { EntityStateListener } from '~/types/context';
 import type { Entity } from '~/types/entity';
 import type { Lionecs } from '~/types/lionecs';
-import type { ComponentBase, ComponentState } from '~/types/state';
+import type { ComponentBase, ComponentState, LionecsExtras } from '~/types/state';
 
 export function entityStateListenersModule<
 	C extends ComponentBase,
-	S extends ComponentState<C>
+	S extends ComponentState<C>,
+	_X extends LionecsExtras,
 >() {
 	function addEntityStateListener<
 		E extends Entity,

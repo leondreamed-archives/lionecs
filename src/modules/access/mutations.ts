@@ -7,13 +7,15 @@ import type {
 	ComponentBase,
 	ComponentKey,
 	ComponentState,
+	LionecsExtras,
 	StateUpdate,
 } from '~/types/state';
 import { StateUpdateType } from '~/types/state';
 
 export function mutationsModule<
 	C extends ComponentBase,
-	S extends ComponentState<C>
+	S extends ComponentState<C>,
+	_X extends LionecsExtras
 >() {
 	/**
 	 * Batch update the state and trigger listeners only when the callback has finished
