@@ -3,12 +3,16 @@ import { nanoid } from 'nanoid';
 import type { Lionecs } from '~/types/lionecs';
 import type { ComponentBase, ComponentState } from '~/types/state';
 
-import type { ElementExtras, ElementProperty } from '../types';
+import type {
+	ElementExtras,
+	ElementPluginOptions,
+	ElementProperty,
+} from '../types';
 
 export function createElementModule<
 	C extends ComponentBase,
 	S extends ComponentState<C>
->() {
+>(options: ElementPluginOptions) {
 	type CreateElementPropertyProps = {
 		tag: string;
 		namespace?: string;
@@ -27,11 +31,14 @@ export function createElementModule<
 		}
 
 		const elementId = nanoid() as ElementProperty;
-		element.setAttribute('id', elementId);
+		if (options.setIdAttribute) {
+			element.setAttribute('id', elementId);
+		}
 		elementId.__elementId = true;
 
 		this.elements.set(elementId, element);
 		return elementId;
 	}
+
 	return { createElementProperty };
 }

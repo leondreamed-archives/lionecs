@@ -15,7 +15,9 @@ class ElementMethodsWrapper<
 > {
 	// eslint-disable-next-line class-methods-use-this
 	wrapped() {
-		return elementModules['' as keyof typeof elementModules]<C, S>();
+		return elementModules['' as keyof typeof elementModules]<C, S>(
+			{} as ElementPluginOptions
+		);
 	}
 }
 
@@ -29,4 +31,8 @@ export type ElementExtras<
 	S extends ComponentState<C>
 > = ElementMethods<C, S> & {
 	elements: Map<string, Element>;
+};
+
+export type ElementPluginOptions = {
+	setIdAttribute: boolean;
 };

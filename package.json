@@ -11,7 +11,7 @@
 	"scripts": {
 		"build": "rimraf dist && tsc && tsc-alias -p tsconfig.json",
 		"lint": "eslint --fix src",
-		"tc": "tsc --noEmit",
+		"tc": "tsc --noEmit --project ./tsconfig.json && tsc --noEmit --project ./src/plugins/element/tsconfig.json",
 		"prettier": "prettier --write src",
 		"prepublish": "pnpm build"
 	},
