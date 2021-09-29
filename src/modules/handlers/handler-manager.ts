@@ -8,13 +8,11 @@ import type {
 	ComponentBase,
 	ComponentKey,
 	ComponentState,
-	LionecsExtras,
 } from '~/types/state';
 
 export function handlerManagerModule<
 	C extends ComponentBase,
-	S extends ComponentState<C>,
-	_X extends LionecsExtras
+	S extends ComponentState<C>
 >() {
 	/**
 	 * Handlers should be responsible for applying changes to the ECS data to the DOM.

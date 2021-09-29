@@ -4,14 +4,12 @@ import type {
 	ComponentBase,
 	ComponentKey,
 	ComponentState,
-	LionecsExtras,
 	LionecsState,
 } from '~/types/state';
 
 export function getModule<
 	C extends ComponentBase,
 	S extends ComponentState<C>,
-	_X extends LionecsExtras
 >() {
 	type GetOptions = {
 		optional?: boolean;

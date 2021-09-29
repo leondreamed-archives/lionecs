@@ -8,13 +8,12 @@ import type {
 
 export function usePluginModule<
 	C extends ComponentBase,
-	S extends ComponentState<C>,
-	X extends LionecsExtras
+	S extends ComponentState<C>
 >() {
-	function use<A extends LionecsExtras>(
+	function use<X extends LionecsExtras, A extends LionecsExtras>(
 		this: Lionecs<C, S, X>,
-		plugin: LionecsPlugin<C, S, X, A>
-	) {
+		plugin: LionecsPlugin<C, S, A>
+	): Lionecs<C, S, A> {
 		return plugin(this);
 	}
 

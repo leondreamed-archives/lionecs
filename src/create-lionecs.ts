@@ -6,7 +6,6 @@ import type {
 	ComponentBase,
 	ComponentKey,
 	ComponentState,
-	LionecsExtras,
 	LionecsState,
 } from './types/state';
 
@@ -16,8 +15,7 @@ type CreateLionecsProps<C extends ComponentBase> = {
 
 export function createLionecs<
 	C extends ComponentBase,
-	S extends ComponentState<C>,
-	X extends LionecsExtras = LionecsExtras
+	S extends ComponentState<C>
 >({ components: componentsList }: CreateLionecsProps<C>) {
 	const components = {} as Record<string, EntityMap<C, S, ComponentKey<C>>>;
 	for (const component of Object.keys(componentsList)) {
@@ -25,16 +23,16 @@ export function createLionecs<
 	}
 
 	const lionecsModulesObj = { ...lionecsModules };
-	const lionecsMethods = {} as LionecsMethods<C, S, X>;
+	const lionecsMethods = {} as LionecsMethods<C, S>;
 	for (const module of Object.values(lionecsModulesObj)) {
-		for (const [fn, value] of Object.entries(module<C, S, X>())) {
-			lionecsMethods[fn as keyof LionecsMethods<C, S, X>] = value;
+		for (const [fn, value] of Object.entries(module<C, S>())) {
+			lionecsMethods[fn as keyof LionecsMethods<C, S>] = value;
 		}
 	}
 
-	const lionecs: Lionecs<C, S, X> = {
+	const lionecs: Lionecs<C, S> = {
 		...lionecsMethods,
-		state: { components } as LionecsState<C, S, X>,
+		state: { components } as LionecsState<C, S>,
 		entityListenerContexts: new Map(),
 		componentListenerContexts: new Map(),
 		activeUpdateCallCount: 0,

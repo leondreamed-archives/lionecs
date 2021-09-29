@@ -18,7 +18,7 @@ type LionecsBase<
 	C extends ComponentBase,
 	S extends ComponentState<C>,
 	X extends LionecsExtras
-> = LionecsMethods<C, S, X> & X;
+> = LionecsMethods<C, S> & X;
 
 export type Lionecs<
 	C extends ComponentBase,
@@ -28,7 +28,7 @@ export type Lionecs<
 	/**
 	 * An object that represents the lionecs state.
 	 */
-	state: LionecsState<C, S, X>;
+	state: LionecsState<C, S>;
 	/**
 	 * A map where the keys are entities and the value is an array of all the entity
 	 * listener contexts.
@@ -81,4 +81,4 @@ export type Lionecs<
 		StateListener<C, S>,
 		Parameters<StateListener<C, S>>
 	>;
-};
+}

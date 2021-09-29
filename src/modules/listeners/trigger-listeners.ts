@@ -3,14 +3,12 @@ import type {
 	ComponentBase,
 	ComponentKey,
 	ComponentState,
-	LionecsExtras,
 	StateUpdate,
 } from '~/types/state';
 
 export function triggerListenersModule<
 	C extends ComponentBase,
 	S extends ComponentState<C>,
-	_X extends LionecsExtras
 >() {
 	function triggerListeners(
 		this: Lionecs<C, S>,
