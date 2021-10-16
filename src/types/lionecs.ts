@@ -1,3 +1,5 @@
+import type { RemovePrivateProperties } from 'liontypes';
+
 import type {
 	ComponentStateListenerContext,
 	EntityStateListenerContext,
@@ -86,8 +88,4 @@ export type Lionecs<
 	C extends ComponentBase,
 	S extends ComponentState<C>,
 	X extends LionecsExtras = LionecsExtras
-> = {
-	[K in keyof InternalLionecs<C, S, X> as K extends `_${infer _}`
-		? never
-		: K]: InternalLionecs<C, S, X>[K];
-};
+> = RemovePrivateProperties<InternalLionecs<C, S, X>>;

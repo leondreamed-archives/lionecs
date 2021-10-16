@@ -19,6 +19,7 @@ importers:
       immer: ^9.0.6
       just-extend: ^4.2.1
       lint-staged: ^11.1.2
+      liontypes: ^1.0.0
       nanoid: ^3.1.25
       prettier: ^2.4.1
       rfdc: ^1.3.0
@@ -48,6 +49,7 @@ importers:
       execa: 5.1.1
       husky: 7.0.2
       lint-staged: 11.1.2
+      liontypes: 1.0.0
       prettier: 2.4.1
       rimraf: 3.0.2
       rollup: 2.57.0
@@ -1805,6 +1807,10 @@ packages:
       stringify-object: 3.3.0
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /liontypes/1.0.0:
+    resolution: {integrity: sha512-Pu7yU4M30yFZNYcn6fbNpRd3b/nNqeg2I6zXOVkLW9uFyz6KtsMMiC5D7+KDeI8y30RMTg1Nur8zOHB9hfjSvw==}
     dev: true
 
   /listr2/3.12.2_enquirer@2.3.6:

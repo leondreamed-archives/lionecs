@@ -1,3 +1,4 @@
+import type { RemovePrivateProperties } from 'liontypes';
 import type { UnionToIntersection } from 'utility-types';
 
 import type { ComponentBase, ComponentState } from '~/types/state';
@@ -37,11 +38,7 @@ export type InternalElementExtrasInner<
 export type ElementExtrasInner<
 	C extends ComponentBase,
 	S extends ComponentState<C>
-> = {
-	[K in keyof InternalElementExtrasInner<C, S> as K extends `_${infer _}`
-		? never
-		: K]: InternalElementExtrasInner<C, S>;
-};
+> = RemovePrivateProperties<InternalElementExtrasInner<C, S>>;
 
 export type InternalElementExtras<
 	C extends ComponentBase,
