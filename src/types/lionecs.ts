@@ -4,7 +4,7 @@ import type {
 	StateListener,
 } from './context';
 import type { Entity } from './entity';
-import type { LionecsMethods } from './methods';
+import type { InternalLionecsProperties } from './properties';
 import type {
 	ComponentBase,
 	ComponentKey,
@@ -14,17 +14,10 @@ import type {
 	StateUpdate,
 } from './state';
 
-type LionecsBase<
+export type InternalLionecsState<
 	C extends ComponentBase,
-	S extends ComponentState<C>,
-	X extends LionecsExtras
-> = LionecsMethods<C, S> & X;
-
-export type Lionecs<
-	C extends ComponentBase,
-	S extends ComponentState<C>,
-	X extends LionecsExtras = LionecsExtras
-> = LionecsBase<C, S, X> & {
+	S extends ComponentState<C>
+> = {
 	/**
 	 * An object that represents the lionecs state.
 	 */
@@ -33,7 +26,7 @@ export type Lionecs<
 	 * A map where the keys are entities and the value is an array of all the entity
 	 * listener contexts.
 	 */
-	entityListenerContexts: Map<
+	_entityListenerContexts: Map<
 		Entity,
 		EntityStateListenerContext<C, S, Entity>[]
 	>;
@@ -42,7 +35,7 @@ export type Lionecs<
 	 * A map where the keys are components and the value is an array of all the component
 	 * listener contexts.
 	 */
-	componentListenerContexts: Map<
+	_componentListenerContexts: Map<
 		ComponentKey<C>,
 		ComponentStateListenerContext<C, S, ComponentKey<C>>[]
 	>;
@@ -54,7 +47,7 @@ export type Lionecs<
 	 * function to trigger the listeners for the entities/components which were
 	 * updated in the `update` callback.
 	 */
-	activeUpdates: StateUpdate<C, S, ComponentKey<C>>[];
+	_activeUpdates: StateUpdate<C, S, ComponentKey<C>>[];
 
 	/**
 	 * A boolean that represents whether or not the `triggerListener` callback is
@@ -63,7 +56,7 @@ export type Lionecs<
 	 * within the listener) and ending up triggering a listener that is already queued
 	 * to be triggered.
 	 */
-	areListenersBeingTriggered: boolean;
+	_areListenersBeingTriggered: boolean;
 
 	/**
 	 * The active update call count is a counter that keeps track of how many
@@ -71,14 +64,30 @@ export type Lionecs<
 	 * not trigger a listener (the reason why a counter is used instead of a
 	 * boolean is because `update` calls can be potentially nested).
 	 */
-	activeUpdateCallCount: number;
+	_activeUpdateCallCount: number;
 
 	/**
 	 * A map where the keys are the untriggered listeners (the function reference) and
 	 * the value is the parameters that should be passed to the listeners when calling them.
 	 */
-	untriggeredListeners: Map<
+	_untriggeredListeners: Map<
 		StateListener<C, S>,
 		Parameters<StateListener<C, S>>
 	>;
-}
+};
+
+export type InternalLionecs<
+	C extends ComponentBase,
+	S extends ComponentState<C>,
+	X extends LionecsExtras = LionecsExtras
+> = InternalLionecsProperties<C, S> & X & InternalLionecsState<C, S>;
+
+export type Lionecs<
+	C extends ComponentBase,
+	S extends ComponentState<C>,
+	X extends LionecsExtras = LionecsExtras
+> = {
+	[K in keyof InternalLionecs<C, S, X> as K extends `_${infer _}`
+		? never
+		: K]: InternalLionecs<C, S, X>[K];
+};

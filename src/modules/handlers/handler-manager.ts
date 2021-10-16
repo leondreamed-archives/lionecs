@@ -3,7 +3,7 @@ import type {
 	MultiComponentStateChangeHandler,
 	SingleComponentStateChangeHandler,
 } from '~/types/handlers';
-import type { Lionecs } from '~/types/lionecs';
+import type { InternalLionecs } from '~/types/lionecs';
 import type {
 	ComponentBase,
 	ComponentKey,
@@ -25,7 +25,7 @@ export function handlerManagerModule<
 	function createHandlerManager<
 		E extends Entity,
 		R extends Record<string, unknown> = Record<never, never>
-	>(this: Lionecs<C, S>) {
+	>(this: InternalLionecs<C, S>) {
 		const handlers: (
 			| SingleComponentStateChangeHandler<C, S, ComponentKey<C>, E, R>
 			| MultiComponentStateChangeHandler<C, S, readonly ComponentKey<C>[], E, R>

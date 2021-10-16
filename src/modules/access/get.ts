@@ -1,5 +1,5 @@
 import type { Entity, TypedEntity } from '~/types/entity';
-import type { Lionecs } from '~/types/lionecs';
+import type { InternalLionecs } from '~/types/lionecs';
 import type {
 	ComponentBase,
 	ComponentKey,
@@ -63,7 +63,7 @@ export function getModule<
 		: S[K] | undefined;
 
 	function get<K extends ComponentKey<C>>(
-		this: Lionecs<C, S>,
+		this: InternalLionecs<C, S>,
 		...args: unknown[]
 	): S[K] {
 		// get(entity, component, options)
@@ -118,7 +118,7 @@ export function getModule<
 	): S[K] | undefined;
 
 	function getOpt<K extends ComponentKey<C>>(
-		this: Lionecs<C, S>,
+		this: InternalLionecs<C, S>,
 		...args: unknown[]
 	): S[K] | undefined {
 		// getOpt(state, entity, component)

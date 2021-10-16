@@ -1,4 +1,6 @@
-import type { Lionecs } from '~/types/lionecs';
+import rfdc from 'rfdc';
+
+import type { InternalLionecs, Lionecs } from '~/types/lionecs';
 import type {
 	ComponentBase,
 	ComponentState,
@@ -8,14 +10,25 @@ import type {
 import * as elementModules from './modules';
 import type {
 	ElementExtras,
-	ElementMethods,
 	ElementPluginOptions,
-	ElementProperty,
+	InternalElementExtras,
+	InternalElementExtrasInner,
+	InternalElementProperties,
+	InternalElementState,
 } from './types';
 
 export const elementPluginOptionsDefaults: ElementPluginOptions = {
 	setIdAttribute: true,
 };
+
+const clone = rfdc();
+const elementModulesObj = { ...elementModules };
+const elementProperties = {} as InternalElementProperties<any, any>;
+for (const module of Object.values(elementModulesObj)) {
+	for (const [fn, value] of Object.entries(module<any, any>())) {
+		elementProperties[fn as keyof InternalElementProperties<any, any>] = value;
+	}
+}
 
 export function elementPlugin<
 	C extends ComponentBase,
@@ -27,16 +40,21 @@ export function elementPlugin<
 ): Lionecs<C, S, X & ElementExtras<C, S>> {
 	options = { ...elementPluginOptionsDefaults, ...options };
 
-	const elementEcs = this as unknown as Lionecs<C, S, X & ElementExtras<C, S>>;
+	const elementEcs = this as unknown as InternalLionecs<
+		C,
+		S,
+		X & InternalElementExtras<C, S>
+	>;
 
-	const elementModulesObj = { ...elementModules };
-	for (const module of Object.values(elementModulesObj)) {
-		for (const [fn, value] of Object.entries(module<C, S>(options))) {
-			elementEcs[fn as keyof ElementMethods<C, S>] = value;
-		}
-	}
+	const internalState: InternalElementState = {
+		_options: options,
+		elements: new Map(),
+	};
 
-	elementEcs.elements = new Map<ElementProperty, Element>();
+	elementEcs.element = Object.assign(
+		clone(elementProperties),
+		internalState
+	) as InternalElementExtrasInner<C, S>;
 
-	return elementEcs;
+	return elementEcs as unknown as Lionecs<C, S, X & ElementExtras<C, S>>;
 }

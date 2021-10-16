@@ -1,6 +1,6 @@
 import type { EntityStateListener } from '~/types/context';
 import type { Entity } from '~/types/entity';
-import type { Lionecs } from '~/types/lionecs';
+import type { InternalLionecs } from '~/types/lionecs';
 import type { ComponentBase, ComponentState } from '~/types/state';
 
 export function entityStateListenersModule<
@@ -11,7 +11,7 @@ export function entityStateListenersModule<
 		E extends Entity,
 		R extends Record<string, unknown> | undefined = undefined
 	>(
-		this: Lionecs<C, S>,
+		this: InternalLionecs<C, S>,
 		{
 			entity,
 			listener,
@@ -22,11 +22,11 @@ export function entityStateListenersModule<
 			extras?: R;
 		}
 	) {
-		if (!this.entityListenerContexts.has(entity)) {
-			this.entityListenerContexts.set(entity, []);
+		if (!this._entityListenerContexts.has(entity)) {
+			this._entityListenerContexts.set(entity, []);
 		}
 
-		this.entityListenerContexts.get(entity)!.push({
+		this._entityListenerContexts.get(entity)!.push({
 			listener: listener as any,
 			extras,
 		});
@@ -35,7 +35,7 @@ export function entityStateListenersModule<
 	function createEntityStateListenerManager<
 		E extends Entity,
 		R extends Record<string, unknown> | undefined = undefined
-	>(this: Lionecs<C, S>, listener: EntityStateListener<E, C, S, R>) {
+	>(this: InternalLionecs<C, S>, listener: EntityStateListener<E, C, S, R>) {
 		const listeners = new Map<Entity, EntityStateListener<E, C, S, R>>();
 
 		const registerEntityStateListener = (entity: E, extras?: R) => {
@@ -57,7 +57,7 @@ export function entityStateListenersModule<
 		E extends Entity,
 		R extends Record<string, unknown> | undefined = undefined
 	>(
-		this: Lionecs<C, S>,
+		this: InternalLionecs<C, S>,
 		{
 			entity,
 			listener,
@@ -67,12 +67,12 @@ export function entityStateListenersModule<
 		}
 	) {
 		const index =
-			this.entityListenerContexts
+			this._entityListenerContexts
 				.get(entity)
 				?.findIndex((e) => e.listener === listener) ?? -1;
 
 		if (index !== -1) {
-			this.entityListenerContexts.get(entity)!.splice(index, 1);
+			this._entityListenerContexts.get(entity)!.splice(index, 1);
 		}
 	}
 

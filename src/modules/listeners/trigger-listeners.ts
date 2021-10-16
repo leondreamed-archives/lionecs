@@ -1,4 +1,4 @@
-import type { Lionecs } from '~/types/lionecs';
+import type { InternalLionecs } from '~/types/lionecs';
 import type {
 	ComponentBase,
 	ComponentKey,
@@ -8,27 +8,27 @@ import type {
 
 export function triggerListenersModule<
 	C extends ComponentBase,
-	S extends ComponentState<C>,
+	S extends ComponentState<C>
 >() {
 	function triggerListeners(
-		this: Lionecs<C, S>,
+		this: InternalLionecs<C, S>,
 		stateUpdates: StateUpdate<C, S, ComponentKey<C>>[]
 	) {
 		const stateListeners = this.retrieveStateListeners(stateUpdates);
 		for (const [stateListener, params] of stateListeners) {
-			this.untriggeredListeners.set(stateListener, params);
+			this._untriggeredListeners.set(stateListener, params);
 		}
 
-		if (!this.areListenersBeingTriggered) {
-			this.areListenersBeingTriggered = true;
+		if (!this._areListenersBeingTriggered) {
+			this._areListenersBeingTriggered = true;
 			// Trigger listeners as long as there are untriggered listeners remaining
-			while (this.untriggeredListeners.size > 0) {
-				const listener = this.untriggeredListeners.keys().next().value;
-				const listenerParams = this.untriggeredListeners.get(listener);
+			while (this._untriggeredListeners.size > 0) {
+				const listener = this._untriggeredListeners.keys().next().value;
+				const listenerParams = this._untriggeredListeners.get(listener);
 				listener(listenerParams);
-				this.untriggeredListeners.delete(listener);
+				this._untriggeredListeners.delete(listener);
 			}
-			this.areListenersBeingTriggered = false;
+			this._areListenersBeingTriggered = false;
 		}
 	}
 

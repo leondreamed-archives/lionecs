@@ -9,30 +9,30 @@ export type LionecsState<
 	};
 };
 
-export type ComponentBase = {
-	[id: string]: string;
-	[nu: number]: string;
-};
+export type ComponentBase = Record<string, string>;
 
 export type ComponentContext<
-	Component extends ComponentBase,
-	ComponentState extends Record<keyof Component, any>
+	C extends ComponentBase,
+	S extends ComponentState<C>
 > = {
-	component: Component;
-	componentState: ComponentState;
+	component: C;
+	componentState: S;
 };
 
-export type ComponentState<C extends ComponentBase> = Record<keyof C, any>;
+export type ComponentState<C extends ComponentBase> = Record<
+	ComponentKey<C>,
+	any
+>;
 
 export type ComponentKey<C extends ComponentBase> = keyof C;
 
 export type LionecsExtras<
-	X extends Record<string, unknown> = Record<string, unknown>
+	X extends Record<never, never> = Record<never, never>
 > = X;
 
 export type ComponentStateType<
 	C extends ComponentBase,
-	S extends Record<keyof C, any>,
+	S extends ComponentState<C>,
 	T
 > = T extends keyof S ? S[T] : never;
 

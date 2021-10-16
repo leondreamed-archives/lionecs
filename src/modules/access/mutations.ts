@@ -2,7 +2,7 @@ import { produce } from 'immer';
 import extend from 'just-extend';
 
 import type { Entity } from '~/types/entity';
-import type { Lionecs } from '~/types/lionecs';
+import type { InternalLionecs } from '~/types/lionecs';
 import type {
 	ComponentBase,
 	ComponentKey,
@@ -18,20 +18,20 @@ export function mutationsModule<
 	/**
 	 * Batch update the state and trigger listeners only when the callback has finished
 	 */
-	function update(this: Lionecs<C, S>, cb: () => void) {
-		this.activeUpdateCallCount += 1;
+	function update(this: InternalLionecs<C, S>, cb: () => void) {
+		this._activeUpdateCallCount += 1;
 		cb();
-		this.activeUpdateCallCount -= 1;
+		this._activeUpdateCallCount -= 1;
 
-		if (this.activeUpdateCallCount === 0) {
-			const stateUpdates = this.activeUpdates;
-			this.activeUpdates = [];
+		if (this._activeUpdateCallCount === 0) {
+			const stateUpdates = this._activeUpdates;
+			this._activeUpdates = [];
 			this.triggerListeners(stateUpdates);
 		}
 	}
 
 	function del<K extends ComponentKey<C>>(
-		this: Lionecs<C, S>,
+		this: InternalLionecs<C, S>,
 		entity: Entity,
 		componentKey: K
 	) {
@@ -39,7 +39,7 @@ export function mutationsModule<
 	}
 
 	function set<K extends ComponentKey<C>>(
-		this: Lionecs<C, S>,
+		this: InternalLionecs<C, S>,
 		entity: Entity,
 		componentKey: K,
 		newComponentState: S[K]
@@ -58,8 +58,8 @@ export function mutationsModule<
 			oldComponentState,
 		};
 		// If set() is called as part of an update, push the changes
-		if (this.activeUpdateCallCount > 0) {
-			this.activeUpdates.push(stateUpdate);
+		if (this._activeUpdateCallCount > 0) {
+			this._activeUpdates.push(stateUpdate);
 		}
 		// If set() isn't called as part of an update, notify listeners
 		else {
@@ -68,7 +68,7 @@ export function mutationsModule<
 	}
 
 	function patch<K extends ComponentKey<C>>(
-		this: Lionecs<C, S>,
+		this: InternalLionecs<C, S>,
 		entity: Entity,
 		componentKey: K,
 		patchedState: Partial<S[K]>

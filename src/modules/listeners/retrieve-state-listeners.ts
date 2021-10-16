@@ -6,7 +6,7 @@ import type {
 	StateListener,
 } from '~/types/context';
 import type { Entity, EntityMap } from '~/types/entity';
-import type { Lionecs } from '~/types/lionecs';
+import type { InternalLionecs } from '~/types/lionecs';
 import type {
 	ComponentBase,
 	ComponentKey,
@@ -20,13 +20,13 @@ export function retrieveStateListenersModule<
 	S extends ComponentState<C>
 >() {
 	function retrieveStateListeners(
-		this: Lionecs<C, S>,
+		this: InternalLionecs<C, S>,
 		stateUpdates: StateUpdate<C, S, ComponentKey<C>>[]
 	): [StateListener<C, S>, Parameters<StateListener<C, S>>][] {
 		// Construct the old state object
 		const oldState = produce(this.state, (state) => {
 			const stateComponents = state.components as {
-				[K in keyof C]: EntityMap<C, S, K>;
+				[K in ComponentKey<C>]: EntityMap<C, S, K>;
 			};
 			for (const stateUpdate of stateUpdates) {
 				const { component, entity, type } = stateUpdate;
@@ -69,7 +69,7 @@ export function retrieveStateListenersModule<
 		for (const [entity, affectedEntityUpdates] of Object.entries(
 			affectedEntityUpdatesMap
 		)) {
-			for (const { listener } of this.entityListenerContexts.get(entity) ??
+			for (const { listener } of this._entityListenerContexts.get(entity) ??
 				[]) {
 				const params: Parameters<EntityStateListener<Entity, C, S>> = [
 					{
@@ -87,7 +87,7 @@ export function retrieveStateListenersModule<
 			affectedComponentUpdatesMap
 		)) {
 			const component = componentString as ComponentKey<C>;
-			for (const { listener } of this.componentListenerContexts.get(
+			for (const { listener } of this._componentListenerContexts.get(
 				component
 			) ?? []) {
 				const params: Parameters<

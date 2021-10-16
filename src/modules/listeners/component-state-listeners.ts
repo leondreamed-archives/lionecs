@@ -1,5 +1,5 @@
 import type { ComponentStateListener } from '~/types/context';
-import type { Lionecs } from '~/types/lionecs';
+import type { InternalLionecs } from '~/types/lionecs';
 import type {
 	ComponentBase,
 	ComponentKey,
@@ -14,7 +14,7 @@ export function componentStateListenersModule<
 		K extends ComponentKey<C>,
 		R extends Record<string, unknown> | undefined = undefined
 	>(
-		this: Lionecs<C, S>,
+		this: InternalLionecs<C, S>,
 		{
 			component,
 			listener,
@@ -24,12 +24,12 @@ export function componentStateListenersModule<
 		}
 	) {
 		const index =
-			this.componentListenerContexts
+			this._componentListenerContexts
 				.get(component)
 				?.findIndex((e) => e.listener === listener) ?? -1;
 
 		if (index !== -1) {
-			this.componentListenerContexts.get(component)!.splice(index, 1);
+			this._componentListenerContexts.get(component)!.splice(index, 1);
 		}
 	}
 
@@ -37,7 +37,7 @@ export function componentStateListenersModule<
 		K extends ComponentKey<C>,
 		R extends Record<string, unknown> | undefined = undefined
 	>(
-		this: Lionecs<C, S>,
+		this: InternalLionecs<C, S>,
 		{
 			component,
 			listener,
@@ -48,11 +48,11 @@ export function componentStateListenersModule<
 			extras?: R;
 		}
 	) {
-		if (!this.componentListenerContexts.has(component)) {
-			this.componentListenerContexts.set(component, []);
+		if (!this._componentListenerContexts.has(component)) {
+			this._componentListenerContexts.set(component, []);
 		}
 
-		this.componentListenerContexts.get(component)!.push({
+		this._componentListenerContexts.get(component)!.push({
 			listener: listener as any,
 			extras,
 		});
@@ -61,7 +61,7 @@ export function componentStateListenersModule<
 	function createComponentStateListenerManager<
 		K extends ComponentKey<C>,
 		R extends Record<string, unknown> | undefined = undefined
-	>(this: Lionecs<C, S>, listener: ComponentStateListener<C, S, K, R>) {
+	>(this: InternalLionecs<C, S>, listener: ComponentStateListener<C, S, K, R>) {
 		const listeners = new Map<
 			ComponentKey<C>,
 			ComponentStateListener<C, S, K, R>

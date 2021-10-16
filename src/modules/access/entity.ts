@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid';
 
 import type { Entity, EntityMap, TypedEntity } from '~/types/entity';
-import type { Lionecs } from '~/types/lionecs';
+import type { InternalLionecs } from '~/types/lionecs';
 import type {
 	ComponentBase,
 	ComponentKey,
@@ -18,7 +18,7 @@ export function entityModule<
 		infer Opt
 	>
 		? { [K in Req]: S[K] } & (Opt extends ComponentKey<C>
-				? { [K in Opt]: S[K] }
+				? { [K in Opt]?: S[K] }
 				: Record<string, unknown>)
 		: { [K in ComponentKey<C>]?: S[K] };
 
@@ -27,7 +27,7 @@ export function entityModule<
 	};
 
 	function createEntity<E extends Entity>(
-		this: Lionecs<C, S>,
+		this: InternalLionecs<C, S>,
 		props?: CreateEntityProps<E>
 	): E {
 		const entity = nanoid() as E;
@@ -46,14 +46,14 @@ export function entityModule<
 	}
 
 	function getEntityMap<K extends ComponentKey<C>>(
-		this: Lionecs<C, S>,
+		this: InternalLionecs<C, S>,
 		componentKey: K
 	): EntityMap<C, S, K> {
 		return this.state.components[componentKey];
 	}
 
 	function cloneEntity<E extends Entity>(
-		this: Lionecs<C, S>,
+		this: InternalLionecs<C, S>,
 		entityToClone: E
 	): E {
 		const entity = this.createEntity<E>();

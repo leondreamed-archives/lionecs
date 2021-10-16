@@ -1,18 +1,14 @@
 import { nanoid } from 'nanoid';
 
-import type { Lionecs } from '~/types/lionecs';
+import type { InternalLionecs } from '~/types/lionecs';
 import type { ComponentBase, ComponentState } from '~/types/state';
 
-import type {
-	ElementExtras,
-	ElementPluginOptions,
-	ElementProperty,
-} from '../types';
+import type { ElementProperty, InternalElementExtras } from '../types';
 
 export function createElementModule<
 	C extends ComponentBase,
 	S extends ComponentState<C>
->(options: ElementPluginOptions) {
+>() {
 	type CreateElementPropertyProps = {
 		tag: string;
 		namespace?: string;
@@ -20,7 +16,7 @@ export function createElementModule<
 	};
 
 	function createElementProperty(
-		this: Lionecs<C, S, ElementExtras<C, S>>,
+		this: InternalLionecs<C, S, InternalElementExtras<C, S>>,
 		{ tag, namespace, creationOptions }: CreateElementPropertyProps
 	): ElementProperty {
 		let element: Element;
@@ -30,14 +26,14 @@ export function createElementModule<
 			element = document.createElement(tag, creationOptions);
 		}
 
-		const elementId = nanoid() as ElementProperty;
-		if (options.setIdAttribute) {
+		const elementId = nanoid();
+		const elementProperty = { elementId };
+		if (this.element._options.setIdAttribute) {
 			element.setAttribute('id', elementId);
 		}
-		elementId.__elementId = true;
 
-		this.elements.set(elementId, element);
-		return elementId;
+		this.element.elements.set(elementId, element);
+		return elementProperty;
 	}
 
 	return { createElementProperty };
