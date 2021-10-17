@@ -52,13 +52,7 @@ export function createLionecs<
 	const lionecs = Object.assign(
 		clone(lionecsProperties),
 		internalState
-	) as InternalLionecs<C, S, X>;
+	) as InternalLionecs<C, S, X> & X;
 
-	return lionecs as unknown as Lionecs<C, S, X>;
+	return lionecs as unknown as Lionecs<C, S, X> & X;
 }
-
-// TODO: get the following code to not throw any type error
-const ecs = createLionecs({} as any);
-ecs.createEntityStateListenerManager<string, Record<string, unknown>>(() => {
-	/* empty */
-});

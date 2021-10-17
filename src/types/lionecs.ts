@@ -18,8 +18,9 @@ import type {
 
 export type InternalLionecsState<
 	C extends ComponentBase,
-	S extends ComponentState<C>
-> = {
+	S extends ComponentState<C>,
+	X extends LionecsExtras = LionecsExtras
+> = X & {
 	/**
 	 * An object that represents the lionecs state.
 	 */
@@ -81,11 +82,9 @@ export type InternalLionecsState<
 type InternalLionecsKeys<
 	C extends ComponentBase,
 	S extends ComponentState<C>,
-	X extends LionecsExtras = LionecsExtras
-> = InternalLionecsProperties<C, S> & InternalLionecsState<C, S> & X;
+	_X extends LionecsExtras
+> = InternalLionecsProperties<C, S> & InternalLionecsState<C, S>;
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 export interface InternalLionecs<
 	C extends ComponentBase,
 	S extends ComponentState<C>,
@@ -93,10 +92,7 @@ export interface InternalLionecs<
 > extends InternalLionecsKeys<C, S, X> {}
 
 export interface Lionecs<
-		C extends ComponentBase,
-		S extends ComponentState<C>,
-		X extends LionecsExtras = LionecsExtras
-	>
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	extends RemovePrivateProperties<InternalLionecs<C, S, X>> {}
+	C extends ComponentBase,
+	S extends ComponentState<C>,
+	X extends LionecsExtras = LionecsExtras
+> extends RemovePrivateProperties<InternalLionecs<C, S, X>> {}

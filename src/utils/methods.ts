@@ -11,8 +11,8 @@ export function createMethodsDefiner<
 	X extends LionecsExtras = LionecsExtras
 >() {
 	return function defineMethods<M>(
-		methods: M & ThisType<InternalLionecs<C, S, X>>
+		methods: M & ThisType<InternalLionecs<C, S, X> & X>
 	) {
-		return methods as unknown as M & ThisType<InternalLionecs<C, S, X>>;
+		return methods as unknown as M & ThisType<InternalLionecs<C, S, X> & X>;
 	};
 }

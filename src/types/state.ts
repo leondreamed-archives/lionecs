@@ -27,7 +27,7 @@ export type ComponentState<C extends ComponentBase> = Record<
 export type ComponentKey<C extends ComponentBase> = keyof C;
 
 export type LionecsExtras<
-	X extends Record<never, never> = Record<never, never>
+	X extends Record<string, unknown> = Record<never, never>
 > = X;
 
 export type ComponentStateType<
