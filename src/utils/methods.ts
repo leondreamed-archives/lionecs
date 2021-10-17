@@ -13,6 +13,6 @@ export function createMethodsDefiner<
 	return function defineMethods<M>(
 		methods: M & ThisType<InternalLionecs<C, S, X> & X>
 	) {
-		return methods as unknown as M & ThisType<InternalLionecs<C, S, X> & X>;
+		return methods as unknown as M;
 	};
 }
