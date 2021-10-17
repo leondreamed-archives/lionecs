@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid';
 import type { InternalLionecs } from '~/types/lionecs';
 import type { ComponentBase, ComponentState } from '~/types/state';
 
-import type { ElementProperty, InternalElementExtras } from '../types';
+import type { ElementProperty, InternalElementPluginExtras } from '../types';
 
 export function createElementModule<
 	C extends ComponentBase,
@@ -16,7 +16,7 @@ export function createElementModule<
 	};
 
 	function createElementProperty(
-		this: InternalLionecs<C, S, InternalElementExtras<C, S>>,
+		this: InternalLionecs<C, S, InternalElementPluginExtras<C, S>>,
 		{ tag, namespace, creationOptions }: CreateElementPropertyProps
 	): ElementProperty {
 		let element: Element;

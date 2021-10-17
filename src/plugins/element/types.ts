@@ -20,35 +20,35 @@ class ElementMethodsWrapper<
 	}
 }
 
-export type InternalElementProperties<
+export type InternalElementPluginProperties<
 	C extends ComponentBase,
 	S extends ComponentState<C>
 > = UnionToIntersection<ReturnType<ElementMethodsWrapper<C, S>['wrapped']>>;
 
-export type InternalElementState = {
+export type InternalElementPluginState = {
 	elements: Map<string, Element>;
 	_options: ElementPluginOptions;
 };
 
-export type InternalElementExtrasInner<
+export type InternalElementPluginExtrasInner<
 	C extends ComponentBase,
 	S extends ComponentState<C>
-> = InternalElementProperties<C, S> & InternalElementState;
+> = InternalElementPluginProperties<C, S> & InternalElementPluginState;
 
-export type ElementExtrasInner<
+export type ElementPluginExtrasInner<
 	C extends ComponentBase,
 	S extends ComponentState<C>
-> = RemovePrivateProperties<InternalElementExtrasInner<C, S>>;
+> = RemovePrivateProperties<InternalElementPluginExtrasInner<C, S>>;
 
-export type InternalElementExtras<
+export type InternalElementPluginExtras<
 	C extends ComponentBase,
 	S extends ComponentState<C>
-> = { element: InternalElementExtrasInner<C, S> };
+> = { element: InternalElementPluginExtrasInner<C, S> };
 
-export type ElementExtras<
+export type ElementPluginExtras<
 	C extends ComponentBase,
 	S extends ComponentState<C>
-> = { element: ElementExtrasInner<C, S> };
+> = { element: ElementPluginExtrasInner<C, S> };
 
 export type ElementPluginOptions = {
 	setIdAttribute: boolean;

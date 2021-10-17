@@ -1,0 +1,6 @@
+{
+	"peerDependencies": {
+		"vue": "^3.2.20",
+		"rfdc": "workspace:^"
+	}
+}

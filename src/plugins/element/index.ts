@@ -9,12 +9,11 @@ import type {
 
 import * as elementModules from './modules';
 import type {
-	ElementExtras,
+	ElementPluginExtras,
 	ElementPluginOptions,
-	InternalElementExtras,
-	InternalElementExtrasInner,
-	InternalElementProperties,
-	InternalElementState,
+	InternalElementPluginExtras,
+	InternalElementPluginProperties,
+	InternalElementPluginState,
 } from './types';
 
 export const elementPluginOptionsDefaults: ElementPluginOptions = {
@@ -22,11 +21,13 @@ export const elementPluginOptionsDefaults: ElementPluginOptions = {
 };
 
 const clone = rfdc();
-const elementModulesObj = { ...elementModules };
-const elementProperties = {} as InternalElementProperties<any, any>;
-for (const module of Object.values(elementModulesObj)) {
+const elementPluginModulesObj = { ...elementModules };
+const elementPluginProperties = {} as InternalElementPluginProperties<any, any>;
+for (const module of Object.values(elementPluginModulesObj)) {
 	for (const [fn, value] of Object.entries(module<any, any>())) {
-		elementProperties[fn as keyof InternalElementProperties<any, any>] = value;
+		elementPluginProperties[
+			fn as keyof InternalElementPluginProperties<any, any>
+		] = value;
 	}
 }
 
@@ -37,24 +38,29 @@ export function elementPlugin<
 >(
 	this: Lionecs<C, S, X>,
 	options?: ElementPluginOptions
-): Lionecs<C, S, X & ElementExtras<C, S>> {
+): Lionecs<C, S, X & ElementPluginExtras<C, S>> {
 	options = { ...elementPluginOptionsDefaults, ...options };
 
-	const elementEcs = this as unknown as InternalLionecs<
+	const elementPluginEcs = this as unknown as InternalLionecs<
 		C,
 		S,
-		X & InternalElementExtras<C, S>
+		X & InternalElementPluginExtras<C, S>
 	>;
 
-	const internalState: InternalElementState = {
+	const internalState: InternalElementPluginState = {
 		_options: options,
 		elements: new Map(),
 	};
 
-	elementEcs.element = Object.assign(
-		clone(elementProperties),
+	Object.assign(
+		elementPluginEcs,
+		clone(elementPluginProperties),
 		internalState
-	) as InternalElementExtrasInner<C, S>;
+	);
 
-	return elementEcs as unknown as Lionecs<C, S, X & ElementExtras<C, S>>;
+	return elementPluginEcs as unknown as Lionecs<
+		C,
+		S,
+		X & ElementPluginExtras<C, S>
+	>;
 }
