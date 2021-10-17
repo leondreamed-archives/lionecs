@@ -6,11 +6,14 @@ import type {
 	ComponentState,
 	LionecsState,
 } from '~/types/state';
+import { createMethodsDefiner } from '~/utils/methods';
 
 export function getModule<
 	C extends ComponentBase,
-	S extends ComponentState<C>,
+	S extends ComponentState<C>
 >() {
+	const defineMethods = createMethodsDefiner<C, S>();
+
 	type GetOptions = {
 		optional?: boolean;
 	};
@@ -136,7 +139,7 @@ export function getModule<
 	}
 
 	return {
-		get,
-		getOpt,
+		...defineMethods({ get }),
+		...defineMethods({ getOpt }),
 	};
 }

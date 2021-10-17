@@ -1,12 +1,12 @@
 import { nanoid } from 'nanoid';
 
 import type { Entity, EntityMap, TypedEntity } from '~/types/entity';
-import type { InternalLionecs } from '~/types/lionecs';
 import type {
 	ComponentBase,
 	ComponentKey,
 	ComponentState,
 } from '~/types/state';
+import { createMethodsDefiner } from '~/utils/methods';
 
 export function entityModule<
 	C extends ComponentBase,
@@ -26,53 +26,54 @@ export function entityModule<
 		components: CreateEntityComponentsProp<E>;
 	};
 
-	function createEntity<E extends Entity>(
-		this: InternalLionecs<C, S>,
-		props?: CreateEntityProps<E>
-	): E {
-		const entity = nanoid() as E;
+	const defineMethods = createMethodsDefiner<C, S>();
 
-		if (props !== undefined) {
+	const { createEntity } = defineMethods({
+		createEntity<E extends Entity>(props?: CreateEntityProps<E>): E {
+			const entity = nanoid() as E;
+
+			if (props !== undefined) {
+				this.update(() => {
+					for (const [componentName, componentValue] of Object.entries(
+						props.components
+					)) {
+						this.set(entity, componentName as ComponentKey<C>, componentValue);
+					}
+				});
+			}
+
+			return entity;
+		},
+	});
+
+	const { getEntityMap } = defineMethods({
+		getEntityMap<K extends ComponentKey<C>>(
+			componentKey: K
+		): EntityMap<C, S, K> {
+			return this.state.components[componentKey];
+		},
+	});
+
+	const { cloneEntity } = defineMethods({
+		cloneEntity<E extends Entity>(entityToClone: E): E {
+			const entity = this.createEntity<E>();
+
 			this.update(() => {
-				for (const [componentName, componentValue] of Object.entries(
-					props.components
-				)) {
-					this.set(entity, componentName as ComponentKey<C>, componentValue);
+				for (const componentString of Object.keys(this.state.components)) {
+					const component = componentString as ComponentKey<C>;
+					const componentState = this.getOpt(
+						entityToClone,
+						component as keyof ComponentBase
+					);
+					if (componentState !== undefined) {
+						this.set(entity, component, componentState);
+					}
 				}
 			});
-		}
 
-		return entity;
-	}
-
-	function getEntityMap<K extends ComponentKey<C>>(
-		this: InternalLionecs<C, S>,
-		componentKey: K
-	): EntityMap<C, S, K> {
-		return this.state.components[componentKey];
-	}
-
-	function cloneEntity<E extends Entity>(
-		this: InternalLionecs<C, S>,
-		entityToClone: E
-	): E {
-		const entity = this.createEntity<E>();
-
-		this.update(() => {
-			for (const componentString of Object.keys(this.state.components)) {
-				const component = componentString as ComponentKey<C>;
-				const componentState = this.getOpt(
-					entityToClone,
-					component as keyof ComponentBase
-				);
-				if (componentState !== undefined) {
-					this.set(entity, component, componentState);
-				}
-			}
-		});
-
-		return entity;
-	}
+			return entity;
+		},
+	});
 
 	return {
 		createEntity,

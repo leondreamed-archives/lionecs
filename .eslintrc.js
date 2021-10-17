@@ -93,6 +93,7 @@ module.exports = {
 		'@typescript-eslint/no-explicit-any': 'off',
 		'@typescript-eslint/no-non-null-assertion': 'off',
 		'@typescript-eslint/consistent-type-imports': 'error',
+		'@typescript-eslint/no-empty-interface': 'off',
 
 		// eslint-plugin-unicorn
 		'unicorn/prefer-module': 'off',

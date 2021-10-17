@@ -78,46 +78,22 @@ export type InternalLionecsState<
 	>;
 };
 
-export type InternalLionecs<
+type InternalLionecsKeys<
+	C extends ComponentBase,
+	S extends ComponentState<C>
+> = InternalLionecsProperties<C, S> & InternalLionecsState<C, S>;
+
+export interface InternalLionecs<
 	C extends ComponentBase,
 	S extends ComponentState<C>,
-	X extends LionecsExtras = LionecsExtras
-> = InternalLionecsProperties<C, S> &
-	InternalLionecsState<C, S> &
-	X & { __internal: true };
+	_X extends LionecsExtras = LionecsExtras
+> extends InternalLionecsKeys<C, S> {}
 
-export type ExternalLionecs<
-	C extends ComponentBase,
-	S extends ComponentState<C>,
-	X extends LionecsExtras = LionecsExtras
-> = RemovePrivateProperties<InternalLionecs<C, S, X>>;
-
-type AnyFunction = (...a: any[]) => any;
-
-class LionecsMethodWrapper<
-	C extends ComponentBase,
-	S extends ComponentState<C>,
-	X extends LionecsExtras,
-	F extends AnyFunction
-> {
-	// eslint-disable-next-line class-methods-use-this
-	wrapped(t: F) {
-		return { t } as ThisType<ExternalLionecs<C, S, X>> & { t: F };
-	}
-}
-
-export type Lionecs<
-	C extends ComponentBase,
-	S extends ComponentState<C>,
-	X extends LionecsExtras = LionecsExtras
-> = {
-	[K in keyof ExternalLionecs<C, S, X>]: ExternalLionecs<
-		C,
-		S,
-		X
-	>[K] extends AnyFunction
-		? ReturnType<
-				LionecsMethodWrapper<C, S, X, ExternalLionecs<C, S, X>[K]>['wrapped']
-		  >['t']
-		: ExternalLionecs<C, S, X>[K];
-};
+export interface Lionecs<
+		C extends ComponentBase,
+		S extends ComponentState<C>,
+		X extends LionecsExtras = LionecsExtras
+	>
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
+	extends RemovePrivateProperties<InternalLionecs<C, S, X>> {}
