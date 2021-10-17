@@ -92,13 +92,32 @@ export type ExternalLionecs<
 	X extends LionecsExtras = LionecsExtras
 > = RemovePrivateProperties<InternalLionecs<C, S, X>>;
 
+type AnyFunction = (...a: any[]) => any;
+
+class LionecsMethodWrapper<
+	C extends ComponentBase,
+	S extends ComponentState<C>,
+	X extends LionecsExtras,
+	F extends AnyFunction
+> {
+	// eslint-disable-next-line class-methods-use-this
+	wrapped(t: F) {
+		return { t } as ThisType<ExternalLionecs<C, S, X>> & { t: F };
+	}
+}
+
 export type Lionecs<
 	C extends ComponentBase,
 	S extends ComponentState<C>,
 	X extends LionecsExtras = LionecsExtras
 > = {
-	[K in keyof ExternalLionecs<C, S, X>]: OmitThisParameter<
-		ExternalLionecs<C, S, X>[K]
-	> &
-		ThisType<ExternalLionecs<C, S, X>>;
+	[K in keyof ExternalLionecs<C, S, X>]: ExternalLionecs<
+		C,
+		S,
+		X
+	>[K] extends AnyFunction
+		? ReturnType<
+				LionecsMethodWrapper<C, S, X, ExternalLionecs<C, S, X>[K]>['wrapped']
+		  >['t']
+		: ExternalLionecs<C, S, X>[K];
 };

@@ -56,3 +56,9 @@ export function createLionecs<
 
 	return lionecs as unknown as Lionecs<C, S, X>;
 }
+
+// TODO: get the following code to not throw any type error
+const ecs = createLionecs({} as any);
+ecs.createEntityStateListenerManager<string, Record<string, unknown>>(() => {
+	/* empty */
+});
