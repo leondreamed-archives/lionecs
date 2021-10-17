@@ -1,4 +1,3 @@
-import type { InternalLionecs } from '~/types/lionecs';
 import type {
 	ComponentBase,
 	ComponentKey,
@@ -14,10 +13,7 @@ export function triggerListenersModule<
 	const defineMethods = createMethodsDefiner<C, S>();
 
 	const { triggerListeners } = defineMethods({
-		triggerListeners(
-			this: InternalLionecs<C, S>,
-			stateUpdates: StateUpdate<C, S, ComponentKey<C>>[]
-		) {
+		triggerListeners(stateUpdates: StateUpdate<C, S, ComponentKey<C>>[]) {
 			const stateListeners = this.retrieveStateListeners(stateUpdates);
 			for (const [stateListener, params] of stateListeners) {
 				this._untriggeredListeners.set(stateListener, params);

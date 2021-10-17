@@ -80,14 +80,17 @@ export type InternalLionecsState<
 
 type InternalLionecsKeys<
 	C extends ComponentBase,
-	S extends ComponentState<C>
-> = InternalLionecsProperties<C, S> & InternalLionecsState<C, S>;
+	S extends ComponentState<C>,
+	X extends LionecsExtras = LionecsExtras
+> = InternalLionecsProperties<C, S> & InternalLionecsState<C, S> & X;
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 export interface InternalLionecs<
 	C extends ComponentBase,
 	S extends ComponentState<C>,
-	_X extends LionecsExtras = LionecsExtras
-> extends InternalLionecsKeys<C, S> {}
+	X extends LionecsExtras = LionecsExtras
+> extends InternalLionecsKeys<C, S, X> {}
 
 export interface Lionecs<
 		C extends ComponentBase,

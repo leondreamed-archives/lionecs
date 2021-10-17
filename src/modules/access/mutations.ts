@@ -2,7 +2,6 @@ import { produce } from 'immer';
 import extend from 'just-extend';
 
 import type { Entity } from '~/types/entity';
-import type { InternalLionecs } from '~/types/lionecs';
 import type {
 	ComponentBase,
 	ComponentKey,
@@ -36,7 +35,6 @@ export function mutationsModule<
 
 	const { del } = defineMethods({
 		del<K extends ComponentKey<C>>(
-			this: InternalLionecs<C, S>,
 			entity: Entity,
 			componentKey: K
 		) {
