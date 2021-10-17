@@ -41,6 +41,7 @@ module.exports = {
 		'no-cond-assign': ['error', 'except-parens'],
 		'default-case': 'off',
 		'no-use-before-define': 'off',
+		'func-names': 'off',
 
 		// eslint-plugin-import rules
 		'import/no-default-export': 'error',

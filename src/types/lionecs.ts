@@ -82,10 +82,23 @@ export type InternalLionecs<
 	C extends ComponentBase,
 	S extends ComponentState<C>,
 	X extends LionecsExtras = LionecsExtras
-> = InternalLionecsProperties<C, S> & X & InternalLionecsState<C, S>;
+> = InternalLionecsProperties<C, S> &
+	InternalLionecsState<C, S> &
+	X & { __internal: true };
+
+export type ExternalLionecs<
+	C extends ComponentBase,
+	S extends ComponentState<C>,
+	X extends LionecsExtras = LionecsExtras
+> = RemovePrivateProperties<InternalLionecs<C, S, X>>;
 
 export type Lionecs<
 	C extends ComponentBase,
 	S extends ComponentState<C>,
 	X extends LionecsExtras = LionecsExtras
-> = RemovePrivateProperties<InternalLionecs<C, S, X>>;
+> = {
+	[K in keyof ExternalLionecs<C, S, X>]: OmitThisParameter<
+		ExternalLionecs<C, S, X>[K]
+	> &
+		ThisType<ExternalLionecs<C, S, X>>;
+};

@@ -14,7 +14,7 @@ export function usePluginModule<
 		this: Lionecs<C, S, X>,
 		plugin: LionecsPlugin<C, S, A>
 	): Lionecs<C, S, A> {
-		return plugin(this);
+		return plugin(this as any);
 	}
 
 	return { use };
