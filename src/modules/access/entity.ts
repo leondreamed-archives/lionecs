@@ -19,9 +19,9 @@ export function entityModule<
 		infer Req,
 		infer Opt
 	>
-		? { [K in Req]: S[K] } & (Opt extends ComponentKey<C>
-				? { [K in Opt]?: S[K] }
-				: Record<string, unknown>)
+		? { [K in keyof TypedEntity<C, Req, Opt>['__required']]: S[K] } & {
+				[K in keyof TypedEntity<C, Req, Opt>['__optional']]?: S[K];
+		  }
 		: { [K in ComponentKey<C>]?: S[K] };
 
 	type CreateEntityProps<E extends Entity> = {
@@ -29,7 +29,7 @@ export function entityModule<
 	};
 
 	const { createEntity } = defineMethods({
-		createEntity <E extends Entity>(props?: CreateEntityProps<E>): E {
+		createEntity: function <E extends Entity>(props?: CreateEntityProps<E>): E {
 			const entity = nanoid() as E;
 
 			if (props !== undefined) {
@@ -47,7 +47,7 @@ export function entityModule<
 	});
 
 	const { getEntityMap } = defineMethods({
-		getEntityMap<K extends ComponentKey<C>>(
+		getEntityMap: function <K extends ComponentKey<C>>(
 			componentKey: K
 		): EntityMap<C, S, K> {
 			return this.state.components[componentKey];
@@ -55,7 +55,7 @@ export function entityModule<
 	});
 
 	const { cloneEntity } = defineMethods({
-		cloneEntity <E extends Entity>(entityToClone: E): E {
+		cloneEntity: function <E extends Entity>(entityToClone: E): E {
 			const entity = this.createEntity<E>();
 
 			this.update(() => {
