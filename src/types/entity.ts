@@ -16,14 +16,14 @@ export type TypedEntity<
 	__required: {
 		[K in R]: K;
 	};
-	__optional: O extends ComponentKey<C>
+	__optional: [O] extends [ComponentKey<C>]
 		? {
 				[K in O]: K;
 		  }
-		: Record<never, never>;
+		: Record<string, never>;
 };
 
 export type EntityComponent<
 	C extends ComponentBase,
 	E extends Entity
-> = E extends TypedEntity<infer R, infer O> ? R | O : ComponentKey<C>;
+> = E extends TypedEntity<C, infer R, infer O> ? R | O : ComponentKey<C>;
