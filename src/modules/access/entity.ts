@@ -19,9 +19,11 @@ export function entityModule<
 		infer Req,
 		infer Opt
 	>
-		? { [K in keyof TypedEntity<C, Req, Opt>['__required']]: S[K] } & {
-				[K in keyof TypedEntity<C, Req, Opt>['__optional']]?: S[K];
-		  }
+		? Opt extends ComponentKey<C>
+			? { [K in keyof TypedEntity<C, Req, Opt>['__required']]: S[K] } & {
+					[K in keyof TypedEntity<C, Req, Opt>['__optional']]?: S[K];
+			  }
+			: { [K in keyof TypedEntity<C, Req, Opt>['__required']]: S[K] }
 		: { [K in ComponentKey<C>]?: S[K] };
 
 	type CreateEntityProps<E extends Entity> = {
