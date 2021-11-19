@@ -5,7 +5,7 @@ import type {
 	ComponentState,
 	LionecsExtras,
 } from '~/types/state';
-import { createMethodsDefiner } from '~/utils/methods';
+import { useDefineMethods } from '~/utils/methods';
 
 export function usePluginModule<
 	C extends ComponentBase,
@@ -18,6 +18,6 @@ export function usePluginModule<
 		return plugin(this as any);
 	}
 
-	const defineMethods = createMethodsDefiner<C, S>();
+	const defineMethods = useDefineMethods<C, S>();
 	return defineMethods({ use });
 }

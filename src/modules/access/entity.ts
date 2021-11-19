@@ -6,7 +6,7 @@ import type {
 	ComponentKey,
 	ComponentState,
 } from '~/types/state';
-import { createMethodsDefiner } from '~/utils/methods';
+import { useDefineMethods } from '~/utils/methods';
 
 export function entityModule<
 	C extends ComponentBase,
@@ -26,7 +26,7 @@ export function entityModule<
 		components: CreateEntityComponentsProp<E>;
 	};
 
-	const defineMethods = createMethodsDefiner<C, S>();
+	const defineMethods = useDefineMethods<C, S>();
 
 	const { createEntity } = defineMethods({
 		createEntity<E extends Entity>(props?: CreateEntityProps<E>): E {

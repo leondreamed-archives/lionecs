@@ -1,13 +1,13 @@
 import type { EntityStateListener } from '~/types/context';
 import type { Entity } from '~/types/entity';
 import type { ComponentBase, ComponentState } from '~/types/state';
-import { createMethodsDefiner } from '~/utils/methods';
+import { useDefineMethods } from '~/utils/methods';
 
 export function entityStateListenersModule<
 	C extends ComponentBase,
 	S extends ComponentState<C>
 >() {
-	const defineMethods = createMethodsDefiner<C, S>();
+	const defineMethods = useDefineMethods<C, S>();
 
 	const { addEntityStateListener } = defineMethods({
 		addEntityStateListener<

@@ -4,13 +4,13 @@ import type {
 	ComponentState,
 	StateUpdate,
 } from '~/types/state';
-import { createMethodsDefiner } from '~/utils/methods';
+import { useDefineMethods } from '~/utils/methods';
 
 export function triggerListenersModule<
 	C extends ComponentBase,
 	S extends ComponentState<C>
 >() {
-	const defineMethods = createMethodsDefiner<C, S>();
+	const defineMethods = useDefineMethods<C, S>();
 
 	const { triggerListeners } = defineMethods({
 		triggerListeners(stateUpdates: StateUpdate<C, S, ComponentKey<C>>[]) {

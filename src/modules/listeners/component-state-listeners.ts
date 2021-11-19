@@ -4,16 +4,16 @@ import type {
 	ComponentKey,
 	ComponentState,
 } from '~/types/state';
-import { createMethodsDefiner } from '~/utils/methods';
+import { useDefineMethods } from '~/utils/methods';
 
 export function componentStateListenersModule<
 	C extends ComponentBase,
 	S extends ComponentState<C>
 >() {
-	const defineMethods = createMethodsDefiner<C, S>();
+	const defineMethods = useDefineMethods<C, S>();
 
 	const { removeComponentStateListener } = defineMethods({
-		removeComponentStateListener<
+		removeComponentStateListener: function <
 			K extends ComponentKey<C>,
 			R extends Record<string, unknown> | undefined = undefined
 		>({
@@ -35,7 +35,7 @@ export function componentStateListenersModule<
 	});
 
 	const { addComponentStateListener } = defineMethods({
-		addComponentStateListener<
+		addComponentStateListener: function <
 			K extends ComponentKey<C>,
 			R extends Record<string, unknown> | undefined = undefined
 		>({
@@ -59,7 +59,7 @@ export function componentStateListenersModule<
 	});
 
 	const { createComponentStateListenerManager } = defineMethods({
-		createComponentStateListenerManager<
+		createComponentStateListenerManager: function <
 			K extends ComponentKey<C>,
 			R extends Record<string, unknown> | undefined = undefined
 		>(listener: ComponentStateListener<C, S, K, R>) {

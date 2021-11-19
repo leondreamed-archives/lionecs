@@ -3,13 +3,13 @@ import type {
 	ComponentKey,
 	ComponentState,
 } from '~/types/state';
-import { createMethodsDefiner } from '~/utils/methods';
+import { useDefineMethods } from '~/utils/methods';
 
 export function selectModule<
 	C extends ComponentBase,
 	S extends ComponentState<C>
 >() {
-	const defineMethods = createMethodsDefiner<C, S>();
+	const defineMethods = useDefineMethods<C, S>();
 
 	type SelectProps<KS extends ComponentKey<C>[]> = {
 		components: KS;

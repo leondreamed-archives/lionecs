@@ -9,13 +9,13 @@ import type {
 	StateUpdate,
 } from '~/types/state';
 import { StateUpdateType } from '~/types/state';
-import { createMethodsDefiner } from '~/utils/methods';
+import { useDefineMethods } from '~/utils/methods';
 
 export function mutationsModule<
 	C extends ComponentBase,
 	S extends ComponentState<C>
 >() {
-	const defineMethods = createMethodsDefiner<C, S>();
+	const defineMethods = useDefineMethods<C, S>();
 	/**
 	 * Batch update the state and trigger listeners only when the callback has finished
 	 */

@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid';
 
 import type { ComponentBase, ComponentState } from '~/types/state';
-import { createMethodsDefiner } from '~/utils/methods';
+import { useDefineMethods } from '~/utils/methods';
 
 import type { ElementProperty, InternalElementPluginExtras } from '../types';
 
@@ -9,7 +9,7 @@ export function createElementModule<
 	C extends ComponentBase,
 	S extends ComponentState<C>
 >() {
-	const defineMethods = createMethodsDefiner<
+	const defineMethods = useDefineMethods<
 		C,
 		S,
 		InternalElementPluginExtras<C, S>
