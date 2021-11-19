@@ -16,3 +16,5 @@ export type TypedEntity<
 	__requiredComponents: R;
 	__optionalComponents: O;
 };
+
+export type EntityComponent<C extends ComponentBase, E extends Entity> = E extends TypedEntity<infer R, infer O> ? R | O : ComponentKey<C>;

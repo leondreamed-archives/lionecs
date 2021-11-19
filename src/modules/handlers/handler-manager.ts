@@ -1,4 +1,4 @@
-import type { Entity } from '~/types/entity';
+import type { Entity, EntityComponent } from '~/types/entity';
 import type {
 	MultiComponentStateChangeHandler,
 	SingleComponentStateChangeHandler,
@@ -8,6 +8,7 @@ import type {
 	ComponentKey,
 	ComponentState,
 } from '~/types/state';
+import type { InternalLionecs } from '~/types/lionecs';
 import { createMethodsDefiner } from '~/utils/methods';
 
 export function handlerManagerModule<
@@ -16,19 +17,7 @@ export function handlerManagerModule<
 >() {
 	const defineMethods = createMethodsDefiner<C, S>();
 
-	/**
-	 * Handlers should be responsible for applying changes to the ECS data to the DOM.
-	 * Listeners/systems will call these handlers and will expect them to update the DOM
-	 * as necessary based on the current state and the last state the handler managed.
-	 * Instead of checking the DOM to determine the current state (which has performance
-	 * implications), the handlers will keep a copy of the last state they acted upon to
-	 * keep track of the current DOM state.
-	 */
-	const { createHandlerManager } = defineMethods({
-		createHandlerManager<
-			E extends Entity,
-			R extends Record<string, unknown> = Record<never, never>
-		>() {
+	function __createHandlerManager<E extends Entity, R extends Record<string, unknown> = Record<never, never>>(this: InternalLionecs<C, S>) {
 			const handlers: (
 				| SingleComponentStateChangeHandler<C, S, ComponentKey<C>, E, R>
 				| MultiComponentStateChangeHandler<
@@ -118,75 +107,103 @@ export function handlerManagerModule<
 						}
 					}
 				}
-			};
+			}
 
-			const createMultiComponentHandler = <
-				K extends readonly ComponentKey<C>[]
-			>(
-				components: K,
-				callback: MultiComponentStateChangeHandler<C, S, K, E, R>['callback']
-			) => {
-				handlers.push({
-					components,
-					callback,
-					oldComponentStates: components.map(() => undefined),
-				});
-			};
+		const createMultiComponentHandler = <K extends readonly ComponentKey<C>[]>(
+			components: K,
+			callback: MultiComponentStateChangeHandler<C, S, K, E, R>['callback']
+		) => {
+			handlers.push({
+				components,
+				callback,
+				oldComponentStates: components.map(() => undefined),
+			});
+		};
 
-			const createSingleComponentHandler = <K extends ComponentKey<C>>(
-				component: K,
-				callback: SingleComponentStateChangeHandler<C, S, K, E, R>['callback']
-			) => {
-				handlers.push({
-					component,
-					callback,
-					oldComponentState: undefined,
-				});
-			};
+		const createSingleComponentHandler = <K extends ComponentKey<C>>(
+			component: K,
+			callback: SingleComponentStateChangeHandler<C, S, K, E, R>['callback']
+		) => {
+			handlers.push({
+				component,
+				callback,
+				oldComponentState: undefined,
+			});
+		};
 
-			const createHandler = <
-				K extends ComponentKey<C> | readonly ComponentKey<C>[]
-			>(
-				componentOrComponents: K,
-				callback: K extends ComponentKey<C>
-					? SingleComponentStateChangeHandler<C, S, K, E, R>['callback']
-					: K extends readonly ComponentKey<C>[]
-					? MultiComponentStateChangeHandler<C, S, K, E, R>['callback']
-					: never
-			) => {
-				if (typeof componentOrComponents === 'string') {
-					createSingleComponentHandler(
-						componentOrComponents,
-						callback as SingleComponentStateChangeHandler<
-							C,
-							S,
-							ComponentKey<C>,
-							E,
-							R
-						>['callback']
-					);
-				} else {
-					createMultiComponentHandler(
-						componentOrComponents as readonly ComponentKey<C>[],
-						callback as MultiComponentStateChangeHandler<
-							C,
-							S,
-							ComponentKey<C>[],
-							E,
-							R
-						>['callback']
-					);
-				}
-			};
+		const createHandler = <
+			K extends ComponentKey<C> | readonly ComponentKey<C>[]
+		>(
+			componentOrComponents: K,
+			callback: K extends ComponentKey<C>
+				? SingleComponentStateChangeHandler<C, S, K, E, R>['callback']
+				: K extends readonly ComponentKey<C>[]
+				? MultiComponentStateChangeHandler<C, S, K, E, R>['callback']
+				: never
+		) => {
+			if (typeof componentOrComponents === 'string') {
+				createSingleComponentHandler(
+					componentOrComponents,
+					callback as SingleComponentStateChangeHandler<
+						C,
+						S,
+						ComponentKey<C>,
+						E,
+						R
+					>['callback']
+				);
+			} else {
+				createMultiComponentHandler(
+					componentOrComponents as readonly ComponentKey<C>[],
+					callback as MultiComponentStateChangeHandler<
+						C,
+						S,
+						ComponentKey<C>[],
+						E,
+						R
+					>['callback']
+				);
+			}
+		};
 
-			return {
-				executeHandlers,
-				createHandler,
-			};
-		},
+		type DefineHandlersProps = {
+			exhaustive: false,
+			handlers: {
+				[K in EntityComponent<C, E>]?: SingleComponentStateChangeHandler<C, S, K, E, R>['callback']
+			},
+		} | {
+			exhaustive: true,
+			handlers: {
+				[K in EntityComponent<C, E>]: SingleComponentStateChangeHandler<C, S, K, E, R>['callback']
+			}
+		}
+
+		const defineHandlers = (props: DefineHandlersProps) => {
+			for (const [component, callback] of Object.entries(props.handlers)) {
+				createSingleComponentHandler(component, callback as SingleComponentStateChangeHandler<C, S, ComponentKey<C>, E, R>['callback']);
+			}
+		}
+
+		return {
+			executeHandlers,
+			defineHandlers,
+			createHandler,
+		};
+	}
+
+	/**
+	 * Handlers should be responsible for applying changes to the ECS data to some UI state.
+	 * Listeners/systems will call these handlers and will expect them to update the UI state
+	 * as necessary based on the current state and the last state the handler managed.
+	 * Instead of checking the UI state to determine the current state (which has performance
+	 * implications), the handlers will keep a copy of the last state they acted upon to
+	 * keep track of the current UI state.
+	 */
+	const { createHandlerManager } = defineMethods({
+		createHandlerManager: __createHandlerManager
 	});
 
 	return {
-		createHandlerManager,
-	};
+		createHandlerManager
+	}
 }
