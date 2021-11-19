@@ -27,7 +27,7 @@ export function triggerListenersModule<
 						.keys()
 						.next().value;
 					const [listener, listenerParams] = untriggeredListenerCall;
-					listener(listenerParams);
+					listener(...listenerParams);
 					this._untriggeredListenerCalls.delete(untriggeredListenerCall);
 				}
 				this._areListenersBeingTriggered = false;

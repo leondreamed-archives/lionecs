@@ -122,6 +122,7 @@ export function handlerManagerModule<
 
 				const uniqueComponents = new Set<ComponentKey<C>>();
 				for (const handler of handlers) {
+					(componentToHandlers[handler.component] ??= []).push(handler);
 					uniqueComponents.add(handler.component);
 				}
 				for (const component of uniqueComponents) {
