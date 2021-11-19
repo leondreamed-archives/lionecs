@@ -11,16 +11,14 @@ export type EntityMap<
 export type TypedEntity<
 	C extends ComponentBase,
 	R extends ComponentKey<C>,
-	O extends ComponentKey<C> | undefined = undefined
+	O extends ComponentKey<C> | never = never
 > = Entity & {
 	__required: {
-		[K in R]: K;
+		[K in R]: true;
 	};
-	__optional: [O] extends [ComponentKey<C>]
-		? {
-				[K in O]: K;
-		  }
-		: Record<string, never>;
+	__optional: {
+		[K in O]: true;
+	};
 };
 
 export type EntityComponent<
