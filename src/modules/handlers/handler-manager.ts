@@ -1,8 +1,5 @@
 import type { Entity } from '~/types/entity';
-import type {
-	MultiComponentStateChangeHandler,
-	SingleComponentStateChangeHandler,
-} from '~/types/handlers';
+import type { ComponentStateChangeHandler } from '~/types/handlers';
 import type {
 	ComponentBase,
 	ComponentKey,
@@ -29,16 +26,13 @@ export function handlerManagerModule<
 			E extends Entity,
 			R extends Record<string, unknown> = Record<never, never>
 		>() {
-			const handlers: (
-				| SingleComponentStateChangeHandler<C, S, ComponentKey<C>, E, R>
-				| MultiComponentStateChangeHandler<
-						C,
-						S,
-						readonly ComponentKey<C>[],
-						E,
-						R
-				  >
-			)[] = [];
+			const handlers: ComponentStateChangeHandler<
+				C,
+				S,
+				ComponentKey<C>,
+				E,
+				R
+			>[] = [];
 
 			type ExecuteHandlerProps = {
 				entity: E;
@@ -57,85 +51,46 @@ export function handlerManagerModule<
 				for (const handler of handlers) {
 					let didComponentsChange = false;
 
-					const isMultiComponentHandler = 'components' in handler;
-					const handlerComponents = isMultiComponentHandler
-						? handler.components
-						: [handler.component];
-					const oldComponentStates = isMultiComponentHandler
-						? handler.oldComponentStates
-						: [handler.oldComponentState];
+					// If the handler isn't responsible for the component, then skip it.
+					if (
+						components !== undefined &&
+						!components.includes(handler.component)
+					)
+						continue;
 
-					for (const [
-						componentIndex,
-						component,
-					] of handlerComponents.entries()) {
-						// If the handler isn't responsible for the component, then skip it.
-						if (components !== undefined && !components.includes(component))
-							continue;
+					// Check if the component state changed
+					const currentComponentState = this.get(
+						entity as Entity,
+						handler.component as keyof ComponentBase
+					);
 
-						// Check if the component state changed
-						const currentComponentState = this.get(
-							entity as Entity,
-							component as keyof ComponentBase
-						);
-
-						if (currentComponentState !== oldComponentStates[componentIndex]) {
-							didComponentsChange = true;
-							break;
-						}
+					if (currentComponentState !== handler.oldComponentState) {
+						didComponentsChange = true;
+						break;
 					}
 
 					// If a change in the components was detected, trigger the callback
 					if (didComponentsChange) {
-						if (isMultiComponentHandler) {
-							const currentComponentStates = handlerComponents.map(
-								(component) =>
-									this.get(entity as Entity, component as keyof ComponentBase)
-							);
+						const currentComponentState = this.get(
+							entity as Entity,
+							handler.component as keyof ComponentBase
+						);
 
-							handler.callback({
-								newComponentStates: currentComponentStates,
-								oldComponentStates,
-								entity,
-								extras,
-							});
+						handler.callback({
+							entity,
+							extras,
+							oldComponentState: handler.oldComponentState,
+							newComponentState: currentComponentState,
+						});
 
-							handler.oldComponentStates = currentComponentStates;
-						} else {
-							const currentComponentState = this.get(
-								entity as Entity,
-								handler.component as keyof ComponentBase
-							);
-
-							handler.callback({
-								entity,
-								extras,
-								oldComponentState: handler.oldComponentState,
-								newComponentState: currentComponentState,
-							});
-
-							handler.oldComponentState = currentComponentState;
-						}
+						handler.oldComponentState = currentComponentState;
 					}
 				}
 			};
 
-			const createMultiComponentHandler = <
-				K extends readonly ComponentKey<C>[]
-			>(
-				components: K,
-				callback: MultiComponentStateChangeHandler<C, S, K, E, R>['callback']
-			) => {
-				handlers.push({
-					components,
-					callback,
-					oldComponentStates: components.map(() => undefined),
-				});
-			};
-
-			const createSingleComponentHandler = <K extends ComponentKey<C>>(
+			const createHandler = <K extends ComponentKey<C>>(
 				component: K,
-				callback: SingleComponentStateChangeHandler<C, S, K, E, R>['callback']
+				callback: ComponentStateChangeHandler<C, S, K, E, R>['callback']
 			) => {
 				handlers.push({
 					component,
@@ -144,44 +99,41 @@ export function handlerManagerModule<
 				});
 			};
 
-			const createHandler = <
-				K extends ComponentKey<C> | readonly ComponentKey<C>[]
-			>(
-				componentOrComponents: K,
-				callback: K extends ComponentKey<C>
-					? SingleComponentStateChangeHandler<C, S, K, E, R>['callback']
-					: K extends readonly ComponentKey<C>[]
-					? MultiComponentStateChangeHandler<C, S, K, E, R>['callback']
-					: never
+			type RegisterHandlerListenersProps = {
+				extras: R;
+			};
+			const registerHandlerListeners = (
+				props: RegisterHandlerListenersProps
 			) => {
-				if (typeof componentOrComponents === 'string') {
-					createSingleComponentHandler(
-						componentOrComponents,
-						callback as SingleComponentStateChangeHandler<
-							C,
-							S,
-							ComponentKey<C>,
-							E,
-							R
-						>['callback']
-					);
-				} else {
-					createMultiComponentHandler(
-						componentOrComponents as readonly ComponentKey<C>[],
-						callback as MultiComponentStateChangeHandler<
-							C,
-							S,
-							ComponentKey<C>[],
-							E,
-							R
-						>['callback']
-					);
+				const componentToHandlers = {} as Record<
+					ComponentKey<C>,
+					ComponentStateChangeHandler<C, S, ComponentKey<C>, E, R>[]
+				>;
+
+				for (const handler of handlers) {
+					(componentToHandlers[handler.component] ??= []).push(handler);
 				}
+
+				this.createComponentStateListenerManager(
+					({ component, entity, oldComponentState }) => {
+						if (componentToHandlers[component] !== undefined) {
+							for (const handler of componentToHandlers[component]) {
+								handler.callback({
+									extras: props.extras,
+									newComponentState: this.get(entity, component),
+									oldComponentState,
+									entity: entity as E,
+								});
+							}
+						}
+					}
+				);
 			};
 
 			return {
 				executeHandlers,
 				createHandler,
+				registerHandlerListeners,
 			};
 		},
 	});
