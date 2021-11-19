@@ -49,14 +49,13 @@ export function handlerManagerModule<
 				components,
 			}: ExecuteHandlerProps) => {
 				for (const handler of handlers) {
-					let didComponentsChange = false;
-
 					// If the handler isn't responsible for the component, then skip it.
 					if (
 						components !== undefined &&
 						!components.includes(handler.component)
-					)
+					) {
 						continue;
+					}
 
 					// Check if the component state changed
 					const currentComponentState = this.get(
@@ -64,13 +63,8 @@ export function handlerManagerModule<
 						handler.component as keyof ComponentBase
 					);
 
-					if (currentComponentState !== handler.oldComponentState) {
-						didComponentsChange = true;
-						break;
-					}
-
 					// If a change in the components was detected, trigger the callback
-					if (didComponentsChange) {
+					if (currentComponentState !== handler.oldComponentState) {
 						const currentComponentState = this.get(
 							entity as Entity,
 							handler.component as keyof ComponentBase
