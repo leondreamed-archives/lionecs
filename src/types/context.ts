@@ -38,7 +38,7 @@ export type EntityStateListenerContext<
 		| Record<string, unknown>
 		| undefined
 > = {
-	listener: EntityStateListener<E, C, S, R>;
+	listener: EntityStateListener<E, C, R>;
 	extras: R;
 };
 

@@ -19,7 +19,7 @@ export function entityStateListenersModule<
 			extras,
 		}: {
 			entity: E;
-			listener: EntityStateListener<E, C, S, R>;
+			listener: EntityStateListener<E, C, R>;
 			extras?: R;
 		}) {
 			if (!this._entityListenerContexts.has(entity)) {
@@ -37,8 +37,8 @@ export function entityStateListenersModule<
 		createEntityStateListenerManager<
 			E extends Entity,
 			R extends Record<string, unknown> | undefined = undefined
-		>(listener: EntityStateListener<E, C, S, R>) {
-			const listeners = new Map<Entity, EntityStateListener<E, C, S, R>>();
+		>(listener: EntityStateListener<E, C, R>) {
+			const listeners = new Map<Entity, EntityStateListener<E, C, R>>();
 
 			const registerEntityStateListener = (entity: E, extras?: R) => {
 				if (!listeners.has(entity)) {
@@ -65,7 +65,7 @@ export function entityStateListenersModule<
 			listener,
 		}: {
 			entity: Entity;
-			listener: EntityStateListener<E, C, S, R>;
+			listener: EntityStateListener<E, C, R>;
 		}) {
 			const index =
 				this._entityListenerContexts
