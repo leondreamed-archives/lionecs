@@ -13,8 +13,14 @@ export type TypedEntity<
 	R extends ComponentKey<C>,
 	O extends ComponentKey<C> | undefined = undefined
 > = Entity & {
-	__requiredComponents: R;
-	__optionalComponents: O;
+	__required: {
+		[K in R]: K;
+	};
+	__optional: O extends ComponentKey<C>
+		? {
+				[K in O]: K;
+		  }
+		: Record<never, never>;
 };
 
 export type EntityComponent<

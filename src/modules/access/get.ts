@@ -23,11 +23,11 @@ export function getModule<
 		E extends Entity,
 		K extends E extends TypedEntity<infer Req, infer Opt>
 			?
-					| TypedEntity<Req, Opt>['__requiredComponents']
-					| TypedEntity<Req, Opt>['__optionalComponents']
+					| keyof TypedEntity<Req, Opt>['__required']
+					| keyof TypedEntity<Req, Opt>['__optional']
 			: ComponentKey<C>,
 		O extends E extends TypedEntity<infer Req, infer Opt>
-			? C extends TypedEntity<Req, Opt>['__optionalComponents']
+			? C extends keyof TypedEntity<Req, Opt>['__optional']
 				? { optional: true }
 				: { optional: false }
 			: GetOptions
@@ -47,11 +47,11 @@ export function getModule<
 		E extends Entity,
 		K extends E extends TypedEntity<infer Req, infer Opt>
 			?
-					| TypedEntity<Req, Opt>['__requiredComponents']
-					| TypedEntity<Req, Opt>['__optionalComponents']
+					| keyof TypedEntity<Req, Opt>['__required']
+					| keyof TypedEntity<Req, Opt>['__optional']
 			: ComponentKey<C>,
 		O extends E extends TypedEntity<infer Req, infer Opt>
-			? C extends TypedEntity<Req, Opt>['__optionalComponents']
+			? C extends keyof TypedEntity<Req, Opt>['__optional']
 				? { optional: true }
 				: { optional: false }
 			: GetOptions
