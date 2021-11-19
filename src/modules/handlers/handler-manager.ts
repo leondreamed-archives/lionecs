@@ -104,24 +104,29 @@ export function handlerManagerModule<
 					ComponentStateChangeHandler<C, S, ComponentKey<C>, E, R>[]
 				>;
 
-				for (const handler of handlers) {
-					(componentToHandlers[handler.component] ??= []).push(handler);
-				}
-
-				this.createComponentStateListenerManager(
-					({ component, entity, oldComponentState }) => {
-						if (componentToHandlers[component] !== undefined) {
-							for (const handler of componentToHandlers[component]) {
-								handler.callback({
-									extras: props.extras,
-									newComponentState: this.get(entity, component),
-									oldComponentState,
-									entity: entity as E,
-								});
+				const { registerComponentStateListener } =
+					this.createComponentStateListenerManager(
+						({ component, entity, oldComponentState }) => {
+							if (componentToHandlers[component] !== undefined) {
+								for (const handler of componentToHandlers[component]) {
+									handler.callback({
+										extras: props.extras,
+										newComponentState: this.get(entity, component),
+										oldComponentState,
+										entity: entity as E,
+									});
+								}
 							}
 						}
-					}
-				);
+					);
+
+				const uniqueComponents = new Set<ComponentKey<C>>();
+				for (const handler of handlers) {
+					uniqueComponents.add(handler.component);
+				}
+				for (const component of uniqueComponents) {
+					registerComponentStateListener(component);
+				}
 			};
 
 			return {
