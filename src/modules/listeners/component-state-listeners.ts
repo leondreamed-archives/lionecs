@@ -13,7 +13,7 @@ export function componentStateListenersModule<
 	const defineMethods = useDefineMethods<C, S>();
 
 	const { removeComponentStateListener } = defineMethods({
-		removeComponentStateListener: function <
+		removeComponentStateListener <
 			K extends ComponentKey<C>,
 			R extends Record<string, unknown> | undefined = undefined
 		>({
@@ -35,7 +35,7 @@ export function componentStateListenersModule<
 	});
 
 	const { addComponentStateListener } = defineMethods({
-		addComponentStateListener: function <
+		addComponentStateListener <
 			K extends ComponentKey<C>,
 			R extends Record<string, unknown> | undefined = undefined
 		>({
@@ -59,7 +59,7 @@ export function componentStateListenersModule<
 	});
 
 	const { createComponentStateListenerManager } = defineMethods({
-		createComponentStateListenerManager: function <
+		createComponentStateListenerManager <
 			K extends ComponentKey<C>,
 			R extends Record<string, unknown> | undefined = undefined
 		>(listener: ComponentStateListener<C, S, K, R>) {

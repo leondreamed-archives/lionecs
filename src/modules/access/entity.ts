@@ -12,6 +12,8 @@ export function entityModule<
 	C extends ComponentBase,
 	S extends ComponentState<C>
 >() {
+	const defineMethods = useDefineMethods<C, S>();
+
 	type CreateEntityComponentsProp<E extends Entity> = E extends TypedEntity<
 		C,
 		infer Req,
@@ -26,10 +28,8 @@ export function entityModule<
 		components: CreateEntityComponentsProp<E>;
 	};
 
-	const defineMethods = useDefineMethods<C, S>();
-
 	const { createEntity } = defineMethods({
-		createEntity<E extends Entity>(props?: CreateEntityProps<E>): E {
+		createEntity <E extends Entity>(props?: CreateEntityProps<E>): E {
 			const entity = nanoid() as E;
 
 			if (props !== undefined) {
@@ -55,7 +55,7 @@ export function entityModule<
 	});
 
 	const { cloneEntity } = defineMethods({
-		cloneEntity<E extends Entity>(entityToClone: E): E {
+		cloneEntity <E extends Entity>(entityToClone: E): E {
 			const entity = this.createEntity<E>();
 
 			this.update(() => {

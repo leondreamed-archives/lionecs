@@ -34,10 +34,7 @@ export function mutationsModule<
 	});
 
 	const { del } = defineMethods({
-		del<K extends ComponentKey<C>>(
-			entity: Entity,
-			componentKey: K
-		) {
+		del<K extends ComponentKey<C>>(entity: Entity, componentKey: K) {
 			delete this.state.components[componentKey][entity];
 		},
 	});

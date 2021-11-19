@@ -8,7 +8,7 @@ export function registerFunctionModule<
 	const defineMethods = useDefineMethods<C, S>();
 
 	const { registerFunction } = defineMethods({
-		registerFunction: function () {
+		registerFunction () {
 			throw new Error('not implemented');
 		},
 	});

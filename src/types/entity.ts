@@ -17,4 +17,7 @@ export type TypedEntity<
 	__optionalComponents: O;
 };
 
-export type EntityComponent<C extends ComponentBase, E extends Entity> = E extends TypedEntity<infer R, infer O> ? R | O : ComponentKey<C>;
+export type EntityComponent<
+	C extends ComponentBase,
+	E extends Entity
+> = E extends TypedEntity<infer R, infer O> ? R | O : ComponentKey<C>;

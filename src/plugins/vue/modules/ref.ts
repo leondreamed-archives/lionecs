@@ -22,7 +22,7 @@ export function refModule<
 
 	// get(entity, component, options)
 	const { useLionecsRef } = defineMethods({
-		useLionecsRef: function <
+		useLionecsRef <
 			E extends Entity,
 			K extends E extends TypedEntity<infer Req, infer Opt>
 				?

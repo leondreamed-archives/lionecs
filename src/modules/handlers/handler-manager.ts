@@ -25,7 +25,7 @@ export function handlerManagerModule<
 	 * keep track of the current UI state.
 	 */
 	const { createHandlerManager } = defineMethods({
-		createHandlerManager: function <
+		createHandlerManager <
 			E extends Entity,
 			R extends Record<string, unknown> = Record<never, never>
 		>() {
