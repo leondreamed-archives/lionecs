@@ -10,7 +10,7 @@ export function entityStateListenersModule<
 	const defineMethods = useDefineMethods<C, S>();
 
 	const { addEntityStateListener } = defineMethods({
-		addEntityStateListener<
+		addEntityStateListener: function <
 			E extends Entity,
 			R extends Record<string, unknown> | undefined = undefined
 		>({
@@ -19,7 +19,7 @@ export function entityStateListenersModule<
 			extras,
 		}: {
 			entity: E;
-			listener: EntityStateListener<E, C, R>;
+			listener: EntityStateListener<C, E, R>;
 			extras?: R;
 		}) {
 			if (!this._entityListenerContexts.has(entity)) {
@@ -34,11 +34,11 @@ export function entityStateListenersModule<
 	});
 
 	const { createEntityStateListenerManager } = defineMethods({
-		createEntityStateListenerManager<
+		createEntityStateListenerManager: function <
 			E extends Entity,
 			R extends Record<string, unknown> | undefined = undefined
-		>(listener: EntityStateListener<E, C, R>) {
-			const listeners = new Map<Entity, EntityStateListener<E, C, R>>();
+		>(listener: EntityStateListener<C, E, R>) {
+			const listeners = new Map<Entity, EntityStateListener<C, E, R>>();
 
 			const registerEntityStateListener = (entity: E, extras?: R) => {
 				if (!listeners.has(entity)) {
@@ -57,7 +57,7 @@ export function entityStateListenersModule<
 	});
 
 	const { removeEntityStateListener } = defineMethods({
-		removeEntityStateListener<
+		removeEntityStateListener: function <
 			E extends Entity,
 			R extends Record<string, unknown> | undefined = undefined
 		>({
@@ -65,7 +65,7 @@ export function entityStateListenersModule<
 			listener,
 		}: {
 			entity: Entity;
-			listener: EntityStateListener<E, C, R>;
+			listener: EntityStateListener<C, E, R>;
 		}) {
 			const index =
 				this._entityListenerContexts

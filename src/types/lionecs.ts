@@ -31,7 +31,7 @@ export type InternalLionecsState<
 	 */
 	_entityListenerContexts: Map<
 		Entity,
-		EntityStateListenerContext<C, S, Entity>[]
+		EntityStateListenerContext<C, Entity>[]
 	>;
 
 	/**

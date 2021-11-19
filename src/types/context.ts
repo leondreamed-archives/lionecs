@@ -18,8 +18,8 @@ export type ComponentStateListener<
 ) => void;
 
 export type EntityStateListener<
-	E extends Entity,
 	C extends ComponentBase,
+	E extends Entity,
 	R extends Record<string, unknown> | undefined =
 		| Record<string, unknown>
 		| undefined
@@ -32,13 +32,12 @@ export type EntityStateListener<
 
 export type EntityStateListenerContext<
 	C extends ComponentBase,
-	S extends ComponentState<C>,
 	E extends Entity,
 	R extends Record<string, unknown> | undefined =
 		| Record<string, unknown>
 		| undefined
 > = {
-	listener: EntityStateListener<E, C, R>;
+	listener: EntityStateListener<C, E, R>;
 	extras: R;
 };
 
@@ -61,5 +60,5 @@ export type StateListener<
 	C extends ComponentBase,
 	S extends ComponentState<C>
 > =
-	| EntityStateListener<Entity, C>
+	| EntityStateListener<C, Entity>
 	| ComponentStateListener<C, S, ComponentKey<C>>;

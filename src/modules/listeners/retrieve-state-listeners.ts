@@ -48,7 +48,7 @@ export function retrieveStateListenerCallsModule<
 			)) {
 				for (const { listener } of this._entityListenerContexts.get(entity) ??
 					[]) {
-					const params: Parameters<EntityStateListener<Entity, C>> = [
+					const params: Parameters<EntityStateListener<C, Entity>> = [
 						{
 							components: affectedEntityUpdates.map(
 								({ component }) => component
