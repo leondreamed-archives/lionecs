@@ -2,11 +2,7 @@ import rfdc from 'rfdc';
 
 import * as lionecsModules from './modules';
 import type { EntityMap } from './types/entity';
-import type {
-	InternalLionecs,
-	InternalLionecsState,
-	Lionecs,
-} from './types/lionecs';
+import type { InternalLionecsState, Lionecs } from './types/lionecs';
 import type { InternalLionecsProperties } from './types/properties';
 import type {
 	ComponentBase,
@@ -17,7 +13,7 @@ import type {
 } from './types/state';
 
 type CreateLionecsProps<C extends ComponentBase> = {
-	components: C[];
+	components: C;
 };
 
 const clone = rfdc();
@@ -52,7 +48,7 @@ export function createLionecs<
 	const lionecs = Object.assign(
 		clone(lionecsProperties),
 		internalState
-	) as InternalLionecs<C, S, X> & X;
+	) as unknown as Lionecs<C, S, X> & X;
 
-	return lionecs as unknown as Lionecs<C, S, X> & X;
+	return lionecs;
 }
