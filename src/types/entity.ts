@@ -11,7 +11,7 @@ export type EntityMap<
 export type TypedEntity<
 	C extends ComponentBase,
 	R extends ComponentKey<C>,
-	O extends ComponentKey<C> | never = never
+	O extends ComponentKey<C> = '__component',
 > = Entity & {
 	__required: {
 		[K in R]: true;
