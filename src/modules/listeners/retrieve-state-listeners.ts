@@ -1,11 +1,9 @@
-import { produce } from 'immer';
-
 import type {
 	ComponentStateListener,
 	EntityStateListener,
 	StateListener,
 } from '~/types/context';
-import type { Entity, EntityMap } from '~/types/entity';
+import type { Entity } from '~/types/entity';
 import type {
 	ComponentBase,
 	ComponentKey,
@@ -15,36 +13,16 @@ import type {
 import { StateUpdateType } from '~/types/state';
 import { useDefineMethods } from '~/utils/methods';
 
-export function retrieveStateListenersModule<
+export function retrieveStateListenerCallsModule<
 	C extends ComponentBase,
 	S extends ComponentState<C>
 >() {
 	const defineMethods = useDefineMethods<C, S>();
 
-	const { retrieveStateListeners } = defineMethods({
-		retrieveStateListeners(
+	const { retrieveStateListenerCalls } = defineMethods({
+		retrieveStateListenerCalls(
 			stateUpdates: StateUpdate<C, S, ComponentKey<C>>[]
 		): [StateListener<C, S>, Parameters<StateListener<C, S>>][] {
-			// Construct the old state object
-			const oldState = produce(this.state, (state) => {
-				const stateComponents = state.components as {
-					[K in ComponentKey<C>]: EntityMap<C, S, K>;
-				};
-				for (const stateUpdate of stateUpdates) {
-					const { component, entity, type } = stateUpdate;
-					if (type === StateUpdateType.set) {
-						if (stateUpdate.oldComponentState === undefined) {
-							delete stateComponents[component][entity];
-						} else {
-							stateComponents[entity as ComponentKey<C>] =
-								stateUpdate.oldComponentState;
-						}
-					} else if (type === StateUpdateType.del) {
-						delete stateComponents[entity];
-					}
-				}
-			});
-
 			// Map of entities to the updates that affected it
 			const affectedEntityUpdatesMap: Record<Entity, StateUpdate<C, S, any>[]> =
 				{};
@@ -70,13 +48,12 @@ export function retrieveStateListenersModule<
 			)) {
 				for (const { listener } of this._entityListenerContexts.get(entity) ??
 					[]) {
-					const params: Parameters<EntityStateListener<Entity, C, S>> = [
+					const params: Parameters<EntityStateListener<Entity, C>> = [
 						{
 							components: affectedEntityUpdates.map(
 								({ component }) => component
 							),
 							entity,
-							oldState,
 						},
 					];
 					stateListeners.push([listener, params]);
@@ -91,17 +68,23 @@ export function retrieveStateListenersModule<
 				for (const { listener } of this._componentListenerContexts.get(
 					component
 				) ?? []) {
-					const params: Parameters<
-						ComponentStateListener<C, S, ComponentKey<C>>
-					> = [
-						{
-							component,
-							entities: affectedComponentUpdates.map(({ entity }) => entity),
-							oldState,
-						},
-					];
+					// Looping through all the entities that were affected
+					for (const componentUpdate of affectedComponentUpdates) {
+						const params: Parameters<
+							ComponentStateListener<C, S, ComponentKey<C>>
+						> = [
+							{
+								component,
+								entity: componentUpdate.entity,
+								oldComponentState:
+									componentUpdate.type === StateUpdateType.del
+										? undefined
+										: componentUpdate.oldComponentState,
+							},
+						];
 
-					stateListeners.push([listener, params]);
+						stateListeners.push([listener, params]);
+					}
 				}
 			}
 
@@ -110,6 +93,6 @@ export function retrieveStateListenersModule<
 	});
 
 	return {
-		retrieveStateListeners,
+		retrieveStateListenerCalls,
 	};
 }

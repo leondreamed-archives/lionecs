@@ -14,19 +14,21 @@ export function triggerListenersModule<
 
 	const { triggerListeners } = defineMethods({
 		triggerListeners(stateUpdates: StateUpdate<C, S, ComponentKey<C>>[]) {
-			const stateListeners = this.retrieveStateListeners(stateUpdates);
-			for (const [stateListener, params] of stateListeners) {
-				this._untriggeredListeners.set(stateListener, params);
+			const stateListenerCalls = this.retrieveStateListenerCalls(stateUpdates);
+			for (const [stateListenerCall, params] of stateListenerCalls) {
+				this._untriggeredListenerCalls.add([stateListenerCall, params]);
 			}
 
 			if (!this._areListenersBeingTriggered) {
 				this._areListenersBeingTriggered = true;
 				// Trigger listeners as long as there are untriggered listeners remaining
-				while (this._untriggeredListeners.size > 0) {
-					const listener = this._untriggeredListeners.keys().next().value;
-					const listenerParams = this._untriggeredListeners.get(listener);
+				while (this._untriggeredListenerCalls.size > 0) {
+					const untriggeredListenerCall = this._untriggeredListenerCalls
+						.keys()
+						.next().value;
+					const [listener, listenerParams] = untriggeredListenerCall;
 					listener(listenerParams);
-					this._untriggeredListeners.delete(listener);
+					this._untriggeredListenerCalls.delete(untriggeredListenerCall);
 				}
 				this._areListenersBeingTriggered = false;
 			}

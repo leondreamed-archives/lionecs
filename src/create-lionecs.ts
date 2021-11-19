@@ -41,7 +41,7 @@ export function createLionecs<
 		_componentListenerContexts: new Map(),
 		_activeUpdateCallCount: 0,
 		_activeUpdates: [],
-		_untriggeredListeners: new Map(),
+		_untriggeredListenerCalls: new Set(),
 		_areListenersBeingTriggered: false,
 	};
 

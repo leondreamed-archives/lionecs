@@ -1,10 +1,5 @@
 import type { Entity } from './entity';
-import type {
-	ComponentBase,
-	ComponentKey,
-	ComponentState,
-	LionecsState,
-} from './state';
+import type { ComponentBase, ComponentKey, ComponentState } from './state';
 
 type OptionalExtras<R extends Record<string, unknown> | undefined> =
 	R extends Record<string, unknown> ? { extras: R } : { extras?: R };
@@ -17,22 +12,20 @@ export type ComponentStateListener<
 > = (
 	props: {
 		component: K;
-		oldState: LionecsState<C, S>;
-		entities: Entity[];
+		entity: Entity;
+		oldComponentState: S[K] | undefined;
 	} & OptionalExtras<R>
 ) => void;
 
 export type EntityStateListener<
 	E extends Entity,
 	C extends ComponentBase,
-	S extends ComponentState<C>,
 	R extends Record<string, unknown> | undefined =
 		| Record<string, unknown>
 		| undefined
 > = (
 	props: {
 		entity: E;
-		oldState: LionecsState<C, S>;
 		components: ComponentKey<C>[];
 	} & OptionalExtras<R>
 ) => void;
@@ -68,5 +61,5 @@ export type StateListener<
 	C extends ComponentBase,
 	S extends ComponentState<C>
 > =
-	| EntityStateListener<Entity, C, S>
+	| EntityStateListener<Entity, C>
 	| ComponentStateListener<C, S, ComponentKey<C>>;

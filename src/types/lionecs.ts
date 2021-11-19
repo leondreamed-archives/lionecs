@@ -70,12 +70,12 @@ export type InternalLionecsState<
 	_activeUpdateCallCount: number;
 
 	/**
-	 * A map where the keys are the untriggered listeners (the function reference) and
-	 * the value is the parameters that should be passed to the listeners when calling them.
+	 * A set of 2-value tuples that represent untriggered listener calls where the first element
+	 * is a reference to the listener function and the second element contains the parameters to
+	 * pass to the listener function.
 	 */
-	_untriggeredListeners: Map<
-		StateListener<C, S>,
-		Parameters<StateListener<C, S>>
+	_untriggeredListenerCalls: Set<
+		[StateListener<C, S>, Parameters<StateListener<C, S>>]
 	>;
 };
 
