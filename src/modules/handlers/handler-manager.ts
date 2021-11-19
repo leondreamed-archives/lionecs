@@ -1,4 +1,4 @@
-import type { Entity, EntityComponent } from '~/types/entity';
+import type { Entity } from '~/types/entity';
 import type {
 	MultiComponentStateChangeHandler,
 	SingleComponentStateChangeHandler,
@@ -25,7 +25,7 @@ export function handlerManagerModule<
 	 * keep track of the current UI state.
 	 */
 	const { createHandlerManager } = defineMethods({
-		createHandlerManager <
+		createHandlerManager: function <
 			E extends Entity,
 			R extends Record<string, unknown> = Record<never, never>
 		>() {
@@ -179,50 +179,8 @@ export function handlerManagerModule<
 				}
 			};
 
-			type DefineHandlersProps =
-				| {
-						exhaustive: false;
-						handlers: {
-							[K in EntityComponent<C, E>]?: SingleComponentStateChangeHandler<
-								C,
-								S,
-								K,
-								E,
-								R
-							>['callback'];
-						};
-				  }
-				| {
-						exhaustive: true;
-						handlers: {
-							[K in EntityComponent<C, E>]: SingleComponentStateChangeHandler<
-								C,
-								S,
-								K,
-								E,
-								R
-							>['callback'];
-						};
-				  };
-
-			const defineHandlers = (props: DefineHandlersProps) => {
-				for (const [component, callback] of Object.entries(props.handlers)) {
-					createSingleComponentHandler(
-						component,
-						callback as SingleComponentStateChangeHandler<
-							C,
-							S,
-							ComponentKey<C>,
-							E,
-							R
-						>['callback']
-					);
-				}
-			};
-
 			return {
 				executeHandlers,
-				defineHandlers,
 				createHandler,
 			};
 		},

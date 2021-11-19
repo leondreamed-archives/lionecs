@@ -42,6 +42,7 @@ module.exports = {
 		'default-case': 'off',
 		'no-use-before-define': 'off',
 		'func-names': 'off',
+		'object-shorthand': 'off',
 
 		// eslint-plugin-import rules
 		'import/no-default-export': 'error',
