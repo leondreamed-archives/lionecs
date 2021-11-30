@@ -16,10 +16,11 @@ export function mutationsModule<
 	S extends ComponentState<C>
 >() {
 	const defineMethods = useDefineMethods<C, S>();
-	/**
-	 * Batch update the state and trigger listeners only when the callback has finished
-	 */
-	const { update } = defineMethods({
+
+	return defineMethods({
+		/**
+		 * Batch update the state and trigger listeners only when the callback has finished
+		 */
 		update(cb: () => void) {
 			this._activeUpdateCallCount += 1;
 			cb();
@@ -31,15 +32,9 @@ export function mutationsModule<
 				this.triggerListeners(stateUpdates);
 			}
 		},
-	});
-
-	const { del } = defineMethods({
 		del<K extends ComponentKey<C>>(entity: Entity, componentKey: K) {
 			delete this.state.components[componentKey][entity];
 		},
-	});
-
-	const { set } = defineMethods({
 		set<K extends ComponentKey<C>>(
 			entity: Entity,
 			componentKey: K,
@@ -67,9 +62,6 @@ export function mutationsModule<
 				this.triggerListeners([stateUpdate]);
 			}
 		},
-	});
-
-	const { patch } = defineMethods({
 		patch<K extends ComponentKey<C>>(
 			entity: Entity,
 			componentKey: K,
@@ -90,11 +82,4 @@ export function mutationsModule<
 			this.set(entity, componentKey, newComponentState as S[K]);
 		},
 	});
-
-	return {
-		update,
-		patch,
-		del,
-		set,
-	};
 }

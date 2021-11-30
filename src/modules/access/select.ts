@@ -14,7 +14,8 @@ export function selectModule<
 	type SelectProps<KS extends ComponentKey<C>[]> = {
 		components: KS;
 	};
-	const { select } = defineMethods({
+
+	return defineMethods({
 		select<KS extends ComponentKey<C>[]>({ components }: SelectProps<KS>) {
 			let minComponentLen = 0;
 			let minComponentIndex = 0;
@@ -30,9 +31,5 @@ export function selectModule<
 
 			// Loop through every entity, and check if they exist in the other components
 		},
-	});
-
-	return defineMethods({
-		select,
 	});
 }

@@ -21,7 +21,7 @@ export function handlerManagerModule<
 	 * implications), the handlers will keep a copy of the last state they acted upon to
 	 * keep track of the current UI state.
 	 */
-	const { createHandlerManager } = defineMethods({
+	return defineMethods({
 		createHandlerManager: function <
 			E extends Entity,
 			R extends Record<string, unknown> = Record<never, never>
@@ -137,8 +137,4 @@ export function handlerManagerModule<
 			};
 		},
 	});
-
-	return {
-		createHandlerManager,
-	};
 }

@@ -138,8 +138,5 @@ export function getModule<
 		}
 	}
 
-	return {
-		...defineMethods({ get }),
-		...defineMethods({ getOpt }),
-	};
+	return defineMethods({ get, getOpt });
 }

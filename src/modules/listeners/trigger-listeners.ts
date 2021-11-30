@@ -12,7 +12,7 @@ export function triggerListenersModule<
 >() {
 	const defineMethods = useDefineMethods<C, S>();
 
-	const { triggerListeners } = defineMethods({
+	return defineMethods({
 		triggerListeners(stateUpdates: StateUpdate<C, S, ComponentKey<C>>[]) {
 			const stateListenerCalls = this.retrieveStateListenerCalls(stateUpdates);
 			for (const [stateListenerCall, params] of stateListenerCalls) {
@@ -34,8 +34,4 @@ export function triggerListenersModule<
 			}
 		},
 	});
-
-	return {
-		triggerListeners,
-	};
 }

@@ -9,7 +9,7 @@ export function entityStateListenersModule<
 >() {
 	const defineMethods = useDefineMethods<C, S>();
 
-	const { addEntityStateListener } = defineMethods({
+	return defineMethods({
 		addEntityStateListener: function <
 			E extends Entity,
 			R extends Record<string, unknown> | undefined = undefined
@@ -31,9 +31,6 @@ export function entityStateListenersModule<
 				extras,
 			});
 		},
-	});
-
-	const { createEntityStateListenerManager } = defineMethods({
 		createEntityStateListenerManager: function <
 			E extends Entity,
 			R extends Record<string, unknown> | undefined = undefined
@@ -54,9 +51,6 @@ export function entityStateListenersModule<
 
 			return { registerEntityStateListener, deleteEntityStateListener };
 		},
-	});
-
-	const { removeEntityStateListener } = defineMethods({
 		removeEntityStateListener: function <
 			E extends Entity,
 			R extends Record<string, unknown> | undefined = undefined
@@ -77,10 +71,4 @@ export function entityStateListenersModule<
 			}
 		},
 	});
-
-	return {
-		addEntityStateListener,
-		removeEntityStateListener,
-		createEntityStateListenerManager,
-	};
 }

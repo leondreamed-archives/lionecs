@@ -12,7 +12,7 @@ export function componentStateListenersModule<
 >() {
 	const defineMethods = useDefineMethods<C, S>();
 
-	const { removeComponentStateListener } = defineMethods({
+	return defineMethods({
 		removeComponentStateListener: function <
 			K extends ComponentKey<C>,
 			R extends Record<string, unknown> | undefined = undefined
@@ -32,9 +32,6 @@ export function componentStateListenersModule<
 				this._componentListenerContexts.get(component)!.splice(index, 1);
 			}
 		},
-	});
-
-	const { addComponentStateListener } = defineMethods({
 		addComponentStateListener: function <
 			K extends ComponentKey<C>,
 			R extends Record<string, unknown> | undefined = undefined
@@ -56,9 +53,6 @@ export function componentStateListenersModule<
 				extras,
 			});
 		},
-	});
-
-	const { createComponentStateListenerManager } = defineMethods({
 		createComponentStateListenerManager: function <
 			K extends ComponentKey<C>,
 			R extends Record<string, unknown> | undefined = undefined
@@ -83,10 +77,4 @@ export function componentStateListenersModule<
 			return { registerComponentStateListener, deleteComponentStateListener };
 		},
 	});
-
-	return {
-		addComponentStateListener,
-		removeComponentStateListener,
-		createComponentStateListenerManager,
-	};
 }

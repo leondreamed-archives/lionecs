@@ -19,7 +19,7 @@ export function retrieveStateListenerCallsModule<
 >() {
 	const defineMethods = useDefineMethods<C, S>();
 
-	const { retrieveStateListenerCalls } = defineMethods({
+	return defineMethods({
 		retrieveStateListenerCalls(
 			stateUpdates: StateUpdate<C, S, ComponentKey<C>>[]
 		): [StateListener<C, S>, Parameters<StateListener<C, S>>][] {
@@ -91,8 +91,4 @@ export function retrieveStateListenerCallsModule<
 			return stateListeners;
 		},
 	});
-
-	return {
-		retrieveStateListenerCalls,
-	};
 }
