@@ -1,3 +1,4 @@
+import { createLionecs } from '~/create-lionecs';
 import type {
 	ComponentBase,
 	ComponentKey,
@@ -12,7 +13,7 @@ type DefineTypedEntityProps<
 	O extends ComponentKey<C>[]
 > = {
 	required: R;
-	optional: O;
+	optional?: O;
 };
 
 type ComponentType<N extends string, _T extends unknown> = {
@@ -34,25 +35,12 @@ export function defineModule<
 		): TypedEntity<C, R[number], O[number]> {
 			return undefined as any;
 		},
-		defineComponent: function <N extends string, T extends unknown>(
-			name: N
-		): ComponentType<N, T> {
+		defineComponent: function <T extends unknown>() {
 			return {
-				name,
+				setName: function <N extends string>(name: N): ComponentType<N, T> {
+					return { name };
+				},
 			};
 		},
 	});
 }
-/*
-	C extends ComponentBase,
-	R extends ComponentKey<C>,
-	O extends ComponentKey<C> | '__empty' = '__empty'
-> = Entity & {
-	__required: {
-		[K in R]: true;
-	};
-	__optional: {
-		[K in O]: true;
-	};
-};
-*/
