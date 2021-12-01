@@ -1,24 +1,23 @@
+import type { ComponentKey, ComponentMap } from './component';
 import type { Entity } from './entity';
-import type { ComponentBase, ComponentKey, ComponentState } from './state';
 
 type OptionalExtras<R extends Record<string, unknown> | undefined> =
 	R extends Record<string, unknown> ? { extras: R } : { extras?: R };
 
 export type ComponentStateListener<
-	C extends ComponentBase,
-	S extends ComponentState<C>,
+	C extends ComponentMap,
 	K extends ComponentKey<C>,
 	R extends Record<string, unknown> | undefined = undefined
 > = (
 	props: {
 		component: K;
 		entity: Entity;
-		oldComponentState: S[K] | undefined;
+		oldComponentState: C[K] | undefined;
 	} & OptionalExtras<R>
 ) => void;
 
 export type EntityStateListener<
-	C extends ComponentBase,
+	C extends ComponentMap,
 	E extends Entity,
 	R extends Record<string, unknown> | undefined =
 		| Record<string, unknown>
@@ -31,7 +30,7 @@ export type EntityStateListener<
 ) => void;
 
 export type EntityStateListenerContext<
-	C extends ComponentBase,
+	C extends ComponentMap,
 	E extends Entity,
 	R extends Record<string, unknown> | undefined =
 		| Record<string, unknown>
@@ -42,23 +41,19 @@ export type EntityStateListenerContext<
 };
 
 export type ComponentStateListenerContext<
-	C extends ComponentBase,
-	S extends ComponentState<C>,
+	C extends ComponentMap,
 	K extends ComponentKey<C>,
 	R extends Record<string, unknown> | undefined =
 		| Record<string, unknown>
 		| undefined
 > = {
-	listener: ComponentStateListener<C, S, K, R>;
+	listener: ComponentStateListener<C, K, R>;
 	extras: R;
 };
 
 /**
  * A type which represents a state listener (either listening to an entity or a component).
  */
-export type StateListener<
-	C extends ComponentBase,
-	S extends ComponentState<C>
-> =
+export type StateListener<C extends ComponentMap> =
 	| EntityStateListener<C, Entity>
-	| ComponentStateListener<C, S, ComponentKey<C>>;
+	| ComponentStateListener<C, ComponentKey<C>>;

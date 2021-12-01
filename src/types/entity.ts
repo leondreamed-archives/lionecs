@@ -1,15 +1,14 @@
-import type { ComponentBase, ComponentKey, ComponentState } from './state';
+import type { ComponentKey, ComponentMap, ComponentType } from './component';
 
 export type Entity = string;
 
 export type EntityMap<
-	C extends ComponentBase,
-	S extends ComponentState<C>,
+	C extends ComponentMap,
 	K extends ComponentKey<C>
-> = Record<Entity, Readonly<S[K]>>;
+> = Record<Entity, Readonly<ComponentType<C[K]>>>;
 
 export type TypedEntity<
-	C extends ComponentBase,
+	C extends ComponentMap,
 	R extends ComponentKey<C>,
 	O extends ComponentKey<C> | '__empty' = '__empty'
 > = Entity & {
@@ -22,26 +21,21 @@ export type TypedEntity<
 };
 
 export type EntityComponent<
-	C extends ComponentBase,
+	C extends ComponentMap,
 	E extends Entity
 > = E extends TypedEntity<C, infer R, infer O> ? R | O : ComponentKey<C>;
 
 export type CreateEntityComponentsProp<
-	C extends ComponentBase,
-	S extends ComponentState<C>,
+	C extends ComponentMap,
 	E extends Entity
 > = E extends TypedEntity<C, infer Req, infer Opt>
 	? Opt extends ComponentKey<C>
-		? { [K in keyof TypedEntity<C, Req, Opt>['__required']]: S[K] } & {
-				[K in keyof TypedEntity<C, Req, Opt>['__optional']]?: S[K];
+		? { [K in keyof TypedEntity<C, Req, Opt>['__required']]: C[K] } & {
+				[K in keyof TypedEntity<C, Req, Opt>['__optional']]?: C[K];
 		  }
-		: { [K in keyof TypedEntity<C, Req, Opt>['__required']]: S[K] }
-	: { [K in ComponentKey<C>]?: S[K] };
+		: { [K in keyof TypedEntity<C, Req, Opt>['__required']]: C[K] }
+	: { [K in ComponentKey<C>]?: C[K] };
 
-export type CreateEntityProps<
-	C extends ComponentBase,
-	S extends ComponentState<C>,
-	E extends Entity
-> = {
-	components: CreateEntityComponentsProp<C, S, E>;
+export type CreateEntityProps<C extends ComponentMap, E extends Entity> = {
+	components: CreateEntityComponentsProp<C, E>;
 };

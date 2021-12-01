@@ -1,19 +1,12 @@
-import type {
-	ComponentBase,
-	ComponentKey,
-	ComponentState,
-	StateUpdate,
-} from '~/types/state';
+import type { ComponentKey, ComponentMap } from '~/types/component';
+import type { StateUpdate } from '~/types/state';
 import { useDefineMethods } from '~/utils/methods';
 
-export function triggerListenersModule<
-	C extends ComponentBase,
-	S extends ComponentState<C>
->() {
-	const defineMethods = useDefineMethods<C, S>();
+export function triggerListenersModule<C extends ComponentMap>() {
+	const defineMethods = useDefineMethods<C>();
 
 	return defineMethods({
-		triggerListeners(stateUpdates: StateUpdate<C, S, ComponentKey<C>>[]) {
+		triggerListeners(stateUpdates: StateUpdate<C, ComponentKey<C>>[]) {
 			const stateListenerCalls = this.retrieveStateListenerCalls(stateUpdates);
 			for (const [stateListenerCall, params] of stateListenerCalls) {
 				this._untriggeredListenerCalls.add([stateListenerCall, params]);

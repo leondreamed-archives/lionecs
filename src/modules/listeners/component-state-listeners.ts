@@ -1,16 +1,10 @@
+import type { ComponentKey, ComponentMap } from '~/types/component';
 import type { ComponentStateListener } from '~/types/context';
-import type {
-	ComponentBase,
-	ComponentKey,
-	ComponentState,
-} from '~/types/state';
+import type {} from '~/types/state';
 import { useDefineMethods } from '~/utils/methods';
 
-export function componentStateListenersModule<
-	C extends ComponentBase,
-	S extends ComponentState<C>
->() {
-	const defineMethods = useDefineMethods<C, S>();
+export function componentStateListenersModule<C extends ComponentMap>() {
+	const defineMethods = useDefineMethods<C>();
 
 	return defineMethods({
 		removeComponentStateListener: function <
@@ -21,7 +15,7 @@ export function componentStateListenersModule<
 			listener,
 		}: {
 			component: K;
-			listener: ComponentStateListener<C, S, K, R>;
+			listener: ComponentStateListener<C, K, R>;
 		}) {
 			const index =
 				this._componentListenerContexts
@@ -41,7 +35,7 @@ export function componentStateListenersModule<
 			extras,
 		}: {
 			component: K;
-			listener: ComponentStateListener<C, S, K, R>;
+			listener: ComponentStateListener<C, K, R>;
 			extras?: R;
 		}) {
 			if (!this._componentListenerContexts.has(component)) {
@@ -56,10 +50,10 @@ export function componentStateListenersModule<
 		createComponentStateListenerManager: function <
 			K extends ComponentKey<C>,
 			R extends Record<string, unknown> | undefined = undefined
-		>(listener: ComponentStateListener<C, S, K, R>) {
+		>(listener: ComponentStateListener<C, K, R>) {
 			const listeners = new Map<
 				ComponentKey<C>,
-				ComponentStateListener<C, S, K, R>
+				ComponentStateListener<C, K, R>
 			>();
 
 			const registerComponentStateListener = (component: K) => {

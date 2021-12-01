@@ -1,19 +1,18 @@
+import type { ComponentKey, ComponentMap } from './component';
 import type { Entity } from './entity';
-import type { ComponentBase, ComponentKey, ComponentState } from './state';
 
 export type ComponentStateChangeHandler<
-	C extends ComponentBase,
-	S extends ComponentState<C>,
+	C extends ComponentMap,
 	K extends ComponentKey<C>,
 	E extends Entity,
 	R extends Record<string, unknown>
 > = {
-	oldComponentState: S[K] | undefined;
+	oldComponentState: C[K] | undefined;
 	component: K;
 	callback(props: {
 		entity: E;
 		extras: R;
-		oldComponentState: S[K] | undefined;
-		newComponentState: S[K] | undefined;
+		oldComponentState: C[K] | undefined;
+		newComponentState: C[K] | undefined;
 	}): void;
 };

@@ -1,27 +1,15 @@
 import { nanoid } from 'nanoid';
 
-import type {
-	CreateEntityProps,
-	Entity,
-	EntityMap,
-	TypedEntity,
-} from '~/types/entity';
-import type {
-	ComponentBase,
-	ComponentKey,
-	ComponentState,
-} from '~/types/state';
+import type { ComponentKey, ComponentMap } from '~/types/component';
+import type { CreateEntityProps, Entity, EntityMap } from '~/types/entity';
 import { useDefineMethods } from '~/utils/methods';
 
-export function entityModule<
-	C extends ComponentBase,
-	S extends ComponentState<C>
->() {
-	const defineMethods = useDefineMethods<C, S>();
+export function entityModule<C extends ComponentMap>() {
+	const defineMethods = useDefineMethods<C>();
 
 	return defineMethods({
 		createEntity: function <E extends Entity>(
-			props?: CreateEntityProps<C, S, E>
+			props?: CreateEntityProps<C, E>
 		): E {
 			const entity = nanoid() as E;
 
@@ -39,7 +27,7 @@ export function entityModule<
 		},
 		getEntityMap: function <K extends ComponentKey<C>>(
 			componentKey: K
-		): EntityMap<C, S, K> {
+		): EntityMap<C, K> {
 			return this.state.components[componentKey];
 		},
 		cloneEntity: function <E extends Entity>(entityToClone: E): E {
@@ -50,7 +38,7 @@ export function entityModule<
 					const component = componentString as ComponentKey<C>;
 					const componentState = this.getOpt(
 						entityToClone,
-						component as keyof ComponentBase
+						component as ComponentKey<C>
 					);
 					if (componentState !== undefined) {
 						this.set(entity, component, componentState);

@@ -8,7 +8,6 @@ import type { InternalLionecsProperties } from './types/properties';
 import type {
 	ComponentBase,
 	ComponentKey,
-	ComponentState,
 	LionecsExtras,
 	LionecsState,
 } from './types/state';
@@ -27,8 +26,7 @@ for (const module of Object.values(lionecsModulesObj)) {
 }
 
 export function createLionecs<
-	C extends ComponentBase,
-	S extends ComponentState<C>,
+	C extends Components,
 	X extends LionecsExtras
 >({ components: componentsList }: CreateLionecsProps<C>) {
 	const components = {} as Record<string, EntityMap<C, S, ComponentKey<C>>>;

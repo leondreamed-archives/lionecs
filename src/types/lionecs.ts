@@ -1,5 +1,6 @@
 import type { RemovePrivateProperties } from 'liontypes';
 
+import type { ComponentKey, ComponentMap } from './component';
 import type {
 	ComponentStateListenerContext,
 	EntityStateListenerContext,
@@ -7,32 +8,21 @@ import type {
 } from './context';
 import type { Entity } from './entity';
 import type { InternalLionecsProperties } from './properties';
-import type {
-	ComponentBase,
-	ComponentKey,
-	ComponentState,
-	LionecsExtras,
-	LionecsState,
-	StateUpdate,
-} from './state';
+import type { LionecsExtras, LionecsState, StateUpdate } from './state';
 
 export type InternalLionecsState<
-	C extends ComponentBase,
-	S extends ComponentState<C>,
+	C extends ComponentMap,
 	X extends LionecsExtras = LionecsExtras
 > = X & {
 	/**
 	 * An object that represents the lionecs state.
 	 */
-	state: LionecsState<C, S>;
+	state: LionecsState<C>;
 	/**
 	 * A map where the keys are entities and the value is an array of all the entity
 	 * listener contexts.
 	 */
-	_entityListenerContexts: Map<
-		Entity,
-		EntityStateListenerContext<C, Entity>[]
-	>;
+	_entityListenerContexts: Map<Entity, EntityStateListenerContext<C, Entity>[]>;
 
 	/**
 	 * A map where the keys are components and the value is an array of all the component
@@ -40,7 +30,7 @@ export type InternalLionecsState<
 	 */
 	_componentListenerContexts: Map<
 		ComponentKey<C>,
-		ComponentStateListenerContext<C, S, ComponentKey<C>>[]
+		ComponentStateListenerContext<C, ComponentKey<C>>[]
 	>;
 
 	/**
@@ -50,7 +40,7 @@ export type InternalLionecsState<
 	 * function to trigger the listeners for the entities/components which were
 	 * updated in the `update` callback.
 	 */
-	_activeUpdates: StateUpdate<C, S, ComponentKey<C>>[];
+	_activeUpdates: StateUpdate<C, ComponentKey<C>>[];
 
 	/**
 	 * A boolean that represents whether or not the `triggerListener` callback is
@@ -75,24 +65,21 @@ export type InternalLionecsState<
 	 * pass to the listener function.
 	 */
 	_untriggeredListenerCalls: Set<
-		[StateListener<C, S>, Parameters<StateListener<C, S>>]
+		[StateListener<C>, Parameters<StateListener<C>>]
 	>;
 };
 
 type InternalLionecsKeys<
-	C extends ComponentBase,
-	S extends ComponentState<C>,
+	C extends ComponentMap,
 	_X extends LionecsExtras
-> = InternalLionecsProperties<C, S> & InternalLionecsState<C, S>;
+> = InternalLionecsProperties<C> & InternalLionecsState<C>;
 
 export interface InternalLionecs<
-	C extends ComponentBase,
-	S extends ComponentState<C>,
+	C extends ComponentMap,
 	X extends LionecsExtras = LionecsExtras
-> extends InternalLionecsKeys<C, S, X> {}
+> extends InternalLionecsKeys<C, X> {}
 
 export interface Lionecs<
-	C extends ComponentBase,
-	S extends ComponentState<C>,
+	C extends ComponentMap,
 	X extends LionecsExtras = LionecsExtras
-> extends RemovePrivateProperties<InternalLionecs<C, S, X>> {}
+> extends RemovePrivateProperties<InternalLionecs<C, X>> {}

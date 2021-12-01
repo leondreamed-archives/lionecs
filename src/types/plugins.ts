@@ -1,11 +1,11 @@
 import type { Lionecs } from '~/types/lionecs';
 
-import type { ComponentBase, ComponentState, LionecsExtras } from './state';
+import type { ComponentMap } from './component';
+import type { LionecsExtras } from './state';
 
 export type LionecsPlugin<
-	C extends ComponentBase,
-	S extends ComponentState<C>,
+	C extends ComponentMap,
 	A extends LionecsExtras // plugin augmentations
 > = {
-	(ecs: Lionecs<C, S>): Lionecs<C, S, A>;
+	(ecs: Lionecs<C>): Lionecs<C, A>;
 };

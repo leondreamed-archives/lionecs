@@ -1,17 +1,13 @@
-import type {
-	ComponentBase,
-	ComponentState,
-	InternalLionecs,
-	LionecsExtras,
-} from '../types';
+import type { ComponentMap } from '~/types/component';
+
+import type { InternalLionecs, LionecsExtras } from '../types';
 
 export function useDefineMethods<
-	C extends ComponentBase,
-	S extends ComponentState<C>,
+	C extends ComponentMap,
 	X extends LionecsExtras = LionecsExtras
 >() {
 	return function defineMethods<M>(
-		methods: M & ThisType<InternalLionecs<C, S, X> & X>
+		methods: M & ThisType<InternalLionecs<C, X> & X>
 	) {
 		// Removing the `this` type from the function
 		return methods as unknown as M;

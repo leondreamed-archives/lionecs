@@ -1,3 +1,4 @@
+import type { ComponentMap } from '~/types/component';
 import type { Entity } from '~/types/entity';
 import type { ComponentStateChangeHandler } from '~/types/handlers';
 import type {
@@ -7,11 +8,8 @@ import type {
 } from '~/types/state';
 import { useDefineMethods } from '~/utils/methods';
 
-export function handlerManagerModule<
-	C extends ComponentBase,
-	S extends ComponentState<C>
->() {
-	const defineMethods = useDefineMethods<C, S>();
+export function handlerManagerModule<C extends ComponentMap>() {
+	const defineMethods = useDefineMethods<C>();
 
 	/**
 	 * Handlers should be responsible for applying changes to the ECS data to some UI state.
@@ -26,13 +24,8 @@ export function handlerManagerModule<
 			E extends Entity,
 			R extends Record<string, unknown> = Record<never, never>
 		>() {
-			const handlers: ComponentStateChangeHandler<
-				C,
-				S,
-				ComponentKey<C>,
-				E,
-				R
-			>[] = [];
+			const handlers: ComponentStateChangeHandler<C, ComponentKey<C>, E, R>[] =
+				[];
 
 			type ExecuteHandlerProps = {
 				entity: E;
@@ -84,7 +77,7 @@ export function handlerManagerModule<
 
 			const createHandler = <K extends ComponentKey<C>>(
 				component: K,
-				callback: ComponentStateChangeHandler<C, S, K, E, R>['callback']
+				callback: ComponentStateChangeHandler<C, K, E, R>['callback']
 			) => {
 				handlers.push({
 					component,
@@ -101,7 +94,7 @@ export function handlerManagerModule<
 			) => {
 				const componentToHandlers = {} as Record<
 					ComponentKey<C>,
-					ComponentStateChangeHandler<C, S, ComponentKey<C>, E, R>[]
+					ComponentStateChangeHandler<C, ComponentKey<C>, E, R>[]
 				>;
 
 				const { registerComponentStateListener } =
