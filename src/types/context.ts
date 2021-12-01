@@ -1,4 +1,4 @@
-import type { ComponentKey, ComponentMap } from './component';
+import type { ComponentKey, ComponentMap, ComponentType } from './component';
 import type { Entity } from './entity';
 
 type OptionalExtras<R extends Record<string, unknown> | undefined> =
@@ -12,7 +12,7 @@ export type ComponentStateListener<
 	props: {
 		component: K;
 		entity: Entity;
-		oldComponentState: C[K] | undefined;
+		oldComponentState: ComponentType<C[K]> | undefined;
 	} & OptionalExtras<R>
 ) => void;
 

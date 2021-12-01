@@ -1,11 +1,6 @@
-import type { ComponentMap } from '~/types/component';
+import type { ComponentKey, ComponentMap } from '~/types/component';
 import type { Entity } from '~/types/entity';
 import type { ComponentStateChangeHandler } from '~/types/handlers';
-import type {
-	ComponentBase,
-	ComponentKey,
-	ComponentState,
-} from '~/types/state';
 import { useDefineMethods } from '~/utils/methods';
 
 export function handlerManagerModule<C extends ComponentMap>() {
@@ -53,14 +48,14 @@ export function handlerManagerModule<C extends ComponentMap>() {
 					// Check if the component state changed
 					const currentComponentState = this.get(
 						entity as Entity,
-						handler.component as keyof ComponentBase
+						handler.component as ComponentKey<C>
 					);
 
 					// If a change in the components was detected, trigger the callback
 					if (currentComponentState !== handler.oldComponentState) {
 						const currentComponentState = this.get(
 							entity as Entity,
-							handler.component as keyof ComponentBase
+							handler.component as ComponentKey<C>
 						);
 
 						handler.callback({

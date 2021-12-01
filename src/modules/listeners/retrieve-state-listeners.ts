@@ -1,47 +1,38 @@
+import type { ComponentKey, ComponentMap } from '~/types/component';
 import type {
 	ComponentStateListener,
 	EntityStateListener,
 	StateListener,
 } from '~/types/context';
 import type { Entity } from '~/types/entity';
-import type {
-	ComponentBase,
-	ComponentKey,
-	ComponentState,
-	StateUpdate,
-} from '~/types/state';
+import type { StateUpdate } from '~/types/state';
 import { StateUpdateType } from '~/types/state';
 import { useDefineMethods } from '~/utils/methods';
 
-export function retrieveStateListenerCallsModule<
-	C extends ComponentBase,
-	S extends ComponentState<C>
->() {
-	const defineMethods = useDefineMethods<C, S>();
+export function retrieveStateListenerCallsModule<C extends ComponentMap>() {
+	const defineMethods = useDefineMethods<C>();
 
 	return defineMethods({
 		retrieveStateListenerCalls(
-			stateUpdates: StateUpdate<C, S, ComponentKey<C>>[]
-		): [StateListener<C, S>, Parameters<StateListener<C, S>>][] {
+			stateUpdates: StateUpdate<C, ComponentKey<C>>[]
+		): [StateListener<C>, Parameters<StateListener<C>>][] {
 			// Map of entities to the updates that affected it
-			const affectedEntityUpdatesMap: Record<Entity, StateUpdate<C, S, any>[]> =
+			const affectedEntityUpdatesMap: Record<Entity, StateUpdate<C, any>[]> =
 				{};
 
 			// Map of components to the updates that affected it
 			const affectedComponentUpdatesMap = {} as {
-				[K in ComponentKey<C>]: StateUpdate<C, S, ComponentKey<C>>[];
+				[K in ComponentKey<C>]: StateUpdate<C, ComponentKey<C>>[];
 			};
 
 			for (const stateUpdate of stateUpdates) {
 				(affectedEntityUpdatesMap[stateUpdate.entity] ??= []).push(stateUpdate);
 				(affectedComponentUpdatesMap[stateUpdate.component] ??=
-					[] as StateUpdate<C, S, ComponentKey<C>>[]).push(stateUpdate);
+					[] as StateUpdate<C, ComponentKey<C>>[]).push(stateUpdate);
 			}
 
-			const stateListeners: [
-				StateListener<C, S>,
-				Parameters<StateListener<C, S>>
-			][] = [];
+			const stateListeners: [StateListener<C>, Parameters<StateListener<C>>][] =
+				[];
 			// Save all entity listeners
 			for (const [entity, affectedEntityUpdates] of Object.entries(
 				affectedEntityUpdatesMap
@@ -71,7 +62,7 @@ export function retrieveStateListenerCallsModule<
 					// Looping through all the entities that were affected
 					for (const componentUpdate of affectedComponentUpdates) {
 						const params: Parameters<
-							ComponentStateListener<C, S, ComponentKey<C>>
+							ComponentStateListener<C, ComponentKey<C>>
 						> = [
 							{
 								component,

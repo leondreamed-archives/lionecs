@@ -83,7 +83,7 @@ export function getModule<C extends ComponentMap>() {
 				);
 			}
 
-			return componentState;
+			return componentState as ComponentType<C[K]>;
 		}
 		// get(state, entity, component, options)
 		else {
