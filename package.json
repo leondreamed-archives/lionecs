@@ -32,7 +32,7 @@
 		"execa": "^5.1.1",
 		"husky": "^7.0.2",
 		"lint-staged": "^11.1.2",
-		"liontypes": "^1.0.0",
+		"liontypes": "^1.0.2",
 		"prettier": "^2.4.1",
 		"rimraf": "^3.0.2",
 		"rollup": "^2.57.0",

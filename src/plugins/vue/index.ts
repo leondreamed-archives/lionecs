@@ -1,11 +1,8 @@
 import rfdc from 'rfdc';
 
+import type { ComponentMap } from '~/types/component';
 import type { InternalLionecs, Lionecs } from '~/types/lionecs';
-import type {
-	ComponentBase,
-	ComponentState,
-	LionecsExtras,
-} from '~/types/state';
+import type { LionecsExtras } from '~/types/state';
 
 import * as vuePluginModules from './modules';
 import type { InternalVuePluginProperties } from './types';
@@ -20,14 +17,12 @@ for (const module of Object.values(vuePluginModulesObj)) {
 	}
 }
 
-export function elementPlugin<
-	C extends ComponentBase,
-	S extends ComponentState<C>,
-	X extends LionecsExtras
->(this: Lionecs<C, S, X>): Lionecs<C, S, X> {
-	const vuePluginEcs = this as unknown as InternalLionecs<C, S>;
+export function elementPlugin<C extends ComponentMap, X extends LionecsExtras>(
+	this: Lionecs<C, X>
+): Lionecs<C, X> {
+	const vuePluginEcs = this as unknown as InternalLionecs<C>;
 
 	Object.assign(vuePluginEcs, clone(vuePluginProperties));
 
-	return vuePluginEcs as unknown as Lionecs<C, S, X>;
+	return vuePluginEcs as unknown as Lionecs<C, X>;
 }

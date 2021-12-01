@@ -1,20 +1,16 @@
 import type { Ref } from 'vue';
 import { ref } from 'vue';
 
-import type { Entity, TypedEntity } from '~/types/entity';
-import type { InternalLionecs } from '~/types/lionecs';
 import type {
-	ComponentBase,
 	ComponentKey,
-	ComponentState,
-} from '~/types/state';
+	ComponentMap,
+	ComponentType,
+} from '~/types/component';
+import type { Entity, TypedEntity } from '~/types/entity';
 import { useDefineMethods } from '~/utils/methods';
 
-export function refModule<
-	C extends ComponentBase,
-	S extends ComponentState<C>
->() {
-	const defineMethods = useDefineMethods<C, S>();
+export function refModule<C extends ComponentMap>() {
+	const defineMethods = useDefineMethods<C>();
 
 	type UseLionecsRefOptions = {
 		optional: boolean;
@@ -22,15 +18,15 @@ export function refModule<
 
 	// get(entity, component, options)
 	const { useLionecsRef } = defineMethods({
-		useLionecsRef <
+		useLionecsRef: function <
 			E extends Entity,
 			K extends E extends TypedEntity<infer Req, infer Opt>
 				?
-						| TypedEntity<Req, Opt>['__requiredComponents']
-						| TypedEntity<Req, Opt>['__optionalComponents']
+						| TypedEntity<Req, Opt>['__required']
+						| TypedEntity<Req, Opt>['__optional']
 				: ComponentKey<C>,
 			O extends E extends TypedEntity<infer Req, infer Opt>
-				? C extends TypedEntity<Req, Opt>['__optionalComponents']
+				? C extends TypedEntity<Req, Opt>['__optional']
 					? { optional: true }
 					: { optional: false }
 				: UseLionecsRefOptions
@@ -41,11 +37,13 @@ export function refModule<
 		): Ref<
 			O extends UseLionecsRefOptions
 				? O['optional'] extends true
-					? S[K] | undefined
-					: S[K]
-				: S[K] | undefined
+					? ComponentType<C[K]> | undefined
+					: ComponentType<C[K]>
+				: ComponentType<C[K]> | undefined
 		> {
-			const componentStateRef = ref<S[K]>(this.get(entity, component));
+			const componentStateRef = ref<ComponentType<C[K]>>(
+				this.get(entity, component)
+			);
 
 			// Registers a listener
 			this.addEntityStateListener({

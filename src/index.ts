@@ -1,5 +1,11 @@
 export { createLionecs, defComponent } from './create-lionecs';
-export type { Component, ComponentType } from './types/component';
+export type {
+	Component,
+	ComponentKey,
+	ComponentMap,
+	ComponentName,
+	ComponentType,
+} from './types/component';
 export type {
 	ComponentStateListener,
 	ComponentStateListenerContext,
@@ -10,12 +16,3 @@ export type {
 export type { Entity, EntityMap, TypedEntity } from './types/entity';
 export type { ComponentStateChangeHandler } from './types/handlers';
 export type { Lionecs } from './types/lionecs';
-export type {
-	ComponentBase,
-	ComponentContext,
-	ComponentKey,
-	ComponentState,
-	LionecsState,
-	StateUpdate,
-	StateUpdateType,
-} from './types/state';
