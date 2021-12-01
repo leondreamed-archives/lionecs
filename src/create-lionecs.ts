@@ -1,6 +1,7 @@
 import rfdc from 'rfdc';
 
 import * as lionecsModules from './modules';
+import type { Component } from './types/component';
 import type { EntityMap } from './types/entity';
 import type { InternalLionecsState, Lionecs } from './types/lionecs';
 import type { InternalLionecsProperties } from './types/properties';
@@ -53,12 +54,10 @@ export function createLionecs<
 	return lionecs;
 }
 
-export type ComponentType<N extends string, _T extends unknown> = N;
-
 export function defComponent<T extends unknown>() {
 	return {
-		setName: function <N extends string>(name: N): ComponentType<N, T> {
-			return name;
+		setName: function <N extends string>(name: N): Component<N, T> {
+			return { name };
 		},
 	};
 }

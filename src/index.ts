@@ -1,4 +1,5 @@
 export { createLionecs, defComponent } from './create-lionecs';
+export type { Component, ComponentType } from './types/component';
 export type {
 	ComponentStateListener,
 	ComponentStateListenerContext,
