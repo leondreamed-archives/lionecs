@@ -53,3 +53,9 @@ export type ElementPluginExtras<
 export type ElementPluginOptions = {
 	setIdAttribute: boolean;
 };
+
+export type CreateElementPropertyProps = {
+	tag: string;
+	namespace?: string;
+	creationOptions?: ElementCreationOptions;
+};

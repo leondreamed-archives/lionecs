@@ -3,7 +3,11 @@ import { nanoid } from 'nanoid';
 import type { ComponentBase, ComponentState } from '~/types/state';
 import { useDefineMethods } from '~/utils/methods';
 
-import type { ElementProperty, InternalElementPluginExtras } from '../types';
+import type {
+	CreateElementPropertyProps,
+	ElementProperty,
+	InternalElementPluginExtras,
+} from '../types';
 
 export function createElementModule<
 	C extends ComponentBase,
@@ -15,13 +19,7 @@ export function createElementModule<
 		InternalElementPluginExtras<C, S>
 	>();
 
-	type CreateElementPropertyProps = {
-		tag: string;
-		namespace?: string;
-		creationOptions?: ElementCreationOptions;
-	};
-
-	const { createElementProperty } = defineMethods({
+	return defineMethods({
 		createElementProperty({
 			tag,
 			namespace,
@@ -44,6 +42,4 @@ export function createElementModule<
 			return elementProperty;
 		},
 	});
-
-	return { createElementProperty };
 }
