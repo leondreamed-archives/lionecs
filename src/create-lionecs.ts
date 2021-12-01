@@ -52,3 +52,13 @@ export function createLionecs<
 
 	return lionecs;
 }
+
+export type ComponentType<N extends string, _T extends unknown> = N;
+
+export function defComponent<T extends unknown>() {
+	return {
+		setName: function <N extends string>(name: N): ComponentType<N, T> {
+			return name;
+		},
+	};
+}
