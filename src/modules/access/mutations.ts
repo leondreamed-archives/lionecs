@@ -30,7 +30,8 @@ export function mutationsModule<M extends ComponentMap>() {
 				this.triggerListeners(stateUpdates);
 			}
 		},
-		del<K extends ComponentKey<M>>(entity: Entity, componentKey: K) {
+		del<K extends ComponentKey<M>>(entity: Entity, component: K | ComponentFromKey<M, K>) {
+			const componentKey = this.getComponentKey(component);
 			delete this.state.components[componentKey][entity];
 		},
 		set<K extends ComponentKey<M>>(

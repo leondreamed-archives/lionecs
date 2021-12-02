@@ -76,10 +76,9 @@ export function getModule<C extends ComponentMap>() {
 				GetOptions | undefined
 			];
 			const optional = options?.optional ?? true;
+			const componentKey = this.getComponentKey(component);
 
-			const componentState = isComponent(component)
-				? this.state.components[component.__key][entity]
-				: this.state.components[component][entity];
+			const componentState = this.state.components[componentKey];
 
 			if (!optional && componentState === undefined) {
 				throw new Error(
