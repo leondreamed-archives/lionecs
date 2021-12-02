@@ -13,16 +13,21 @@ export type EntityMap<
 > = Record<Entity, Readonly<ComponentType<C[K]>>>;
 
 export type TypedEntity<
-	R extends Component<string, unknown>,
-	O extends Component<string, unknown> = Component<'__empty', never>
+	R extends ComponentKey<ComponentMap>,
+	O extends ComponentKey<ComponentMap> | '__empty' = '__empty'
 > = Entity & {
 	__required: {
-		[K in R['__name']]: true;
+		[K in R]: true;
 	};
 	__optional: {
-		[K in O['__name']]: true;
+		[K in O]: true;
 	};
 };
+
+export type DefineTypedEntity<
+	R extends Component<string, unknown>,
+	O extends Component<string, unknown> = Component<'__empty', never>
+> = TypedEntity<R['__name'], O['__name']>;
 
 export type EntityComponent<
 	C extends ComponentMap,

@@ -13,6 +13,11 @@ export type {
 	EntityStateListenerContext,
 	StateListener,
 } from './types/context';
-export type { Entity, EntityMap, TypedEntity } from './types/entity';
+export type {
+	DefineTypedEntity,
+	Entity,
+	EntityMap,
+	TypedEntity,
+} from './types/entity';
 export type { ComponentStateChangeHandler } from './types/handlers';
 export type { Lionecs } from './types/lionecs';
