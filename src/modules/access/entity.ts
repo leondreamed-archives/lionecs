@@ -18,7 +18,7 @@ export function entityModule<C extends ComponentMap>() {
 					for (const [componentName, componentValue] of Object.entries(
 						props.components
 					)) {
-						this.set(entity, componentName as ComponentKey<C>, componentValue);
+						this.set(entity, componentName as ComponentKey<C>, componentValue!);
 					}
 				});
 			}
