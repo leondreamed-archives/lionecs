@@ -11,18 +11,18 @@ const clone = rfdc();
 const vuePluginModulesObj = { ...vuePluginModules };
 const vuePluginProperties = {} as InternalVuePluginProperties<any, any>;
 for (const module of Object.values(vuePluginModulesObj)) {
-	for (const [fn, value] of Object.entries(module<any, any>())) {
+	for (const [fn, value] of Object.entries(module<any>())) {
 		vuePluginProperties[fn as keyof InternalVuePluginProperties<any, any>] =
 			value;
 	}
 }
 
-export function elementPlugin<C extends ComponentMap, X extends LionecsExtras>(
-	this: Lionecs<C, X>
-): Lionecs<C, X> {
+export function elementPlugin<M extends ComponentMap, X extends LionecsExtras>(
+	this: Lionecs<M, X>
+): Lionecs<M, X> {
 	const vuePluginEcs = this as unknown as InternalLionecs<C>;
 
 	Object.assign(vuePluginEcs, clone(vuePluginProperties));
 
-	return vuePluginEcs as unknown as Lionecs<C, X>;
+	return vuePluginEcs as unknown as Lionecs<M, X>;
 }

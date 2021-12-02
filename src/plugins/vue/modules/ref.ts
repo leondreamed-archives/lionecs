@@ -2,6 +2,7 @@ import type { Ref } from 'vue';
 import { ref } from 'vue';
 
 import type {
+	Component,
 	ComponentKey,
 	ComponentMap,
 	ComponentType,
@@ -9,8 +10,8 @@ import type {
 import type { Entity, TypedEntity } from '~/types/entity';
 import { useDefineMethods } from '~/utils/methods';
 
-export function refModule<C extends ComponentMap>() {
-	const defineMethods = useDefineMethods<C>();
+export function refModule<M extends ComponentMap>() {
+	const defineMethods = useDefineMethods<M>();
 
 	type UseLionecsRefOptions = {
 		optional: boolean;
@@ -24,24 +25,24 @@ export function refModule<C extends ComponentMap>() {
 				?
 						| TypedEntity<Req, Opt>['__required']
 						| TypedEntity<Req, Opt>['__optional']
-				: ComponentKey<C>,
+				: ComponentKey<M>,
 			O extends E extends TypedEntity<infer Req, infer Opt>
-				? C extends TypedEntity<Req, Opt>['__optional']
+				? M extends TypedEntity<Req, Opt>['__optional']
 					? { optional: true }
 					: { optional: false }
 				: UseLionecsRefOptions
 		>(
 			entity: E,
-			component: K,
+			component: Component<K, M[K]>,
 			options?: O
 		): Ref<
 			O extends UseLionecsRefOptions
 				? O['optional'] extends true
-					? ComponentType<C[K]> | undefined
-					: ComponentType<C[K]>
-				: ComponentType<C[K]> | undefined
+					? ComponentType<M[K]> | undefined
+					: ComponentType<M[K]>
+				: ComponentType<M[K]> | undefined
 		> {
-			const componentStateRef = ref<ComponentType<C[K]>>(
+			const componentStateRef = ref<ComponentType<M[K]>>(
 				this.get(entity, component)
 			);
 

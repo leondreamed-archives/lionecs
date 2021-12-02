@@ -1,4 +1,6 @@
-export interface Component<_N extends string, _T extends unknown> {}
+export interface Component<_N extends string, _T extends unknown> {
+	__name: string;
+}
 
 export type ComponentMap = Record<string, Component<string, unknown>>;
 

@@ -34,7 +34,7 @@ export function mutationsModule<C extends ComponentMap>() {
 		},
 		set<K extends ComponentKey<C>>(
 			entity: Entity,
-			componentKey: K,
+			component: K,
 			newComponentState: ComponentType<C[K]>
 		) {
 			const oldComponentState = this.get(
