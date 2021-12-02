@@ -1,5 +1,4 @@
 import type {
-	Component,
 	ComponentFromKey,
 	ComponentKey,
 	ComponentMap,
@@ -30,7 +29,7 @@ export function handlerManagerModule<C extends ComponentMap>() {
 			type ExecuteHandlerProps = {
 				entity: E;
 				extras: R;
-				components?: Component<string, unknown>[];
+				componentKeys?: ComponentKey<C>[];
 			};
 
 			/**
@@ -39,13 +38,13 @@ export function handlerManagerModule<C extends ComponentMap>() {
 			const executeHandlers = ({
 				entity,
 				extras,
-				components,
+				componentKeys,
 			}: ExecuteHandlerProps) => {
 				for (const handler of handlers) {
 					// If the handler isn't responsible for the component, then skip it.
 					if (
-						components !== undefined &&
-						!components.includes(handler.component)
+						componentKeys !== undefined &&
+						!componentKeys.includes(handler.componentKey)
 					) {
 						continue;
 					}
@@ -53,14 +52,14 @@ export function handlerManagerModule<C extends ComponentMap>() {
 					// Check if the component state changed
 					const currentComponentState = this.get(
 						entity as Entity,
-						handler.component
+						handler.componentKey
 					);
 
 					// If a change in the components was detected, trigger the callback
 					if (currentComponentState !== handler.oldComponentState) {
 						const currentComponentState = this.get(
 							entity as Entity,
-							handler.component
+							handler.componentKey
 						);
 
 						handler.callback({
@@ -76,11 +75,12 @@ export function handlerManagerModule<C extends ComponentMap>() {
 			};
 
 			const createHandler = <K extends ComponentKey<C>>(
-				component: ComponentFromKey<C, K>,
+				component: K | ComponentFromKey<C, K>,
 				callback: ComponentStateChangeHandler<C, K, E, R>['callback']
 			) => {
+				const componentKey = this.getComponentKey(component);
 				handlers.push({
-					component,
+					componentKey,
 					callback,
 					oldComponentState: undefined,
 				});
@@ -115,7 +115,7 @@ export function handlerManagerModule<C extends ComponentMap>() {
 
 				const uniqueComponents = new Set<ComponentKey<C>>();
 				for (const handler of handlers) {
-					const componentKey = this.getComponentKey(handler.component);
+					const componentKey = this.getComponentKey(handler.componentKey);
 					(componentKeyToHandlers[componentKey] ??= []).push(handler);
 					uniqueComponents.add(componentKey);
 				}
