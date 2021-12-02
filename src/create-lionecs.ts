@@ -46,7 +46,7 @@ export function createLionecs<M extends ComponentMap, X extends LionecsExtras>({
 	return lionecs;
 }
 
-export function defComponent<T extends unknown>() {
+export function defComponent<T>() {
 	return {
 		setName: function <K extends string>(key: K): Component<K, T> {
 			return { __key: key };

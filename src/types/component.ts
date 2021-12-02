@@ -1,4 +1,4 @@
-export interface Component<K extends string, _T extends unknown> {
+export interface Component<K extends string, _T> {
 	__key: K;
 }
 
