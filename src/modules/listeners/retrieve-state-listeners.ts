@@ -9,29 +9,29 @@ import type { StateUpdate } from '~/types/state';
 import { StateUpdateType } from '~/types/state';
 import { useDefineMethods } from '~/utils/methods';
 
-export function retrieveStateListenerCallsModule<C extends ComponentMap>() {
-	const defineMethods = useDefineMethods<C>();
+export function retrieveStateListenerCallsModule<M extends ComponentMap>() {
+	const defineMethods = useDefineMethods<M>();
 
 	return defineMethods({
 		retrieveStateListenerCalls(
-			stateUpdates: StateUpdate<C, ComponentKey<C>>[]
-		): [StateListener<C>, Parameters<StateListener<C>>][] {
+			stateUpdates: StateUpdate<M, ComponentKey<M>>[]
+		): [StateListener<M>, Parameters<StateListener<M>>][] {
 			// Map of entities to the updates that affected it
-			const affectedEntityUpdatesMap: Record<Entity, StateUpdate<C, any>[]> =
+			const affectedEntityUpdatesMap: Record<Entity, StateUpdate<M, any>[]> =
 				{};
 
 			// Map of components to the updates that affected it
 			const affectedComponentUpdatesMap = {} as {
-				[K in ComponentKey<C>]: StateUpdate<C, ComponentKey<C>>[];
+				[K in ComponentKey<M>]: StateUpdate<M, ComponentKey<M>>[];
 			};
 
 			for (const stateUpdate of stateUpdates) {
 				(affectedEntityUpdatesMap[stateUpdate.entity] ??= []).push(stateUpdate);
 				(affectedComponentUpdatesMap[stateUpdate.componentKey] ??=
-					[] as StateUpdate<C, ComponentKey<C>>[]).push(stateUpdate);
+					[] as StateUpdate<M, ComponentKey<M>>[]).push(stateUpdate);
 			}
 
-			const stateListeners: [StateListener<C>, Parameters<StateListener<C>>][] =
+			const stateListeners: [StateListener<M>, Parameters<StateListener<M>>][] =
 				[];
 			// Save all entity listeners
 			for (const [entity, affectedEntityUpdates] of Object.entries(
@@ -39,7 +39,7 @@ export function retrieveStateListenerCallsModule<C extends ComponentMap>() {
 			)) {
 				for (const { listener } of this._entityListenerContexts.get(entity) ??
 					[]) {
-					const params: Parameters<EntityStateListener<C, Entity>> = [
+					const params: Parameters<EntityStateListener<M, Entity>> = [
 						{
 							componentKeys: affectedEntityUpdates.map(
 								({ componentKey }) => componentKey
@@ -55,14 +55,14 @@ export function retrieveStateListenerCallsModule<C extends ComponentMap>() {
 			for (const [componentString, affectedComponentUpdates] of Object.entries(
 				affectedComponentUpdatesMap
 			)) {
-				const component = componentString as ComponentKey<C>;
+				const component = componentString as ComponentKey<M>;
 				for (const { listener } of this._componentListenerContexts.get(
 					component
 				) ?? []) {
 					// Looping through all the entities that were affected
 					for (const componentUpdate of affectedComponentUpdates) {
 						const params: Parameters<
-							ComponentStateListener<C, ComponentKey<C>>
+							ComponentStateListener<M, ComponentKey<M>>
 						> = [
 							{
 								component,

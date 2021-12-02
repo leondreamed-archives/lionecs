@@ -3,8 +3,8 @@ import type { EntityStateListener } from '~/types/context';
 import type { Entity } from '~/types/entity';
 import { useDefineMethods } from '~/utils/methods';
 
-export function entityStateListenersModule<C extends ComponentMap>() {
-	const defineMethods = useDefineMethods<C>();
+export function entityStateListenersModule<M extends ComponentMap>() {
+	const defineMethods = useDefineMethods<M>();
 
 	return defineMethods({
 		addEntityStateListener: function <
@@ -16,7 +16,7 @@ export function entityStateListenersModule<C extends ComponentMap>() {
 			extras,
 		}: {
 			entity: E;
-			listener: EntityStateListener<C, E, R>;
+			listener: EntityStateListener<M, E, R>;
 			extras?: R;
 		}) {
 			if (!this._entityListenerContexts.has(entity)) {
@@ -31,8 +31,8 @@ export function entityStateListenersModule<C extends ComponentMap>() {
 		createEntityStateListenerManager: function <
 			E extends Entity,
 			R extends Record<string, unknown> | undefined = undefined
-		>(listener: EntityStateListener<C, E, R>) {
-			const listeners = new Map<Entity, EntityStateListener<C, E, R>>();
+		>(listener: EntityStateListener<M, E, R>) {
+			const listeners = new Map<Entity, EntityStateListener<M, E, R>>();
 
 			const registerEntityStateListener = (entity: E, extras?: R) => {
 				if (!listeners.has(entity)) {
@@ -56,7 +56,7 @@ export function entityStateListenersModule<C extends ComponentMap>() {
 			listener,
 		}: {
 			entity: Entity;
-			listener: EntityStateListener<C, E, R>;
+			listener: EntityStateListener<M, E, R>;
 		}) {
 			const index =
 				this._entityListenerContexts

@@ -7,8 +7,8 @@ import type { InternalLionecsState, Lionecs } from './types/lionecs';
 import type { InternalLionecsProperties } from './types/properties';
 import type { LionecsExtras, LionecsState } from './types/state';
 
-type CreateLionecsProps<C extends ComponentMap> = {
-	components: C;
+type CreateLionecsProps<M extends ComponentMap> = {
+	components: M;
 };
 
 const clone = rfdc();
@@ -20,16 +20,16 @@ for (const module of Object.values(lionecsModulesObj)) {
 	}
 }
 
-export function createLionecs<C extends ComponentMap, X extends LionecsExtras>({
+export function createLionecs<M extends ComponentMap, X extends LionecsExtras>({
 	components: componentsMap,
-}: CreateLionecsProps<C>) {
-	const components = {} as Record<string, EntityMap<C, ComponentKey<C>>>;
+}: CreateLionecsProps<M>) {
+	const components = {} as Record<string, EntityMap<M, ComponentKey<M>>>;
 	for (const component of Object.keys(componentsMap)) {
 		components[component] = {};
 	}
 
-	const internalState: InternalLionecsState<C> = {
-		state: { components } as LionecsState<C>,
+	const internalState: InternalLionecsState<M> = {
+		state: { components } as LionecsState<M>,
 		_entityListenerContexts: new Map(),
 		_componentListenerContexts: new Map(),
 		_activeUpdateCallCount: 0,
@@ -41,7 +41,7 @@ export function createLionecs<C extends ComponentMap, X extends LionecsExtras>({
 	const lionecs = Object.assign(
 		clone(lionecsProperties),
 		internalState
-	) as unknown as Lionecs<C, X> & X;
+	) as unknown as Lionecs<M, X> & X;
 
 	return lionecs;
 }

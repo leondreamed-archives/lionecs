@@ -7,19 +7,19 @@ import type { ComponentStateListener } from '~/types/context';
 import type {} from '~/types/state';
 import { useDefineMethods } from '~/utils/methods';
 
-export function componentStateListenersModule<C extends ComponentMap>() {
-	const defineMethods = useDefineMethods<C>();
+export function componentStateListenersModule<M extends ComponentMap>() {
+	const defineMethods = useDefineMethods<M>();
 
 	return defineMethods({
 		removeComponentStateListener: function <
-			K extends ComponentKey<C>,
+			K extends ComponentKey<M>,
 			R extends Record<string, unknown> | undefined = undefined
 		>({
 			component,
 			listener,
 		}: {
-			component: K | ComponentFromKey<C, K>;
-			listener: ComponentStateListener<C, K, R>;
+			component: K | ComponentFromKey<M, K>;
+			listener: ComponentStateListener<M, K, R>;
 		}) {
 			const componentKey = this.getComponentKey(component);
 			const index =
@@ -32,15 +32,15 @@ export function componentStateListenersModule<C extends ComponentMap>() {
 			}
 		},
 		addComponentStateListener: function <
-			K extends ComponentKey<C>,
+			K extends ComponentKey<M>,
 			R extends Record<string, unknown> | undefined = undefined
 		>({
 			component,
 			listener,
 			extras,
 		}: {
-			component: K | ComponentFromKey<C, K>;
-			listener: ComponentStateListener<C, K, R>;
+			component: K | ComponentFromKey<M, K>;
+			listener: ComponentStateListener<M, K, R>;
 			extras?: R;
 		}) {
 			const componentKey = this.getComponentKey(component);
@@ -54,12 +54,12 @@ export function componentStateListenersModule<C extends ComponentMap>() {
 			});
 		},
 		createComponentStateListenerManager: function <
-			K extends ComponentKey<C>,
+			K extends ComponentKey<M>,
 			R extends Record<string, unknown> | undefined = undefined
-		>(listener: ComponentStateListener<C, K, R>) {
+		>(listener: ComponentStateListener<M, K, R>) {
 			const listeners = new Map<
-				ComponentKey<C>,
-				ComponentStateListener<C, K, R>
+				ComponentKey<M>,
+				ComponentStateListener<M, K, R>
 			>();
 
 			const registerComponentStateListener = (component: K) => {

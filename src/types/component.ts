@@ -3,11 +3,11 @@ export interface Component<K extends string, _T extends unknown> {
 }
 
 export type ComponentFromKey<
-	C extends ComponentMap,
-	K extends ComponentKey<C> | string
-> = K extends ComponentKey<C>
+	M extends ComponentMap,
+	K extends ComponentKey<M> | string
+> = K extends ComponentKey<M>
 	? K extends string
-		? Component<K, TypeOfComponent<C[K]>>
+		? Component<K, TypeOfComponent<M[K]>>
 		: never
 	: K extends string
 	? Component<K, unknown>
@@ -15,7 +15,7 @@ export type ComponentFromKey<
 
 export type ComponentMap = Record<string, Component<string, unknown>>;
 
-export type ComponentKey<C extends ComponentMap> = keyof C;
+export type ComponentKey<M extends ComponentMap> = keyof M;
 
 export type TypeOfComponent<C extends Component<string, unknown>> =
 	C extends Component<infer _K, infer T> ? T : unknown;

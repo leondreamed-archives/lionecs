@@ -1,15 +1,15 @@
 import type { ComponentKey, ComponentMap } from '~/types/component';
 import { useDefineMethods } from '~/utils/methods';
 
-export function selectModule<C extends ComponentMap>() {
-	const defineMethods = useDefineMethods<C>();
+export function selectModule<M extends ComponentMap>() {
+	const defineMethods = useDefineMethods<M>();
 
-	type SelectProps<KS extends ComponentKey<C>[]> = {
+	type SelectProps<KS extends ComponentKey<M>[]> = {
 		components: KS;
 	};
 
 	return defineMethods({
-		select<KS extends ComponentKey<C>[]>({ components }: SelectProps<KS>) {
+		select<KS extends ComponentKey<M>[]>({ components }: SelectProps<KS>) {
 			let minComponentLen = 0;
 			let minComponentIndex = 0;
 

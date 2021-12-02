@@ -6,17 +6,17 @@ import type {
 import type { Entity } from './entity';
 
 export type ComponentStateChangeHandler<
-	C extends ComponentMap,
-	K extends ComponentKey<C>,
+	M extends ComponentMap,
+	K extends ComponentKey<M>,
 	E extends Entity,
 	R extends Record<string, unknown>
 > = {
-	oldComponentState: TypeOfComponent<C[K]> | undefined;
+	oldComponentState: TypeOfComponent<M[K]> | undefined;
 	componentKey: K;
 	callback(props: {
 		entity: E;
 		extras: R;
-		oldComponentState: TypeOfComponent<C[K]> | undefined;
-		newComponentState: TypeOfComponent<C[K]> | undefined;
+		oldComponentState: TypeOfComponent<M[K]> | undefined;
+		newComponentState: TypeOfComponent<M[K]> | undefined;
 	}): void;
 };
