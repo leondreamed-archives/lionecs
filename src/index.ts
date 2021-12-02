@@ -5,6 +5,7 @@ export type {
 	ComponentKey,
 	ComponentMap,
 	KeyOfComponent,
+	TypeOfComponent
 } from './types/component';
 export type {
 	ComponentStateListener,
