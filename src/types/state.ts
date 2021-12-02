@@ -1,4 +1,4 @@
-import type { ComponentKey, ComponentMap, ComponentType } from './component';
+import type { ComponentKey, ComponentMap, TypeOfComponent } from './component';
 import type { Entity, EntityMap } from './entity';
 
 export type LionecsState<C extends ComponentMap> = {
@@ -35,12 +35,12 @@ export type StateUpdate<C extends ComponentMap, K extends ComponentKey<C>> =
 	| {
 			type: StateUpdateType.set;
 			entity: Entity;
-			component: K;
-			oldComponentState: ComponentType<C[K]> | undefined;
-			newComponentState: ComponentType<C[K]>;
+			componentKey: K;
+			oldComponentState: TypeOfComponent<C[K]> | undefined;
+			newComponentState: TypeOfComponent<C[K]>;
 	  }
 	| {
 			type: StateUpdateType.del;
 			entity: Entity;
-			component: K;
+			componentKey: K;
 	  };

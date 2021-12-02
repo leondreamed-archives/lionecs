@@ -2,17 +2,18 @@ import { produce } from 'immer';
 import extend from 'just-extend';
 
 import type {
+	ComponentFromKey,
 	ComponentKey,
 	ComponentMap,
-	ComponentType,
+	TypeOfComponent,
 } from '~/types/component';
 import type { Entity } from '~/types/entity';
 import type { StateUpdate } from '~/types/state';
 import { StateUpdateType } from '~/types/state';
 import { useDefineMethods } from '~/utils/methods';
 
-export function mutationsModule<C extends ComponentMap>() {
-	const defineMethods = useDefineMethods<C>();
+export function mutationsModule<M extends ComponentMap>() {
+	const defineMethods = useDefineMethods<M>();
 
 	return defineMethods({
 		/**
@@ -29,23 +30,20 @@ export function mutationsModule<C extends ComponentMap>() {
 				this.triggerListeners(stateUpdates);
 			}
 		},
-		del<K extends ComponentKey<C>>(entity: Entity, componentKey: K) {
+		del<K extends ComponentKey<M>>(entity: Entity, componentKey: K) {
 			delete this.state.components[componentKey][entity];
 		},
-		set<K extends ComponentKey<C>>(
+		set<K extends ComponentKey<M>>(
 			entity: Entity,
-			component: K,
-			newComponentState: ComponentType<C[K]>
+			component: K | ComponentFromKey<M, K>,
+			newComponentState: TypeOfComponent<M[K]>
 		) {
-			const oldComponentState = this.get(
-				entity,
-				componentKey as ComponentKey<C>
-			);
-			this.getEntityMap(componentKey)[entity] = newComponentState;
+			const oldComponentState = this.get(entity, component);
+			this.getEntityMap(component)[entity] = newComponentState;
 
-			const stateUpdate: StateUpdate<C, K> = {
+			const stateUpdate: StateUpdate<M, K> = {
 				type: StateUpdateType.set,
-				component: componentKey,
+				component,
 				entity,
 				newComponentState,
 				oldComponentState,
@@ -59,15 +57,12 @@ export function mutationsModule<C extends ComponentMap>() {
 				this.triggerListeners([stateUpdate]);
 			}
 		},
-		patch<K extends ComponentKey<C>>(
+		patch<K extends ComponentKey<M>>(
 			entity: Entity,
-			componentKey: K,
-			patchedState: Partial<ComponentType<C[K]>>
+			component: K | ComponentFromKey<M, K>,
+			patchedState: Partial<TypeOfComponent<M[K]>>
 		) {
-			const oldComponentState = this.get(
-				entity,
-				componentKey as ComponentKey<C>
-			);
+			const oldComponentState = this.get(entity, component as ComponentKey<M>);
 			if (oldComponentState === undefined) {
 				throw new Error(`Cannot patch non-initialized state.`);
 			}
@@ -77,12 +72,12 @@ export function mutationsModule<C extends ComponentMap>() {
 
 			const newComponentState = produce(
 				oldComponentState,
-				(state: ComponentType<C[K]>) => {
+				(state: TypeOfComponent<M[K]>) => {
 					extend(state as any, patchedState);
 				}
 			);
 
-			this.set(entity, componentKey, newComponentState as ComponentType<C[K]>);
+			this.set(entity, component, newComponentState as TypeOfComponent<M[K]>);
 		},
 	});
 }

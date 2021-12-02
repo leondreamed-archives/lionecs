@@ -1,4 +1,9 @@
-import type { ComponentKey, ComponentMap } from '~/types/component';
+import type {
+	Component,
+	ComponentFromKey,
+	ComponentKey,
+	ComponentMap,
+} from '~/types/component';
 import type { Entity } from '~/types/entity';
 import type { ComponentStateChangeHandler } from '~/types/handlers';
 import { useDefineMethods } from '~/utils/methods';
@@ -25,7 +30,7 @@ export function handlerManagerModule<C extends ComponentMap>() {
 			type ExecuteHandlerProps = {
 				entity: E;
 				extras: R;
-				components?: ComponentKey<C>[];
+				components?: Component<string, unknown>[];
 			};
 
 			/**
@@ -48,14 +53,14 @@ export function handlerManagerModule<C extends ComponentMap>() {
 					// Check if the component state changed
 					const currentComponentState = this.get(
 						entity as Entity,
-						handler.component as ComponentKey<C>
+						handler.component
 					);
 
 					// If a change in the components was detected, trigger the callback
 					if (currentComponentState !== handler.oldComponentState) {
 						const currentComponentState = this.get(
 							entity as Entity,
-							handler.component as ComponentKey<C>
+							handler.component
 						);
 
 						handler.callback({
@@ -71,7 +76,7 @@ export function handlerManagerModule<C extends ComponentMap>() {
 			};
 
 			const createHandler = <K extends ComponentKey<C>>(
-				component: K,
+				component: ComponentFromKey<C, K>,
 				callback: ComponentStateChangeHandler<C, K, E, R>['callback']
 			) => {
 				handlers.push({
@@ -108,7 +113,7 @@ export function handlerManagerModule<C extends ComponentMap>() {
 						}
 					);
 
-				const uniqueComponents = new Set<ComponentKey<C>>();
+				const uniqueComponents = new Set<Component<string, unknown>>();
 				for (const handler of handlers) {
 					(componentToHandlers[handler.component] ??= []).push(handler);
 					uniqueComponents.add(handler.component);

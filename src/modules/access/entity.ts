@@ -1,33 +1,38 @@
 import { nanoid } from 'nanoid';
 
-import type { ComponentKey, ComponentMap } from '~/types/component';
+import type {
+	ComponentFromKey,
+	ComponentKey,
+	ComponentMap,
+} from '~/types/component';
 import type { CreateEntityProps, Entity, EntityMap } from '~/types/entity';
 import { useDefineMethods } from '~/utils/methods';
 
-export function entityModule<C extends ComponentMap>() {
-	const defineMethods = useDefineMethods<C>();
+export function entityModule<M extends ComponentMap>() {
+	const defineMethods = useDefineMethods<M>();
 
 	return defineMethods({
 		createEntity: function <E extends Entity>(
-			props?: CreateEntityProps<C, E>
+			props?: CreateEntityProps<M, E>
 		): E {
 			const entity = nanoid() as E;
 
 			if (props !== undefined) {
 				this.update(() => {
-					for (const [componentName, componentValue] of Object.entries(
+					for (const [componentKey, componentValue] of Object.entries(
 						props.components
 					)) {
-						this.set(entity, componentName as ComponentKey<C>, componentValue!);
+						this.set(entity, componentKey as ComponentKey<M>, componentValue!);
 					}
 				});
 			}
 
 			return entity;
 		},
-		getEntityMap: function <K extends ComponentKey<C>>(
-			componentKey: K
-		): EntityMap<C, K> {
+		getEntityMap: function <K extends ComponentKey<M>>(
+			component: K | ComponentFromKey<M, K>
+		): EntityMap<M, K> {
+			const componentKey = this.getComponentKey(component);
 			return this.state.components[componentKey];
 		},
 		cloneEntity: function <E extends Entity>(entityToClone: E): E {
@@ -35,10 +40,10 @@ export function entityModule<C extends ComponentMap>() {
 
 			this.update(() => {
 				for (const componentString of Object.keys(this.state.components)) {
-					const component = componentString as ComponentKey<C>;
+					const component = componentString as ComponentKey<M>;
 					const componentState = this.getOpt(
 						entityToClone,
-						component as ComponentKey<C>
+						component as ComponentKey<M>
 					);
 					if (componentState !== undefined) {
 						this.set(entity, component, componentState);

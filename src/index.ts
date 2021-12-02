@@ -1,10 +1,10 @@
 export { createLionecs, defComponent } from './create-lionecs';
 export type {
 	Component,
+	ComponentFromKey,
 	ComponentKey,
+	KeyOfComponent as NameOfComponent
 	ComponentMap,
-	ComponentName,
-	ComponentType,
 } from './types/component';
 export type {
 	ComponentStateListener,
