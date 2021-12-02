@@ -41,7 +41,7 @@ export function retrieveStateListenerCallsModule<C extends ComponentMap>() {
 					[]) {
 					const params: Parameters<EntityStateListener<C, Entity>> = [
 						{
-							components: affectedEntityUpdates.map(
+							componentKeys: affectedEntityUpdates.map(
 								({ componentKey }) => componentKey
 							),
 							entity,
