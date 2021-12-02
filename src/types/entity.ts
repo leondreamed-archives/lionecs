@@ -2,6 +2,7 @@ import type {
 	Component,
 	ComponentKey,
 	ComponentMap,
+	ComponentName,
 	ComponentType,
 } from './component';
 
@@ -27,7 +28,7 @@ export type TypedEntity<
 export type DefineTypedEntity<
 	R extends Component<string, unknown>,
 	O extends Component<string, unknown> = Component<'__empty', never>
-> = TypedEntity<R['__name'], O['__name']>;
+> = TypedEntity<ComponentName<R>, ComponentName<O>>;
 
 export type EntityComponent<
 	C extends ComponentMap,
