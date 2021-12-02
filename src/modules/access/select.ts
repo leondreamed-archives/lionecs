@@ -22,6 +22,8 @@ export function selectModule<C extends ComponentMap>() {
 				}
 			}
 
+			console.log(minComponentIndex);
+
 			// Loop through every entity, and check if they exist in the other components
 		},
 	});

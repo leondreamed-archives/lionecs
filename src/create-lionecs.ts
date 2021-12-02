@@ -48,8 +48,8 @@ export function createLionecs<C extends ComponentMap, X extends LionecsExtras>({
 
 export function defComponent<T extends unknown>() {
 	return {
-		setName: function <N extends string>(name: N): Component<N, T> {
-			return name;
+		setName: function <K extends string>(key: K): Component<K, T> {
+			return { __key: key };
 		},
 	};
 }

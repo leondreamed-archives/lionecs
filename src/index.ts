@@ -3,8 +3,8 @@ export type {
 	Component,
 	ComponentFromKey,
 	ComponentKey,
-	KeyOfComponent as NameOfComponent
 	ComponentMap,
+	KeyOfComponent,
 } from './types/component';
 export type {
 	ComponentStateListener,

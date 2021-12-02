@@ -38,12 +38,13 @@ export function mutationsModule<M extends ComponentMap>() {
 			component: K | ComponentFromKey<M, K>,
 			newComponentState: TypeOfComponent<M[K]>
 		) {
-			const oldComponentState = this.get(entity, component);
-			this.getEntityMap(component)[entity] = newComponentState;
+			const componentKey = this.getComponentKey(component);
+			const oldComponentState = this.get(entity, componentKey);
+			this.getEntityMap(componentKey)[entity] = newComponentState;
 
 			const stateUpdate: StateUpdate<M, K> = {
 				type: StateUpdateType.set,
-				component,
+				componentKey,
 				entity,
 				newComponentState,
 				oldComponentState,

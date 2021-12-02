@@ -27,7 +27,7 @@ export function retrieveStateListenerCallsModule<C extends ComponentMap>() {
 
 			for (const stateUpdate of stateUpdates) {
 				(affectedEntityUpdatesMap[stateUpdate.entity] ??= []).push(stateUpdate);
-				(affectedComponentUpdatesMap[stateUpdate.component] ??=
+				(affectedComponentUpdatesMap[stateUpdate.componentKey] ??=
 					[] as StateUpdate<C, ComponentKey<C>>[]).push(stateUpdate);
 			}
 
@@ -42,7 +42,7 @@ export function retrieveStateListenerCallsModule<C extends ComponentMap>() {
 					const params: Parameters<EntityStateListener<C, Entity>> = [
 						{
 							components: affectedEntityUpdates.map(
-								({ component }) => component
+								({ componentKey }) => componentKey
 							),
 							entity,
 						},

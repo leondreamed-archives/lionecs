@@ -92,7 +92,7 @@ export function handlerManagerModule<C extends ComponentMap>() {
 			const registerHandlerListeners = (
 				props: RegisterHandlerListenersProps
 			) => {
-				const componentToHandlers = {} as Record<
+				const componentKeyToHandlers = {} as Record<
 					ComponentKey<C>,
 					ComponentStateChangeHandler<C, ComponentKey<C>, E, R>[]
 				>;
@@ -100,8 +100,8 @@ export function handlerManagerModule<C extends ComponentMap>() {
 				const { registerComponentStateListener } =
 					this.createComponentStateListenerManager(
 						({ component, entity, oldComponentState }) => {
-							if (componentToHandlers[component] !== undefined) {
-								for (const handler of componentToHandlers[component]) {
+							if (componentKeyToHandlers[component] !== undefined) {
+								for (const handler of componentKeyToHandlers[component]) {
 									handler.callback({
 										extras: props.extras,
 										newComponentState: this.get(entity, component),
@@ -113,10 +113,11 @@ export function handlerManagerModule<C extends ComponentMap>() {
 						}
 					);
 
-				const uniqueComponents = new Set<Component<string, unknown>>();
+				const uniqueComponents = new Set<ComponentKey<C>>();
 				for (const handler of handlers) {
-					(componentToHandlers[handler.component] ??= []).push(handler);
-					uniqueComponents.add(handler.component);
+					const componentKey = this.getComponentKey(handler.component);
+					(componentKeyToHandlers[componentKey] ??= []).push(handler);
+					uniqueComponents.add(componentKey);
 				}
 				for (const component of uniqueComponents) {
 					registerComponentStateListener(component);
