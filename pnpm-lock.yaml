@@ -22,6 +22,7 @@ importers:
       jest: ^27.4.3
       just-extend: ^6.0.1
       lint-staged: ^12.1.2
+      lion-architecture: ^1.0.2
       liontypes: ^1.0.2
       nanoid: ^3.1.30
       prettier: ^2.5.0
@@ -37,6 +38,7 @@ importers:
     dependencies:
       immer: 9.0.7
       just-extend: 6.0.1
+      lion-architecture: 1.0.2
       nanoid: 3.1.30
       rfdc: 1.3.0
     devDependencies:
@@ -3333,6 +3335,12 @@ packages:
       supports-color: 9.2.1
       yaml: 1.10.2
     dev: true
+
+  /lion-architecture/1.0.2:
+    resolution: {integrity: sha512-Ho/LgyNnC/QzhqUIzsIs4ONV+/YhOXCk5rbmZNApq5ISsg32iNodepKS6DykzCkZexrdM8sROJ1AGuRwN/kpAA==}
+    dependencies:
+      rfdc: 1.3.0
+    dev: false
 
   /liontypes/1.0.2:
     resolution: {integrity: sha512-zqqWTSDSX8gpB9rCyYDveGaL6WSSaUydw03AYFO/vEAYer4EiEZCUxCKL+f7tVQ0Amcx0yB9mlxQBnEL/5K/LQ==}

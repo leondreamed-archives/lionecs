@@ -7,3 +7,11 @@ export function isComponent<N extends string, T>(
 		component !== null && typeof component === 'object' && '__key' in component
 	);
 }
+
+export function defComponent<T>() {
+	return {
+		setName: function <K extends string>(key: K): Component<K, T> {
+			return { __key: key };
+		},
+	};
+}
