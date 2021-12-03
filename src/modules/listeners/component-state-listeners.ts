@@ -25,7 +25,7 @@ export function componentStateListenersModule<M extends ComponentMap>() {
 			const index =
 				this._componentListenerContexts
 					.get(componentKey)
-					?.findIndex((e) => e.listener === listener) ?? -1;
+					?.findIndex((e) => e.listener as any === listener) ?? -1;
 
 			if (index !== -1) {
 				this._componentListenerContexts.get(componentKey)!.splice(index, 1);

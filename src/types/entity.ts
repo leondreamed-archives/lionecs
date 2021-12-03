@@ -14,8 +14,9 @@ export type EntityMap<
 > = Record<Entity, Readonly<TypeOfComponent<M[K]>>>;
 
 export type TypedEntity<
-	R extends ComponentKey<ComponentMap>,
-	O extends ComponentKey<ComponentMap> | '__empty' = '__empty'
+	M extends ComponentMap,
+	R extends ComponentKey<M>,
+	O extends ComponentKey<M> | '__empty' = '__empty'
 > = Entity & {
 	__required: {
 		[K in R]: true;
@@ -25,10 +26,11 @@ export type TypedEntity<
 	};
 };
 
-export type DefineTypedEntity<
+export type UseDefineTypedEntity<
+	M extends ComponentMap,
 	R extends Component<string, unknown>,
 	O extends Component<string, unknown> = Component<'__empty', never>
-> = TypedEntity<KeyOfComponent<R>, KeyOfComponent<O>>;
+> = TypedEntity<M, KeyOfComponent<R>, KeyOfComponent<O>>;
 
 export type EntityComponent<
 	M extends ComponentMap,
@@ -38,14 +40,14 @@ export type EntityComponent<
 export type CreateEntityComponentsProp<
 	M extends ComponentMap,
 	E extends Entity
-> = E extends TypedEntity<infer Req, infer Opt>
+> = E extends TypedEntity<M, infer Req, infer Opt>
 	? Opt extends ComponentKey<M>
 		? {
-				[K in keyof TypedEntity<Req, Opt>['__required']]: TypeOfComponent<M[K]>;
+				[K in keyof TypedEntity<M, Req, Opt>['__required']]: TypeOfComponent<M[K]>;
 		  } & {
-				[K in keyof TypedEntity<Req, Opt>['__optional']]?: TypeOfComponent<M[K]>;
+				[K in keyof TypedEntity<M, Req, Opt>['__optional']]?: TypeOfComponent<M[K]>;
 		  }
-		: { [K in keyof TypedEntity<Req, Opt>['__required']]: TypeOfComponent<M[K]> }
+		: { [K in keyof TypedEntity<M, Req, Opt>['__required']]: TypeOfComponent<M[K]> }
 	: { [K in ComponentKey<M>]?: TypeOfComponent<M[K]> };
 
 export type CreateEntityProps<M extends ComponentMap, E extends Entity> = {

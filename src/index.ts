@@ -14,7 +14,7 @@ export type {
 	StateListener,
 } from './types/context';
 export type {
-	DefineTypedEntity,
+	UseDefineTypedEntity,
 	Entity,
 	EntityMap,
 	TypedEntity,

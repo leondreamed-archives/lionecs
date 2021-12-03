@@ -87,7 +87,6 @@ export function handlerManagerModule<M extends ComponentMap>() {
 			};
 
 			type RegisterHandlerListenersProps = {
-				execute?: boolean;
 				extras: R;
 			};
 			const registerHandlerListeners = (
@@ -107,7 +106,7 @@ export function handlerManagerModule<M extends ComponentMap>() {
 										extras: props.extras,
 										newComponentState: this.get(entity, component),
 										oldComponentState,
-										entity: entity as E,
+										entity: entity as unknown as E,
 									});
 								}
 							}

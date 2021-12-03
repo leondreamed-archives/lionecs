@@ -66,7 +66,7 @@ export function retrieveStateListenerCallsModule<M extends ComponentMap>() {
 						> = [
 							{
 								component,
-								entity: componentUpdate.entity,
+								entity: componentUpdate.entity as any,
 								oldComponentState:
 									componentUpdate.type === StateUpdateType.del
 										? undefined
