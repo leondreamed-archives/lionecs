@@ -26,54 +26,12 @@ export function handlerManagerModule<M extends ComponentMap>() {
 			const handlers: ComponentStateChangeHandler<M, ComponentKey<M>, E, R>[] =
 				[];
 
-			type ExecuteHandlerProps = {
-				entity: E;
-				extras: R;
-				componentKeys?: ComponentKey<M>[];
-			};
+			let areHandlersActivated = false;
+			let handlerExtras: R | undefined = undefined;
 
 			/**
-			 * Execute the handlers in the order they were defined.
+			 * Registers a handler (but doesn't activate it)
 			 */
-			const executeHandlers = ({
-				entity,
-				extras,
-				componentKeys,
-			}: ExecuteHandlerProps) => {
-				for (const handler of handlers) {
-					// If the handler isn't responsible for the component, then skip it.
-					if (
-						componentKeys !== undefined &&
-						!componentKeys.includes(handler.componentKey)
-					) {
-						continue;
-					}
-
-					// Check if the component state changed
-					const currentComponentState = this.get(
-						entity as Entity,
-						handler.componentKey
-					);
-
-					// If a change in the components was detected, trigger the callback
-					if (currentComponentState !== handler.oldComponentState) {
-						const currentComponentState = this.get(
-							entity as Entity,
-							handler.componentKey
-						);
-
-						handler.callback({
-							entity,
-							extras,
-							oldComponentState: handler.oldComponentState,
-							newComponentState: currentComponentState,
-						});
-
-						handler.oldComponentState = currentComponentState;
-					}
-				}
-			};
-
 			const createHandler = <K extends ComponentKey<M>>(
 				component: K | ComponentFromKey<M, K>,
 				callback: ComponentStateChangeHandler<M, K, E, R>['callback']
@@ -84,14 +42,25 @@ export function handlerManagerModule<M extends ComponentMap>() {
 					callback,
 					oldComponentState: undefined,
 				});
+				if (areHandlersActivated) {
+					// Loop through all the entities with a certain component
+					callback({
+						entity,
+						extras: handlerExtras as R,
+						newComponentState,
+						oldComponentState: undefined
+					})
+				}
 			};
 
 			type RegisterHandlerListenersProps = {
 				extras: R;
 			};
-			const registerHandlerListeners = (
+			const activateHandlers = (
 				props: RegisterHandlerListenersProps
 			) => {
+				handlerExtras = props.extras;
+
 				const componentKeyToHandlers = {} as Record<
 					ComponentKey<M>,
 					ComponentStateChangeHandler<M, ComponentKey<M>, E, R>[]
@@ -125,9 +94,8 @@ export function handlerManagerModule<M extends ComponentMap>() {
 			};
 
 			return {
-				executeHandlers,
 				createHandler,
-				registerHandlerListeners,
+				activateHandlers,
 			};
 		},
 	});
