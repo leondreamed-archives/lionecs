@@ -87,6 +87,7 @@ export function handlerManagerModule<M extends ComponentMap>() {
 			};
 
 			type RegisterHandlerListenersProps = {
+				execute?: boolean;
 				extras: R;
 			};
 			const registerHandlerListeners = (
