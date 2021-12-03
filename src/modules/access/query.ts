@@ -8,6 +8,7 @@ export function queryModule<M extends ComponentMap>() {
 		createQuery: function <KS extends ComponentKey<M>[]>(
 			components: KS | { [K in KS[number]]: ComponentFromKey<M, K> }
 		) {
+			/*
 			let minComponentLen = 0;
 			let minComponentIndex = 0;
 
@@ -19,6 +20,7 @@ export function queryModule<M extends ComponentMap>() {
 					minComponentIndex = i;
 				}
 			}
+			*/
 		},
 	});
 }
