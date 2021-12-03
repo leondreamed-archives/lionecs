@@ -18,6 +18,12 @@ export type InternalLionecsState<
 	 * An object that represents the lionecs state.
 	 */
 	state: LionecsState<M>;
+
+	/**
+	 * An array of the component keys in the lionecs state.
+	 */
+	_componentKeys: ComponentKey<M>[];
+
 	/**
 	 * A map where the keys are entities and the value is an array of all the entity
 	 * listener contexts.

@@ -11,8 +11,9 @@ type CreateLionecsProps<M extends ComponentMap> = {
 	components: M;
 };
 
-const lionecsProperties =
-	retrieveModuleProperties<InternalLionecsProperties<any>>(lionecsModules);
+const lionecsProperties = retrieveModuleProperties(
+	lionecsModules
+) as InternalLionecsProperties<any>;
 
 export function createLionecs<M extends ComponentMap, X extends LionecsExtras>({
 	components: componentsMap,
@@ -24,6 +25,7 @@ export function createLionecs<M extends ComponentMap, X extends LionecsExtras>({
 
 	const internalState: InternalLionecsState<M> = {
 		state: { components } as LionecsState<M>,
+		_componentKeys: Object.keys(components),
 		_entityListenerContexts: new Map(),
 		_componentListenerContexts: new Map(),
 		_activeUpdateCallCount: 0,
