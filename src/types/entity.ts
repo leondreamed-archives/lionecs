@@ -26,7 +26,7 @@ export type TypedEntity<
 	};
 };
 
-export type UseDefineTypedEntity<
+export type DefineTypedEntity<
 	M extends ComponentMap,
 	R extends Component<string, unknown>,
 	O extends Component<string, unknown> = Component<'__empty', never>
