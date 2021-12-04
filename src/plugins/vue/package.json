@@ -1,6 +1,9 @@
 {
-	"peerDependencies": {
-		"vue": "^3.2.20",
+	"dependencies": {
+		"vue": "^3.2.23",
+		"utility-types": "workspace:^",
+		"lionecs": "path:../../..",
+		"lion-architecture": "workspace:^",
 		"rfdc": "workspace:^"
 	}
 }

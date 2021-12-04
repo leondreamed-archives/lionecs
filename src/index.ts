@@ -14,11 +14,11 @@ export type {
 	StateListener,
 } from './types/context';
 export type {
+	CreateEntityProps,
 	DefineTypedEntity,
 	Entity,
 	EntityMap,
 	TypedEntity,
-	CreateEntityProps,
 } from './types/entity';
 export type { ComponentStateChangeHandler } from './types/handlers';
 export type { Lionecs } from './types/lionecs';

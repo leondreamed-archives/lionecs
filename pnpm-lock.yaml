@@ -67,9 +67,6 @@ importers:
       typescript: 4.5.2
       utility-types: 3.10.0
 
-  src/plugins/vue:
-    specifiers: {}
-
 packages:
 
   /@babel/code-frame/7.16.0:

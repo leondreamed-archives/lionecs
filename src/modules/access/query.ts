@@ -34,15 +34,14 @@ export function queryModule<M extends ComponentMap>() {
 				this.getComponentKey(c)
 			);
 
-			const _matchingEntities = new Set<Entity>();
+			const _matchingEntities = new Set<TypedEntity<M, RKS[number]>>();
 
-			/**
-			 * Populates the matching cache and registers all the component state
-			 * listeners for the required components to keep the cache updated.
-			 */
-			const initializeQuery = () => {
-				let minComponentLen = 0;
+			let _isQueryInitialized = false;
+
+			const getMinimumComponentKey = () => {
+				// Finding the minimum component key to iterate over
 				let minComponentKey: ComponentKey<M> | undefined;
+				let minComponentLen = 0;
 
 				for (const requiredComponentKey of requiredComponentKeys) {
 					const len = Object.keys(
@@ -54,45 +53,82 @@ export function queryModule<M extends ComponentMap>() {
 					}
 				}
 
-				const nonMinRequiredComponentKeys = requiredComponentKeys.filter(
-					(key) => key !== minComponentKey
-				);
+				return minComponentKey;
+			};
+
+			const isMatchingEntity = (
+				entity: Entity
+			): entity is TypedEntity<M, RKS[number]> => {
+				const minComponentKey = getMinimumComponentKey();
+				for (const requiredComponentKey of requiredComponentKeys) {
+					// No need to check whether the entity has the minComponentKey because we're iterating
+					// over those entities
+					if (minComponentKey === requiredComponentKey) continue;
+
+					// If this entity does not have the component, mark it as not matching the query
+					if (this.getOpt(entity, requiredComponentKey) === undefined) {
+						return false;
+					}
+				}
+				return true;
+			};
+
+			/**
+			 * Populates the matching cache and registers all the component state
+			 * listeners for the required components to keep the cache updated.
+			 */
+			const initializeQuery = () => {
+				const minComponentKey = getMinimumComponentKey();
 
 				// Loop through the component map of the component with the least number of entities
 				for (const componentMap of Object.keys(
 					this.state.components[minComponentKey]
 				)) {
 					for (const possibleEntity of Object.keys(componentMap)) {
-						let isMatchingEntity = true;
-						for (const nonMinRequiredComponentKey of nonMinRequiredComponentKeys) {
-							// If this entity does not have the component, mark it as not matching the query
-							if (
-								this.getOpt(possibleEntity, nonMinRequiredComponentKey) ===
-								undefined
-							) {
-								isMatchingEntity = false;
-								break;
-							}
-						}
-						if (isMatchingEntity) {
+						if (isMatchingEntity(possibleEntity)) {
 							_matchingEntities.add(possibleEntity);
 						}
 					}
 				}
-
 				// Now that the matching entities set has been populated, we register
-				// a listener to watch all the required components and if the component
-				// 
+				// a listener to watch all the required components so that the matching entities
+				// set can be updated
+				for (const requiredComponentKey of requiredComponentKeys) {
+					this.addComponentStateListener({
+						component: requiredComponentKey,
+						listener: ({ entity, component }) => {
+							const newComponentState = this.get(entity, component);
+							// If the component was deleted, remove the entity from the matching entities set
+							if (newComponentState === undefined) {
+								_matchingEntities.delete(entity);
+							}
+							// Otherwise, add the entity to the matching entities set (doesn't matter if entity is already
+							// in the set because we use an ES6 Set which prevents duplicates)
+							else {
+								if (isMatchingEntity(entity)) {
+									_matchingEntities.add(entity);
+								}
+							}
+						},
+					});
+				}
+
+				_isQueryInitialized = true;
 			};
 
 			/**
 			 * Loop through every entity that satisfies the component query
 			 * options.
 			 */
-			const each = (cb: (entity: TypedEntity<M, RKS[number]>) => {}) => {};
+			const each = (cb: (entity: TypedEntity<M, RKS[number]>) => void) => {
+				if (!_isQueryInitialized) initializeQuery();
+				for (const matchingEntity of _matchingEntities) {
+					cb(matchingEntity);
+				}
+			};
 
 			return {
-				componentKeys,
+				each,
 			};
 		},
 	});

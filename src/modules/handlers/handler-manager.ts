@@ -27,7 +27,7 @@ export function handlerManagerModule<M extends ComponentMap>() {
 				[];
 
 			let areHandlersActivated = false;
-			let handlerExtras: R | undefined = undefined;
+			let handlerExtras: R | undefined;
 
 			/**
 			 * Registers a handler (but doesn't activate it)
@@ -42,23 +42,26 @@ export function handlerManagerModule<M extends ComponentMap>() {
 					callback,
 					oldComponentState: undefined,
 				});
+
 				if (areHandlersActivated) {
 					// Loop through all the entities with a certain component
-					callback({
-						entity,
-						extras: handlerExtras as R,
-						newComponentState,
-						oldComponentState: undefined
-					})
+					this.query({
+						required: [componentKey],
+					}).each((entity) => {
+						callback({
+							entity: entity as Entity as E,
+							extras: handlerExtras as R,
+							newComponentState: this.get(entity, componentKey),
+							oldComponentState: undefined,
+						});
+					});
 				}
 			};
 
 			type RegisterHandlerListenersProps = {
 				extras: R;
 			};
-			const activateHandlers = (
-				props: RegisterHandlerListenersProps
-			) => {
+			const activateHandlers = (props: RegisterHandlerListenersProps) => {
 				handlerExtras = props.extras;
 
 				const componentKeyToHandlers = {} as Record<
@@ -91,6 +94,8 @@ export function handlerManagerModule<M extends ComponentMap>() {
 				for (const component of uniqueComponents) {
 					registerComponentStateListener(component);
 				}
+
+				areHandlersActivated = true;
 			};
 
 			return {
