@@ -15,3 +15,14 @@ export function defComponent<T>() {
 		},
 	};
 }
+
+/**
+ * A tag is a component with the type as "true"
+ */
+export function defTag() {
+	return {
+		setName: function <K extends string>(key: K): Component<K, true> {
+			return { __key: key };
+		},
+	};
+}

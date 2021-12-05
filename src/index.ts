@@ -22,5 +22,5 @@ export type {
 } from './types/entity';
 export type { ComponentStateChangeHandler } from './types/handlers';
 export type { Lionecs } from './types/lionecs';
-export { defComponent, isComponent } from './utils/component';
+export { defComponent, defTag, isComponent } from './utils/component';
 export { createLionecs } from './utils/lionecs';
