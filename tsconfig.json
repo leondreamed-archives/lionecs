@@ -6,16 +6,16 @@
 		"lib": [
 			"ESNext",
 		],
-		"rootDir": "./src",
-		"baseUrl": "./",
+		"rootDir": ".",
+		"baseUrl": ".",
 		"paths": {
 			"~/*": [
 				"./src/*"
+			],
+			"~test/*": [
+				"./test/*"
 			]
 		},
-		"rootDirs": [
-			"./src",
-		],
 		"declaration": true,
 		"outDir": "./dist",
 		"downlevelIteration": true,
@@ -26,6 +26,7 @@
 	},
 	"include": [
 		"./src",
+		"./test"
 	],
 	"exclude": [
 		"./src/plugins"
