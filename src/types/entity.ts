@@ -17,27 +17,21 @@ export type EntityMap<
 export interface BaseTypedEntity<
 	M extends ComponentMap,
 	R extends ComponentKey<M>,
-	O extends ComponentKey<M> | undefined = undefined
+	O extends ComponentKey<M> | never = never
 > extends Entity {
 	__required?: {
 		[K in R]: true;
 	};
-	__optional?: O extends ComponentKey<M>
-		? {
-				[K in O]: true;
-		  }
-		: Record<never, never>;
+	__optional?: {
+		[K in O]: true;
+	};
 }
 
 export type BaseDefineTypedEntity<
 	M extends ComponentMap,
 	R extends Component<string, unknown>,
-	O extends Component<string, unknown> | undefined = undefined
-> = BaseTypedEntity<
-	M,
-	KeyOfComponent<R>,
-	O extends Component<string, unknown> ? KeyOfComponent<O> : undefined
->;
+	O extends Component<string, unknown> | never = never
+> = BaseTypedEntity<M, KeyOfComponent<R>, KeyOfComponent<O>>;
 
 export type BaseExtendTypedEntity<
 	M extends ComponentMap,
@@ -49,17 +43,12 @@ export type BaseExtendTypedEntity<
 		: never
 	: never;
 
-export type EntityComponent<
-	M extends ComponentMap,
-	E extends Entity
-> = E extends BaseTypedEntity<M, infer R, infer O> ? R | O : ComponentKey<M>;
-
 export type CreateEntityProps<M extends ComponentMap, E extends Entity> = {
 	components: E extends BaseTypedEntity<M, infer Req, infer Opt>
 		? {
 				[K in Req]: TypeOfComponent<M[K]>;
 		  } & {
-				[K in NonNullable<Opt>]: TypeOfComponent<M[K]>;
+				[K in Opt]?: TypeOfComponent<M[K]>;
 		  }
 		: { [K in ComponentKey<M>]?: TypeOfComponent<M[K]> };
 };
