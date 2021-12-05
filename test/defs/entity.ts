@@ -13,3 +13,4 @@ export type EnemyEntity = DefineTypedEntity<
 export type WeaponEntity = DefineTypedEntity<
 	Component.InventoryItem | Component.Name | Component.Damage
 >;
+

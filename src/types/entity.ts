@@ -35,21 +35,16 @@ export type EntityComponent<
 	E extends Entity
 > = E extends BaseTypedEntity<M, infer R, infer O> ? R | O : ComponentKey<M>;
 
-export type CreateEntityComponentsProp<
-	M extends ComponentMap,
-	E extends Entity
-> = E extends BaseTypedEntity<M, infer Req, infer Opt>
-	? Opt extends ComponentKey<M>
-		? {
-				[K in Req]: TypeOfComponent<M[K]>;
-		  } & {
-				[K in Opt]: TypeOfComponent<M[K]>;
-		  }
-		: {
-				[K in Req]: TypeOfComponent<M[K]>;
-		  }
-	: { [K in ComponentKey<M>]?: TypeOfComponent<M[K]> };
-
 export type CreateEntityProps<M extends ComponentMap, E extends Entity> = {
-	components: CreateEntityComponentsProp<M, E>;
+	components: E extends BaseTypedEntity<M, infer Req, infer Opt>
+		? Opt extends ComponentKey<M>
+			? {
+					[K in Req]: TypeOfComponent<M[K]>;
+			  } & {
+					[K in Opt]: TypeOfComponent<M[K]>;
+			  }
+			: {
+					[K in Req]: TypeOfComponent<M[K]>;
+			  }
+		: { [K in ComponentKey<M>]?: TypeOfComponent<M[K]> };
 };
