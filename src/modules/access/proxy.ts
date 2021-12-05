@@ -1,37 +1,7 @@
-import type { BaseTypedEntity, Entity } from '~/types';
-import type {
-	ComponentKey,
-	ComponentMap,
-	TypeOfComponent,
-} from '~/types/component';
+import type { Entity } from '~/types';
+import type { ComponentKey, ComponentMap } from '~/types/component';
+import type { EntityPProxy } from '~/types/proxy';
 import { useDefineMethods } from '~/utils/methods';
-
-type EntityPProxy<
-	M extends ComponentMap,
-	E extends Entity
-> = E extends BaseTypedEntity<M, infer Req, infer Opt>
-	? Opt extends ComponentKey<M>
-		? {
-				[K in keyof BaseTypedEntity<
-					M,
-					Req,
-					Opt
-				>['__required']]: TypeOfComponent<M[K]>;
-		  } & {
-				[K in keyof BaseTypedEntity<
-					M,
-					Req,
-					Opt
-				>['__optional']]?: TypeOfComponent<M[K]>;
-		  }
-		: {
-				[K in keyof BaseTypedEntity<
-					M,
-					Req,
-					Opt
-				>['__required']]: TypeOfComponent<M[K]>;
-		  }
-	: { [K in ComponentKey<M>]?: TypeOfComponent<M[K]> };
 
 export function proxyModule<M extends ComponentMap>() {
 	const defineMethods = useDefineMethods<M>();
@@ -84,7 +54,7 @@ export function proxyModule<M extends ComponentMap>() {
 							return componentValue;
 						}
 					},
-					set: (target, key, value) => {
+					set: (_target, key, value) => {
 						const component = key as ComponentKey<M>;
 						this.set(entity, component, value);
 						return true;
