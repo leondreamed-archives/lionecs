@@ -56,14 +56,10 @@ export type EntityComponent<
 
 export type CreateEntityProps<M extends ComponentMap, E extends Entity> = {
 	components: E extends BaseTypedEntity<M, infer Req, infer Opt>
-		? Opt extends ComponentKey<M>
-			? {
-					[K in Req]: TypeOfComponent<M[K]>;
-			  } & {
-					[K in Opt]: TypeOfComponent<M[K]>;
-			  }
-			: {
-					[K in Req]: TypeOfComponent<M[K]>;
-			  }
+		? {
+				[K in Req]: TypeOfComponent<M[K]>;
+		  } & {
+				[K in NonNullable<Opt>]: TypeOfComponent<M[K]>;
+		  }
 		: { [K in ComponentKey<M>]?: TypeOfComponent<M[K]> };
 };
