@@ -65,7 +65,7 @@ export function getModule<M extends ComponentMap>() {
 		...args: unknown[]
 	): TypeOfComponent<M[K]> {
 		// get(entity, component, options)
-		if (typeof args[0] === 'string') {
+		if ('__key' in (args[0] as Entity)) {
 			const [entity, component, options] = args as [
 				Entity,
 				K | ComponentFromKey<M, K>,
