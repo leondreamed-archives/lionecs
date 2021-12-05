@@ -127,9 +127,9 @@ export function queryModule<M extends ComponentMap>() {
 				}
 			};
 
-			const first = () => {
+			const first = (): BaseTypedEntity<M, RKS[number]> => {
 				if (!_isQueryInitialized) initializeQuery();
-				return _matchingEntities.keys().next();
+				return _matchingEntities.keys().next().value;
 			};
 
 			return {
