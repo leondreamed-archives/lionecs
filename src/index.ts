@@ -15,10 +15,10 @@ export type {
 } from './types/context';
 export type {
 	BaseDefineTypedEntity,
+	BaseTypedEntity,
 	CreateEntityProps,
 	Entity,
 	EntityMap,
-	TypedEntity,
 } from './types/entity';
 export type { ComponentStateChangeHandler } from './types/handlers';
 export type { Lionecs } from './types/lionecs';

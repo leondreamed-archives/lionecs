@@ -1,5 +1,5 @@
 import type { ComponentKey, ComponentMap, TypeOfComponent } from './component';
-import type { Entity, TypedEntity } from './entity';
+import type { Entity, BaseTypedEntity } from './entity';
 
 type OptionalExtras<R extends Record<string, unknown> | undefined> =
 	R extends Record<string, unknown> ? { extras: R } : { extras?: R };
@@ -11,7 +11,7 @@ export type ComponentStateListener<
 > = (
 	props: {
 		component: K;
-		entity: TypedEntity<M, K>;
+		entity: BaseTypedEntity<M, K>;
 		oldComponentState: TypeOfComponent<M[K]> | undefined;
 	} & OptionalExtras<R>
 ) => void;

@@ -1,4 +1,4 @@
-import type { Entity, TypedEntity } from '~/types';
+import type { Entity, BaseTypedEntity } from '~/types';
 import type {
 	ComponentFromKey,
 	ComponentKey,
@@ -34,7 +34,7 @@ export function queryModule<M extends ComponentMap>() {
 				this.getComponentKey(c)
 			);
 
-			const _matchingEntities = new Set<TypedEntity<M, RKS[number]>>();
+			const _matchingEntities = new Set<BaseTypedEntity<M, RKS[number]>>();
 
 			let _isQueryInitialized = false;
 
@@ -58,7 +58,7 @@ export function queryModule<M extends ComponentMap>() {
 
 			const isMatchingEntity = (
 				entity: Entity
-			): entity is TypedEntity<M, RKS[number]> => {
+			): entity is BaseTypedEntity<M, RKS[number]> => {
 				const minComponentKey = getMinimumComponentKey();
 				for (const requiredComponentKey of requiredComponentKeys) {
 					// No need to check whether the entity has the minComponentKey because we're iterating
@@ -120,7 +120,7 @@ export function queryModule<M extends ComponentMap>() {
 			 * Loop through every entity that satisfies the component query
 			 * options.
 			 */
-			const each = (cb: (entity: TypedEntity<M, RKS[number]>) => void) => {
+			const each = (cb: (entity: BaseTypedEntity<M, RKS[number]>) => void) => {
 				if (!_isQueryInitialized) initializeQuery();
 				for (const matchingEntity of _matchingEntities) {
 					cb(matchingEntity);

@@ -4,7 +4,7 @@ import type {
 	ComponentMap,
 	TypeOfComponent,
 } from '~/types/component';
-import type { Entity, TypedEntity } from '~/types/entity';
+import type { Entity, BaseTypedEntity } from '~/types/entity';
 import type { InternalLionecs } from '~/types/lionecs';
 import type { LionecsState } from '~/types/state';
 import { isComponent } from '~/utils/component';
@@ -20,13 +20,13 @@ export function getModule<M extends ComponentMap>() {
 	// get(state, entity, component, options)
 	function get<
 		E extends Entity,
-		K extends E extends TypedEntity<infer Req, infer Opt>
+		K extends E extends BaseTypedEntity<infer Req, infer Opt>
 			?
-					| keyof TypedEntity<Req, Opt>['__required']
-					| keyof TypedEntity<Req, Opt>['__optional']
+					| keyof BaseTypedEntity<Req, Opt>['__required']
+					| keyof BaseTypedEntity<Req, Opt>['__optional']
 			: ComponentKey<M>,
-		O extends E extends TypedEntity<infer Req, infer Opt>
-			? M extends keyof TypedEntity<Req, Opt>['__optional']
+		O extends E extends BaseTypedEntity<infer Req, infer Opt>
+			? M extends keyof BaseTypedEntity<Req, Opt>['__optional']
 				? { optional: true }
 				: { optional: false }
 			: GetOptions
@@ -44,13 +44,13 @@ export function getModule<M extends ComponentMap>() {
 	// get(entity, component, options)
 	function get<
 		E extends Entity,
-		K extends E extends TypedEntity<infer Req, infer Opt>
+		K extends E extends BaseTypedEntity<infer Req, infer Opt>
 			?
-					| keyof TypedEntity<Req, Opt>['__required']
-					| keyof TypedEntity<Req, Opt>['__optional']
+					| keyof BaseTypedEntity<Req, Opt>['__required']
+					| keyof BaseTypedEntity<Req, Opt>['__optional']
 			: ComponentKey<M>,
-		O extends E extends TypedEntity<infer Req, infer Opt>
-			? M extends keyof TypedEntity<Req, Opt>['__optional']
+		O extends E extends BaseTypedEntity<infer Req, infer Opt>
+			? M extends keyof BaseTypedEntity<Req, Opt>['__optional']
 				? { optional: true }
 				: { optional: false }
 			: GetOptions
