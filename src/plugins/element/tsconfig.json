@@ -1,7 +1,15 @@
 {
 	"extends": "../../../tsconfig.json",
 	"compilerOptions": {
-		"lib": ["DOM", "DOM.Iterable"]
+		"lib": [
+			"DOM",
+			"DOM.Iterable"
+		],
+		"paths": {
+			"lionecs": [
+				"../../index"
+			]
+		}
 	},
 	"exclude": []
 }

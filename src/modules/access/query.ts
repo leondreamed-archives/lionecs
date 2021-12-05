@@ -1,4 +1,4 @@
-import type { Entity, BaseTypedEntity } from '~/types';
+import type { BaseTypedEntity, Entity } from '~/types';
 import type {
 	ComponentFromKey,
 	ComponentKey,

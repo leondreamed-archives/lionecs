@@ -1,4 +1,5 @@
 import type { ComponentMap } from 'lionecs';
+import type { RemovePrivateProperties } from 'liontypes';
 import type { UnionToIntersection } from 'utility-types';
 
 import * as vueModules from './modules';
@@ -17,3 +18,6 @@ class ElementMethodsWrapper<M extends ComponentMap> {
 
 export type InternalVuePluginProperties<M extends ComponentMap> =
 	UnionToIntersection<ReturnType<ElementMethodsWrapper<M>['wrapped']>>;
+
+export type VuePluginProperties<M extends ComponentMap> =
+	RemovePrivateProperties<InternalVuePluginProperties<M>>;
