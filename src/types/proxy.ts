@@ -9,7 +9,7 @@ export type EntityPProxy<
 		? {
 				[K in Req]: TypeOfComponent<M[K]>;
 		  } & {
-				[K in Opt]: TypeOfComponent<M[K]>;
+				[K in Opt]?: TypeOfComponent<M[K]>;
 		  }
 		: {
 				[K in Req]: TypeOfComponent<M[K]>;
