@@ -16,9 +16,18 @@ export type EntityMap<
 
 export interface BaseTypedEntity<
 	M extends ComponentMap,
-	_R extends ComponentKey<M>,
-	_O extends ComponentKey<M> | undefined = undefined
-> extends Entity {}
+	R extends ComponentKey<M>,
+	O extends ComponentKey<M> | undefined = undefined
+> extends Entity {
+	__required: {
+		[K in R]: true;
+	};
+	__optional: O extends ComponentKey<M>
+		? {
+				[K in O]: true;
+		  }
+		: Record<never, never>;
+}
 
 export type BaseDefineTypedEntity<
 	M extends ComponentMap,
@@ -29,6 +38,16 @@ export type BaseDefineTypedEntity<
 	KeyOfComponent<R>,
 	O extends Component<string, unknown> ? KeyOfComponent<O> : undefined
 >;
+
+export type BaseExtendTypedEntity<
+	M extends ComponentMap,
+	Parent extends Entity,
+	Child extends Entity
+> = Parent extends BaseTypedEntity<M, infer PR, infer PO>
+	? Child extends BaseTypedEntity<M, infer CR, infer CO>
+		? BaseTypedEntity<M, PR | CR, PO | CO>
+		: never
+	: never;
 
 export type EntityComponent<
 	M extends ComponentMap,

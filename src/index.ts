@@ -15,6 +15,7 @@ export type {
 } from './types/context';
 export type {
 	BaseDefineTypedEntity,
+	BaseExtendTypedEntity,
 	BaseTypedEntity,
 	CreateEntityProps,
 	Entity,

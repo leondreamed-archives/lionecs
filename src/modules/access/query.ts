@@ -127,7 +127,7 @@ export function queryModule<M extends ComponentMap>() {
 			const each = (cb: (entity: BaseTypedEntity<M, RKS[number]>) => void) => {
 				if (!_isQueryInitialized) initializeQuery();
 				for (const matchingEntityKey of _matchingEntityKeys) {
-					cb({ __key: matchingEntityKey });
+					cb({ __key: matchingEntityKey } as any);
 				}
 			};
 
