@@ -127,8 +127,14 @@ export function queryModule<M extends ComponentMap>() {
 				}
 			};
 
+			const first = () => {
+				if (!_isQueryInitialized) initializeQuery();
+				return _matchingEntities.keys().next();
+			};
+
 			return {
 				each,
+				first,
 			};
 		},
 	});
