@@ -30,6 +30,10 @@ export function queryModule<M extends ComponentMap>() {
 		 * is activated with the query.
 		 */
 		query: function <RKS extends ComponentKey<M>[]>(query: Query<M, RKS>) {
+			if (query.required.length === 0) {
+				throw new Error('At least one required component must be specified.');
+			}
+
 			const requiredComponentKeys = query.required.map((c) =>
 				this.getComponentKey(c)
 			);
@@ -41,7 +45,7 @@ export function queryModule<M extends ComponentMap>() {
 			const getMinimumComponentKey = () => {
 				// Finding the minimum component key to iterate over
 				let minComponentKey: ComponentKey<M> | undefined;
-				let minComponentLen = 0;
+				let minComponentLen = Number.POSITIVE_INFINITY;
 
 				for (const requiredComponentKey of requiredComponentKeys) {
 					const len = Object.keys(
