@@ -85,7 +85,7 @@ export function mutationsModule<M extends ComponentMap>() {
 						updateState(immerOldComponentState)
 				) as TypeOfComponent<M[K]>;
 			} else {
-				newComponentState = updateState(oldComponentState!);
+				newComponentState = updateState(oldComponentState as any);
 			}
 
 			this.set(entity, componentKey, newComponentState);

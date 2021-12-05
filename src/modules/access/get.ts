@@ -21,9 +21,7 @@ export function getModule<M extends ComponentMap>() {
 	function get<
 		E extends Entity,
 		K extends E extends BaseTypedEntityComponents<M, infer Req, infer Opt>
-			? Opt extends ComponentKey<M>
-				? Opt | Req
-				: Req
+			? NonNullable<Req | Opt>
 			: ComponentKey<M>,
 		O extends E extends BaseTypedEntityComponents<M, infer _Req, infer Opt>
 			? M extends Opt
@@ -45,9 +43,7 @@ export function getModule<M extends ComponentMap>() {
 	function get<
 		E extends Entity,
 		K extends E extends BaseTypedEntityComponents<M, infer Req, infer Opt>
-			? Opt extends ComponentKey<M>
-				? Opt | Req
-				: Req
+			? NonNullable<Req | Opt>
 			: ComponentKey<M>,
 		O extends E extends BaseTypedEntityComponents<M, infer _Req, infer Opt>
 			? M extends Opt
@@ -56,7 +52,7 @@ export function getModule<M extends ComponentMap>() {
 			: GetOptions
 	>(
 		entity: E,
-		component: K,
+		component: K | ComponentFromKey<M, K>,
 		options?: O
 	): O extends GetOptions
 		? O['optional'] extends true
