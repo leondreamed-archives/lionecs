@@ -7,17 +7,11 @@ export type EntityPProxy<
 > = E extends BaseTypedEntityComponents<M, infer Req, infer Opt>
 	? Opt extends ComponentKey<M>
 		? {
-				[K in keyof Req]: K extends ComponentKey<M>
-					? TypeOfComponent<M[K]>
-					: never;
+				[K in Req]: TypeOfComponent<M[K]>;
 		  } & {
-				[K in keyof Opt]: K extends ComponentKey<M>
-					? TypeOfComponent<M[K]>
-					: never;
+				[K in Opt]: TypeOfComponent<M[K]>;
 		  }
 		: {
-				[K in keyof Req]: K extends ComponentKey<M>
-					? TypeOfComponent<M[K]>
-					: never;
+				[K in Req]: TypeOfComponent<M[K]>;
 		  }
 	: { [K in ComponentKey<M>]?: TypeOfComponent<M[K]> };
