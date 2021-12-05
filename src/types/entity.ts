@@ -45,7 +45,7 @@ export type BaseExtendTypedEntity<
 	Child extends Entity
 > = Parent extends BaseTypedEntity<M, infer PR, infer PO>
 	? Child extends BaseTypedEntity<M, infer CR, infer CO>
-		? BaseTypedEntity<M, PR | CR, PO | CO>
+		? BaseTypedEntity<M, PR | CR, NonNullable<PO | CO>>
 		: never
 	: never;
 
