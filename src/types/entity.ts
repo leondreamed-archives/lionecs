@@ -19,10 +19,10 @@ export interface BaseTypedEntity<
 	R extends ComponentKey<M>,
 	O extends ComponentKey<M> | undefined = undefined
 > extends Entity {
-	__required: {
+	__required?: {
 		[K in R]: true;
 	};
-	__optional: O extends ComponentKey<M>
+	__optional?: O extends ComponentKey<M>
 		? {
 				[K in O]: true;
 		  }

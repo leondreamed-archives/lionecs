@@ -85,13 +85,11 @@ export function queryModule<M extends ComponentMap>() {
 				const minComponentKey = getMinimumComponentKey();
 
 				// Loop through the component map of the component with the least number of entities
-				for (const componentMap of Object.keys(
-					this.state.components[minComponentKey]
+				for (const possibleEntityKey of Object.keys(
+					this.getEntityMap(minComponentKey!)
 				)) {
-					for (const possibleEntityKey of Object.keys(componentMap)) {
-						if (isMatchingEntity({ __key: possibleEntityKey })) {
-							_matchingEntityKeys.add(possibleEntityKey);
-						}
+					if (isMatchingEntity(this.entityFromKey(possibleEntityKey))) {
+						_matchingEntityKeys.add(possibleEntityKey);
 					}
 				}
 				// Now that the matching entities set has been populated, we register
@@ -127,13 +125,13 @@ export function queryModule<M extends ComponentMap>() {
 			const each = (cb: (entity: BaseTypedEntity<M, RKS[number]>) => void) => {
 				if (!_isQueryInitialized) initializeQuery();
 				for (const matchingEntityKey of _matchingEntityKeys) {
-					cb({ __key: matchingEntityKey } as any);
+					cb(this.entityFromKey(matchingEntityKey));
 				}
 			};
 
 			const first = (): BaseTypedEntity<M, RKS[number]> => {
 				if (!_isQueryInitialized) initializeQuery();
-				return _matchingEntityKeys.values().next().value;
+				return this.entityFromKey(_matchingEntityKeys.values().next().value);
 			};
 
 			return {

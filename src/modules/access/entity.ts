@@ -5,7 +5,12 @@ import type {
 	ComponentKey,
 	ComponentMap,
 } from '~/types/component';
-import type { CreateEntityProps, Entity, EntityMap } from '~/types/entity';
+import type {
+	CreateEntityProps,
+	Entity,
+	EntityKey,
+	EntityMap,
+} from '~/types/entity';
 import { useDefineMethods } from '~/utils/methods';
 
 export function entityModule<M extends ComponentMap>() {
@@ -15,7 +20,7 @@ export function entityModule<M extends ComponentMap>() {
 		createEntity: function <E extends Entity>(
 			props?: CreateEntityProps<M, E>
 		): E {
-			const entity = { __key: nanoid() } as E;
+			const entity = this.entityFromKey(nanoid()) as E;
 
 			if (props !== undefined) {
 				this.batch(() => {
@@ -28,6 +33,9 @@ export function entityModule<M extends ComponentMap>() {
 			}
 
 			return entity;
+		},
+		entityFromKey(entityKey: EntityKey): Entity {
+			return { __key: entityKey };
 		},
 		getEntityMap: function <K extends ComponentKey<M>>(
 			component: K | ComponentFromKey<M, K>
