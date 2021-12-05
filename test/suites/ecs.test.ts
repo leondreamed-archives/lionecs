@@ -45,7 +45,14 @@ test('creates', () => {
 		defender: TypedEntity<Component.Health>;
 	}) {
 		const damage = ecs.get(attacker, Component.damage);
-		const prevHealth = ecs.get(defender, Component.health);
-		ecs.set(defender, Component.health, )
+		ecs.update(defender, Component.health, (oldHealth) => oldHealth - damage);
 	}
+
+	attack({ attacker: enemy, defender: player });
+
+	expect(ecs.get(player, Component.health)).toBe(95);
+
+	attack({ attacker: sword, defender: enemy });
+
+	expect(ecs.get(enemy, Component.health)).toBe(40);
 });
