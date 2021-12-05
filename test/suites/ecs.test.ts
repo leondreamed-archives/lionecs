@@ -30,8 +30,8 @@ test('creates', () => {
 		components: {
 			health: 100,
 			inventory: {
-				primary: 'gun',
-				secondary: 'hello',
+				primary: sword,
+				secondary: null,
 			},
 			name: 'Leon',
 		},

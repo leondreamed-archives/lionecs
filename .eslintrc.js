@@ -109,6 +109,7 @@ module.exports = {
 		'unicorn/filename-case': ['error', { case: 'kebabCase' }],
 		'unicorn/prefer-query-selector': 'off',
 		'unicorn/consistent-destructuring': 'off',
+		'unicorn/no-null': 'off',
 	},
 	settings: {
 		'import/resolver': {
