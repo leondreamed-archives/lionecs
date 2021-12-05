@@ -14,6 +14,3 @@ export type EnemyEntity = DefineTypedEntity<
 export type WeaponEntity = DefineTypedEntity<
 	Component.InventoryItem | Component.Name | Component.Damage
 >;
-
-type A = PlayerEntity extends BaseTypedEntity<typeof Component, infer R, infer O> ? [R, O] : undefined;
-
