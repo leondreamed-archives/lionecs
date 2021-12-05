@@ -15,7 +15,7 @@ export type ComponentFromKey<
 
 export type ComponentMap = Record<string, Component<string, unknown>>;
 
-export type ComponentKey<M extends ComponentMap> = keyof M;
+export type ComponentKey<M extends ComponentMap> = keyof M & string;
 
 export type TypeOfComponent<C extends Component<string, unknown>> =
 	C extends Component<infer _K, infer T> ? T : unknown;
