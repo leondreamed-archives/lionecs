@@ -6,10 +6,11 @@ import type {
 import type { TypedEntity } from '~test/types/entity';
 import { createEcs } from '~test/utils/ecs';
 
-import * as Component from '../defs/component';
+import type * as Component from '../defs/component';
 
 test('creates', () => {
 	const ecs = createEcs();
+	const p = ecs.p.bind(ecs);
 
 	const sword = ecs.createEntity<WeaponEntity>({
 		components: {
@@ -44,15 +45,25 @@ test('creates', () => {
 		attacker: TypedEntity<Component.Damage>;
 		defender: TypedEntity<Component.Health>;
 	}) {
-		const damage = ecs.get(attacker, Component.damage);
-		ecs.update(defender, Component.health, (oldHealth) => oldHealth - damage);
+		p(defender).health -= p(attacker).damage;
 	}
 
 	attack({ attacker: enemy, defender: player });
 
-	expect(ecs.get(player, Component.health)).toBe(95);
+	expect(p(player).health).toBe(95);
 
 	attack({ attacker: sword, defender: enemy });
 
-	expect(ecs.get(enemy, Component.health)).toBe(40);
+	expect(p(enemy).health).toBe(40);
+
+	function swapInventoryItems(entity: TypedEntity<Component.Inventory>) {
+		const primaryItem = p(entity).inventory.primary;
+		p(entity).inventory.primary = p(entity).inventory.secondary;
+		p(entity).inventory.secondary = primaryItem;
+	}
+
+	swapInventoryItems(player);
+
+	expect(p(player).inventory.primary).toBe(null);
+	expect(p(player).inventory.secondary).toBe(sword);
 });

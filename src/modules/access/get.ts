@@ -4,7 +4,7 @@ import type {
 	ComponentMap,
 	TypeOfComponent,
 } from '~/types/component';
-import type { Entity, BaseTypedEntity } from '~/types/entity';
+import type { BaseTypedEntity, Entity } from '~/types/entity';
 import type { InternalLionecs } from '~/types/lionecs';
 import type { LionecsState } from '~/types/state';
 import { isComponent } from '~/utils/component';
