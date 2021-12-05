@@ -18,7 +18,7 @@ export function entityModule<M extends ComponentMap>() {
 			const entity = nanoid() as E;
 
 			if (props !== undefined) {
-				this.update(() => {
+				this.batch(() => {
 					for (const [componentKey, componentValue] of Object.entries(
 						props.components
 					)) {
@@ -38,7 +38,7 @@ export function entityModule<M extends ComponentMap>() {
 		cloneEntity: function <E extends Entity>(entityToClone: E): E {
 			const entity = this.createEntity<E>();
 
-			this.update(() => {
+			this.batch(() => {
 				for (const componentString of Object.keys(this.state.components)) {
 					const component = componentString as ComponentKey<M>;
 					const componentState = this.getOpt(

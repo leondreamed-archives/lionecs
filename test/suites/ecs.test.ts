@@ -1,5 +1,12 @@
-import type { EnemyEntity, PlayerEntity, WeaponEntity } from '~test/defs/entity';
+import type {
+	EnemyEntity,
+	PlayerEntity,
+	WeaponEntity,
+} from '~test/defs/entity';
+import type { TypedEntity } from '~test/types/entity';
 import { createEcs } from '~test/utils/ecs';
+
+import * as Component from '../defs/component';
 
 test('creates', () => {
 	const ecs = createEcs();
@@ -30,7 +37,15 @@ test('creates', () => {
 		},
 	});
 
-	function attack({ attacker, defender }: { attacker: Damage}) {
-		ecs.set(enemy, )
+	function attack({
+		attacker,
+		defender,
+	}: {
+		attacker: TypedEntity<Component.Damage>;
+		defender: TypedEntity<Component.Health>;
+	}) {
+		const damage = ecs.get(attacker, Component.damage);
+		const prevHealth = ecs.get(defender, Component.health);
+		ecs.set(defender, Component.health, )
 	}
 });

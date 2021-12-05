@@ -1,5 +1,4 @@
 import { produce } from 'immer';
-import extend from 'just-extend';
 
 import type {
 	ComponentFromKey,
@@ -19,7 +18,7 @@ export function mutationsModule<M extends ComponentMap>() {
 		/**
 		 * Batch update the state and trigger listeners only when the callback has finished
 		 */
-		update(cb: () => void) {
+		batch(cb: () => void) {
 			this._activeUpdateCallCount += 1;
 			cb();
 			this._activeUpdateCallCount -= 1;
@@ -30,7 +29,10 @@ export function mutationsModule<M extends ComponentMap>() {
 				this.triggerListeners(stateUpdates);
 			}
 		},
-		del<K extends ComponentKey<M>>(entity: Entity, component: K | ComponentFromKey<M, K>) {
+		del<K extends ComponentKey<M>>(
+			entity: Entity,
+			component: K | ComponentFromKey<M, K>
+		) {
 			const componentKey = this.getComponentKey(component);
 			delete this.state.components[componentKey][entity];
 		},
@@ -59,27 +61,34 @@ export function mutationsModule<M extends ComponentMap>() {
 				this.triggerListeners([stateUpdate]);
 			}
 		},
-		patch<K extends ComponentKey<M>>(
+		update<K extends ComponentKey<M>>(
 			entity: Entity,
 			component: K | ComponentFromKey<M, K>,
-			patchedState: Partial<TypeOfComponent<M[K]>>
+			updateState: (
+				oldComponentState: TypeOfComponent<M[K]>
+			) => TypeOfComponent<M[K]>
 		) {
-			const oldComponentState = this.get(entity, component as ComponentKey<M>);
+			const componentKey = this.getComponentKey(component);
+			const oldComponentState = this.get(entity, componentKey);
+
 			if (oldComponentState === undefined) {
-				throw new Error(`Cannot patch non-initialized state.`);
-			}
-			if (typeof oldComponentState !== 'object') {
-				throw new TypeError(`Patch can only be used on object states.`);
+				throw new Error(`The entity ${entity} does not have an old state.`);
 			}
 
-			const newComponentState = produce(
-				oldComponentState,
-				(state: TypeOfComponent<M[K]>) => {
-					extend(state as any, patchedState);
-				}
-			);
+			let newComponentState: TypeOfComponent<M[K]>;
+			// If the old component state is an object, use an immer proxy to prevent
+			// mutations to the original object
+			if (typeof oldComponentState === 'object' && oldComponentState !== null) {
+				newComponentState = produce(
+					oldComponentState,
+					(immerOldComponentState: TypeOfComponent<M[K]>) =>
+						updateState(immerOldComponentState)
+				) as TypeOfComponent<M[K]>;
+			} else {
+				newComponentState = updateState(oldComponentState);
+			}
 
-			this.set(entity, component, newComponentState as TypeOfComponent<M[K]>);
+			this.set(entity, componentKey, newComponentState);
 		},
 	});
 }
