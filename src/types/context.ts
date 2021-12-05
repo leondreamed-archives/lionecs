@@ -1,5 +1,5 @@
 import type { ComponentKey, ComponentMap, TypeOfComponent } from './component';
-import type { Entity, BaseTypedEntity } from './entity';
+import type { BaseTypedEntity, Entity } from './entity';
 
 type OptionalExtras<R extends Record<string, unknown> | undefined> =
 	R extends Record<string, unknown> ? { extras: R } : { extras?: R };

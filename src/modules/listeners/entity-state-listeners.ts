@@ -19,11 +19,11 @@ export function entityStateListenersModule<M extends ComponentMap>() {
 			listener: EntityStateListener<M, E, R>;
 			extras?: R;
 		}) {
-			if (!this._entityListenerContexts.has(entity)) {
-				this._entityListenerContexts.set(entity, []);
+			if (!this._entityListenerContexts.has(entity.__key)) {
+				this._entityListenerContexts.set(entity.__key, []);
 			}
 
-			this._entityListenerContexts.get(entity)!.push({
+			this._entityListenerContexts.get(entity.__key)!.push({
 				listener: listener as any,
 				extras,
 			});
@@ -60,11 +60,11 @@ export function entityStateListenersModule<M extends ComponentMap>() {
 		}) {
 			const index =
 				this._entityListenerContexts
-					.get(entity)
+					.get(entity.__key)
 					?.findIndex((e) => e.listener === listener) ?? -1;
 
 			if (index !== -1) {
-				this._entityListenerContexts.get(entity)!.splice(index, 1);
+				this._entityListenerContexts.get(entity.__key)!.splice(index, 1);
 			}
 		},
 	});

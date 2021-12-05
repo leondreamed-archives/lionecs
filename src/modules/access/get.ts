@@ -4,7 +4,7 @@ import type {
 	ComponentMap,
 	TypeOfComponent,
 } from '~/types/component';
-import type { BaseTypedEntityComponents, Entity } from '~/types/entity';
+import type { BaseTypedEntity, Entity } from '~/types/entity';
 import type { InternalLionecs } from '~/types/lionecs';
 import type { LionecsState } from '~/types/state';
 import { isComponent } from '~/utils/component';
@@ -20,11 +20,11 @@ export function getModule<M extends ComponentMap>() {
 	// get(state, entity, component, options)
 	function get<
 		E extends Entity,
-		K extends E extends BaseTypedEntityComponents<M, infer Req, infer Opt>
-			? NonNullable<Req | Opt>
+		K extends E extends BaseTypedEntity<M, infer Req, infer Opt>
+			? Req | NonNullable<Opt>
 			: ComponentKey<M>,
-		O extends E extends BaseTypedEntityComponents<M, infer _Req, infer Opt>
-			? M extends Opt
+		O extends E extends BaseTypedEntity<M, infer _Req, infer Opt>
+			? K extends Opt
 				? { optional: true }
 				: { optional: false }
 			: GetOptions
@@ -42,11 +42,11 @@ export function getModule<M extends ComponentMap>() {
 	// get(entity, component, options)
 	function get<
 		E extends Entity,
-		K extends E extends BaseTypedEntityComponents<M, infer Req, infer Opt>
-			? NonNullable<Req | Opt>
+		K extends E extends BaseTypedEntity<M, infer Req, infer Opt>
+			? Req | NonNullable<Opt>
 			: ComponentKey<M>,
-		O extends E extends BaseTypedEntityComponents<M, infer _Req, infer Opt>
-			? M extends Opt
+		O extends E extends BaseTypedEntity<M, infer _Req, infer Opt>
+			? K extends Opt
 				? { optional: true }
 				: { optional: false }
 			: GetOptions
@@ -74,7 +74,7 @@ export function getModule<M extends ComponentMap>() {
 			const optional = options?.optional ?? true;
 			const componentKey = this.getComponentKey(component);
 
-			const componentState = this.state.components[componentKey][entity];
+			const componentState = this.state.components[componentKey][entity.__key];
 
 			if (!optional && componentState === undefined) {
 				throw new Error(
@@ -95,7 +95,7 @@ export function getModule<M extends ComponentMap>() {
 			const componentKey = this.getComponentKey(component);
 			const optional = options?.optional ?? true;
 
-			const componentState = state.components[componentKey][entity];
+			const componentState = state.components[componentKey][entity.__key];
 
 			if (!optional && componentState === undefined) {
 				throw new Error(
@@ -130,13 +130,15 @@ export function getModule<M extends ComponentMap>() {
 				K | ComponentFromKey<M, K>
 			];
 			const componentKey = this.getComponentKey(component);
-			return state.components[componentKey][entity] as TypeOfComponent<M[K]>;
+			return state.components[componentKey][entity.__key] as TypeOfComponent<
+				M[K]
+			>;
 		} else {
 			const [entity, component] = args as [Entity, K | ComponentFromKey<M, K>];
 			const componentKey = this.getComponentKey(component);
-			return this.state.components[componentKey][entity] as TypeOfComponent<
-				M[K]
-			>;
+			return this.state.components[componentKey][
+				entity.__key
+			] as TypeOfComponent<M[K]>;
 		}
 	}
 

@@ -1,4 +1,4 @@
-import type { BaseTypedEntity, Entity } from '~/types';
+import type { BaseTypedEntity, Entity, EntityKey } from '~/types';
 import type {
 	ComponentFromKey,
 	ComponentKey,
@@ -38,7 +38,7 @@ export function queryModule<M extends ComponentMap>() {
 				this.getComponentKey(c)
 			);
 
-			const _matchingEntities = new Set<BaseTypedEntity<M, RKS[number]>>();
+			const _matchingEntityKeys = new Set<EntityKey>();
 
 			let _isQueryInitialized = false;
 
@@ -88,9 +88,9 @@ export function queryModule<M extends ComponentMap>() {
 				for (const componentMap of Object.keys(
 					this.state.components[minComponentKey]
 				)) {
-					for (const possibleEntity of Object.keys(componentMap)) {
-						if (isMatchingEntity(possibleEntity)) {
-							_matchingEntities.add(possibleEntity);
+					for (const possibleEntityKey of Object.keys(componentMap)) {
+						if (isMatchingEntity({ __key: possibleEntityKey })) {
+							_matchingEntityKeys.add(possibleEntityKey);
 						}
 					}
 				}
@@ -104,13 +104,13 @@ export function queryModule<M extends ComponentMap>() {
 							const newComponentState = this.get(entity, component);
 							// If the component was deleted, remove the entity from the matching entities set
 							if (newComponentState === undefined) {
-								_matchingEntities.delete(entity);
+								_matchingEntityKeys.delete(entity.__key);
 							}
 							// Otherwise, add the entity to the matching entities set (doesn't matter if entity is already
 							// in the set because we use an ES6 Set which prevents duplicates)
 							else {
 								if (isMatchingEntity(entity)) {
-									_matchingEntities.add(entity);
+									_matchingEntityKeys.add(entity.__key);
 								}
 							}
 						},
@@ -126,14 +126,14 @@ export function queryModule<M extends ComponentMap>() {
 			 */
 			const each = (cb: (entity: BaseTypedEntity<M, RKS[number]>) => void) => {
 				if (!_isQueryInitialized) initializeQuery();
-				for (const matchingEntity of _matchingEntities) {
-					cb(matchingEntity);
+				for (const matchingEntityKey of _matchingEntityKeys) {
+					cb({ __key: matchingEntityKey });
 				}
 			};
 
 			const first = (): BaseTypedEntity<M, RKS[number]> => {
 				if (!_isQueryInitialized) initializeQuery();
-				return _matchingEntities.keys().next().value;
+				return _matchingEntityKeys.keys().next().value;
 			};
 
 			return {

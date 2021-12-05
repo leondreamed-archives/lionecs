@@ -1,10 +1,10 @@
 import type { ComponentKey, ComponentMap, TypeOfComponent } from './component';
-import type { BaseTypedEntityComponents, Entity } from './entity';
+import type { BaseTypedEntity, Entity } from './entity';
 
 export type EntityPProxy<
 	M extends ComponentMap,
 	E extends Entity
-> = E extends BaseTypedEntityComponents<M, infer Req, infer Opt>
+> = E extends BaseTypedEntity<M, infer Req, infer Opt>
 	? Opt extends ComponentKey<M>
 		? {
 				[K in Req]: TypeOfComponent<M[K]>;

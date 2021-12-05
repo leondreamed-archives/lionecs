@@ -15,7 +15,7 @@ export function entityModule<M extends ComponentMap>() {
 		createEntity: function <E extends Entity>(
 			props?: CreateEntityProps<M, E>
 		): E {
-			const entity = nanoid() as E;
+			const entity = { __key: nanoid() } as E;
 
 			if (props !== undefined) {
 				this.batch(() => {

@@ -6,24 +6,19 @@ import type {
 	TypeOfComponent,
 } from './component';
 
-export type Entity = string;
+export type EntityKey = string;
+export type Entity = { __key: EntityKey };
 
 export type EntityMap<
 	M extends ComponentMap,
 	K extends ComponentKey<M>
-> = Record<Entity, Readonly<TypeOfComponent<M[K]>>>;
+> = Record<EntityKey, Readonly<TypeOfComponent<M[K]>>>;
 
-export interface BaseTypedEntityComponents<
+export interface BaseTypedEntity<
 	M extends ComponentMap,
 	_R extends ComponentKey<M>,
-	_O extends ComponentKey<M> | undefined
-> {}
-
-export type BaseTypedEntity<
-	M extends ComponentMap,
-	R extends ComponentKey<M>,
-	O extends ComponentKey<M> | undefined = undefined
-> = Entity & BaseTypedEntityComponents<M, R, O>;
+	_O extends ComponentKey<M> | undefined = undefined
+> extends Entity {}
 
 export type BaseDefineTypedEntity<
 	M extends ComponentMap,
@@ -43,15 +38,15 @@ export type EntityComponent<
 export type CreateEntityComponentsProp<
 	M extends ComponentMap,
 	E extends Entity
-> = E extends BaseTypedEntityComponents<M, infer Req, infer Opt>
+> = E extends BaseTypedEntity<M, infer Req, infer Opt>
 	? Opt extends ComponentKey<M>
 		? {
-				[K in Req]:  TypeOfComponent<M[K]>
+				[K in Req]: TypeOfComponent<M[K]>;
 		  } & {
-				[K in Opt]:  TypeOfComponent<M[K]>
+				[K in Opt]: TypeOfComponent<M[K]>;
 		  }
 		: {
-				[K in Req]: TypeOfComponent<M[K]>
+				[K in Req]: TypeOfComponent<M[K]>;
 		  }
 	: { [K in ComponentKey<M>]?: TypeOfComponent<M[K]> };
 

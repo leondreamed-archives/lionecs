@@ -4,7 +4,7 @@ import type {
 	EntityStateListener,
 	StateListener,
 } from '~/types/context';
-import type { Entity } from '~/types/entity';
+import type { Entity, EntityKey } from '~/types/entity';
 import type { StateUpdate } from '~/types/state';
 import { StateUpdateType } from '~/types/state';
 import { useDefineMethods } from '~/utils/methods';
@@ -17,7 +17,7 @@ export function retrieveStateListenerCallsModule<M extends ComponentMap>() {
 			stateUpdates: StateUpdate<M, ComponentKey<M>>[]
 		): [StateListener<M>, Parameters<StateListener<M>>][] {
 			// Map of entities to the updates that affected it
-			const affectedEntityUpdatesMap: Record<Entity, StateUpdate<M, any>[]> =
+			const affectedEntityUpdatesMap: Record<EntityKey, StateUpdate<M, any>[]> =
 				{};
 
 			// Map of components to the updates that affected it
@@ -26,7 +26,9 @@ export function retrieveStateListenerCallsModule<M extends ComponentMap>() {
 			};
 
 			for (const stateUpdate of stateUpdates) {
-				(affectedEntityUpdatesMap[stateUpdate.entity] ??= []).push(stateUpdate);
+				(affectedEntityUpdatesMap[stateUpdate.entity.__key] ??= []).push(
+					stateUpdate
+				);
 				(affectedComponentUpdatesMap[stateUpdate.componentKey] ??=
 					[] as StateUpdate<M, ComponentKey<M>>[]).push(stateUpdate);
 			}
@@ -34,17 +36,18 @@ export function retrieveStateListenerCallsModule<M extends ComponentMap>() {
 			const stateListeners: [StateListener<M>, Parameters<StateListener<M>>][] =
 				[];
 			// Save all entity listeners
-			for (const [entity, affectedEntityUpdates] of Object.entries(
+			for (const [entityKey, affectedEntityUpdates] of Object.entries(
 				affectedEntityUpdatesMap
 			)) {
-				for (const { listener } of this._entityListenerContexts.get(entity) ??
-					[]) {
+				for (const { listener } of this._entityListenerContexts.get(
+					entityKey
+				) ?? []) {
 					const params: Parameters<EntityStateListener<M, Entity>> = [
 						{
 							componentKeys: affectedEntityUpdates.map(
 								({ componentKey }) => componentKey
 							),
-							entity,
+							entity: { __key: entityKey },
 						},
 					];
 					stateListeners.push([listener, params]);

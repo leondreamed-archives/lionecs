@@ -1,5 +1,6 @@
 import type { RemovePrivateProperties } from 'liontypes';
 
+import type { EntityKey } from '.';
 import type { ComponentKey, ComponentMap } from './component';
 import type {
 	ComponentStateListenerContext,
@@ -28,7 +29,10 @@ export type InternalLionecsState<
 	 * A map where the keys are entities and the value is an array of all the entity
 	 * listener contexts.
 	 */
-	_entityListenerContexts: Map<Entity, EntityStateListenerContext<M, Entity>[]>;
+	_entityListenerContexts: Map<
+		EntityKey,
+		EntityStateListenerContext<M, Entity>[]
+	>;
 
 	/**
 	 * A map where the keys are components and the value is an array of all the component
