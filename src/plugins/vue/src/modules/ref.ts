@@ -7,7 +7,7 @@ import type {
 	ComponentMap,
 	TypeOfComponent,
 } from '~/types/component';
-import type { Entity, TypedEntity } from '~/types/entity';
+import type { BaseTypedEntity, Entity } from '~/types/entity';
 import { useDefineMethods } from '~/utils/methods';
 
 export function refModule<M extends ComponentMap>() {
@@ -21,13 +21,11 @@ export function refModule<M extends ComponentMap>() {
 	const { useLionecsRef } = defineMethods({
 		useLionecsRef: function <
 			E extends Entity,
-			K extends E extends TypedEntity<infer Req, infer Opt>
-				?
-						| keyof TypedEntity<Req, Opt>['__required']
-						| keyof TypedEntity<Req, Opt>['__optional']
+			K extends E extends BaseTypedEntity<M, infer Req, infer Opt>
+				? Req | Opt
 				: ComponentKey<M>,
-			O extends E extends TypedEntity<infer Req, infer Opt>
-				? M extends keyof TypedEntity<Req, Opt>['__optional']
+			O extends E extends BaseTypedEntity<M, infer _Req, infer Opt>
+				? K extends Opt
 					? { optional: true }
 					: { optional: false }
 				: UseLionecsRefOptions

@@ -5,14 +5,10 @@ import type { TComponentMap } from './component';
 
 export type DefineTypedEntity<
 	R extends Component<string, unknown>,
-	O extends Component<string, unknown> | undefined = undefined
+	O extends Component<string, unknown> | never = never
 > = BaseDefineTypedEntity<TComponentMap, R, O>;
 
 export type TypedEntity<
 	R extends Component<string, unknown>,
-	O extends Component<string, unknown> | undefined = undefined
-> = BaseTypedEntity<
-	ComponentMap,
-	KeyOfComponent<R>,
-	O extends Component<string, unknown> ? KeyOfComponent<O> : undefined
->;
+	O extends Component<string, unknown> | never = never
+> = BaseTypedEntity<ComponentMap, KeyOfComponent<R>, KeyOfComponent<O>>;

@@ -21,7 +21,7 @@ export function getModule<M extends ComponentMap>() {
 	function get<
 		E extends Entity,
 		K extends E extends BaseTypedEntity<M, infer Req, infer Opt>
-			? Req | NonNullable<Opt>
+			? Req | Opt
 			: ComponentKey<M>,
 		O extends E extends BaseTypedEntity<M, infer _Req, infer Opt>
 			? K extends Opt
@@ -43,7 +43,7 @@ export function getModule<M extends ComponentMap>() {
 	function get<
 		E extends Entity,
 		K extends E extends BaseTypedEntity<M, infer Req, infer Opt>
-			? Req | NonNullable<Opt>
+			? Req | Opt
 			: ComponentKey<M>,
 		O extends E extends BaseTypedEntity<M, infer _Req, infer Opt>
 			? K extends Opt

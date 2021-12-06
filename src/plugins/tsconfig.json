@@ -1,0 +1,11 @@
+{
+	"extends": "../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "../../dist/plugins"
+	},
+	"include": [
+		"./element/src",
+		"./function/src",
+		"./vue/src",
+	]
+}

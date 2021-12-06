@@ -1,4 +1,3 @@
-import { BaseTypedEntity } from '~/types';
 import type { DefineTypedEntity } from '~test/types/entity';
 
 import type * as Component from './component';
