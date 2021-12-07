@@ -1,11 +1,7 @@
 {
+	"extends": "@leonzalion/tsconfig/tsconfig.json",
 	"compilerOptions": {
-		"target": "es2015",
-		"module": "esnext",
-		"moduleResolution": "node",
-		"lib": [
-			"ESNext",
-		],
+		"outDir": "./dist",
 		"rootDir": "./src",
 		"baseUrl": ".",
 		"paths": {
@@ -16,13 +12,6 @@
 				"./test/*"
 			]
 		},
-		"declaration": true,
-		"outDir": "./dist",
-		"downlevelIteration": true,
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
-		"strict": true,
-		"skipLibCheck": true
 	},
 	"include": [
 		"./src",

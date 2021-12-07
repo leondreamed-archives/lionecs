@@ -5,6 +5,13 @@
 	"types": "./dist/index.d.ts",
 	"author": "Leon Si <contact@leonzalion.com>",
 	"license": "MIT",
+	"prettier": "@leonzalion/prettier-config",
+	"commitlint": {
+		"extends": ["@leonzalion/commitlint-config"]
+	},
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"test": "jest",
 		"build": "rimraf dist && tsc && tsc-alias -p tsconfig.json",
@@ -14,6 +21,8 @@
 		"prepublish": "pnpm build"
 	},
 	"dependencies": {
+		"@leonzalion/markdownlint-config": "^1.0.0",
+		"@leonzalion/prettier-config": "^1.0.2",
 		"immer": "^9.0.7",
 		"just-extend": "^6.0.1",
 		"lion-architecture": "^1.0.3",
