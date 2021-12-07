@@ -8,7 +8,7 @@ export function usePluginModule<M extends ComponentMap>() {
 	const defineMethods = useDefineMethods<M>();
 
 	return defineMethods({
-		use: function <X extends LionecsExtras, A extends LionecsExtras>(
+		use <X extends LionecsExtras, A extends LionecsExtras>(
 			this: Lionecs<M, X>,
 			plugin: LionecsPlugin<M, A>
 		): Lionecs<M, A> {

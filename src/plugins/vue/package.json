@@ -1,9 +1,8 @@
 {
 	"dependencies": {
 		"vue": "^3.2.23",
-		"utility-types": "workspace:^",
 		"lionecs": "path:../../..",
-		"lion-architecture": "workspace:^",
-		"rfdc": "workspace:^"
+		"lion-architecture": "^1.0.3",
+		"rfdc": "^1.3.0"
 	}
 }

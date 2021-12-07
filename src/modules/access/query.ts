@@ -29,7 +29,7 @@ export function queryModule<M extends ComponentMap>() {
 		 * query is lazy and only iterates through the components when another function
 		 * is activated with the query.
 		 */
-		query: function <RKS extends ComponentKey<M>[]>(query: Query<M, RKS>) {
+		query <RKS extends ComponentKey<M>[]>(query: Query<M, RKS>) {
 			if (query.required.length === 0) {
 				throw new Error('At least one required component must be specified.');
 			}

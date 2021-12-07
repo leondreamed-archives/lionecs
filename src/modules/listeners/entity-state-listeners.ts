@@ -7,7 +7,7 @@ export function entityStateListenersModule<M extends ComponentMap>() {
 	const defineMethods = useDefineMethods<M>();
 
 	return defineMethods({
-		addEntityStateListener: function <
+		addEntityStateListener <
 			E extends Entity,
 			R extends Record<string, unknown> | undefined = undefined
 		>({
@@ -28,7 +28,7 @@ export function entityStateListenersModule<M extends ComponentMap>() {
 				extras,
 			});
 		},
-		createEntityStateListenerManager: function <
+		createEntityStateListenerManager <
 			E extends Entity,
 			R extends Record<string, unknown> | undefined = undefined
 		>(listener: EntityStateListener<M, E, R>) {
@@ -48,7 +48,7 @@ export function entityStateListenersModule<M extends ComponentMap>() {
 
 			return { registerEntityStateListener, deleteEntityStateListener };
 		},
-		removeEntityStateListener: function <
+		removeEntityStateListener <
 			E extends Entity,
 			R extends Record<string, unknown> | undefined = undefined
 		>({

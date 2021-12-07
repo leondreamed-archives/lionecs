@@ -19,7 +19,7 @@ export function handlerManagerModule<M extends ComponentMap>() {
 	 * keep track of the current UI state.
 	 */
 	return defineMethods({
-		createHandlerManager: function <
+		createHandlerManager <
 			E extends Entity,
 			R extends Record<string, unknown> = Record<never, never>
 		>() {
