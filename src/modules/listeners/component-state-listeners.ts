@@ -11,7 +11,7 @@ export function componentStateListenersModule<M extends ComponentMap>() {
 	const defineMethods = useDefineMethods<M>();
 
 	return defineMethods({
-		removeComponentStateListener <
+		removeComponentStateListener<
 			K extends ComponentKey<M>,
 			R extends Record<string, unknown> | undefined = undefined
 		>({
@@ -25,13 +25,13 @@ export function componentStateListenersModule<M extends ComponentMap>() {
 			const index =
 				this._componentListenerContexts
 					.get(componentKey)
-					?.findIndex((e) => e.listener as any === listener) ?? -1;
+					?.findIndex((e) => (e.listener as any) === listener) ?? -1;
 
 			if (index !== -1) {
 				this._componentListenerContexts.get(componentKey)!.splice(index, 1);
 			}
 		},
-		addComponentStateListener <
+		addComponentStateListener<
 			K extends ComponentKey<M>,
 			R extends Record<string, unknown> | undefined = undefined
 		>({
@@ -53,7 +53,7 @@ export function componentStateListenersModule<M extends ComponentMap>() {
 				extras,
 			});
 		},
-		createComponentStateListenerManager <
+		createComponentStateListenerManager<
 			K extends ComponentKey<M>,
 			R extends Record<string, unknown> | undefined = undefined
 		>(listener: ComponentStateListener<M, K, R>) {

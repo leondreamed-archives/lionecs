@@ -17,9 +17,7 @@ export function entityModule<M extends ComponentMap>() {
 	const defineMethods = useDefineMethods<M>();
 
 	return defineMethods({
-		createEntity <E extends Entity>(
-			props?: CreateEntityProps<M, E>
-		): E {
+		createEntity<E extends Entity>(props?: CreateEntityProps<M, E>): E {
 			const entity = this.entityFromKey(nanoid()) as E;
 
 			if (props !== undefined) {
@@ -37,13 +35,13 @@ export function entityModule<M extends ComponentMap>() {
 		entityFromKey(entityKey: EntityKey): Entity {
 			return { __key: entityKey };
 		},
-		getEntityMap <K extends ComponentKey<M>>(
+		getEntityMap<K extends ComponentKey<M>>(
 			component: K | ComponentFromKey<M, K>
 		): EntityMap<M, K> {
 			const componentKey = this.getComponentKey(component);
 			return this.state.components[componentKey];
 		},
-		cloneEntity <E extends Entity>(entityToClone: E): E {
+		cloneEntity<E extends Entity>(entityToClone: E): E {
 			const entity = this.createEntity<E>();
 
 			this.batch(() => {

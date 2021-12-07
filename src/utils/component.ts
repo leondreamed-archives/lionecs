@@ -10,7 +10,7 @@ export function isComponent<N extends string, T>(
 
 export function defComponent<T>() {
 	return {
-		setName <K extends string>(key: K): Component<K, T> {
+		setName<K extends string>(key: K): Component<K, T> {
 			return { __key: key };
 		},
 	};
@@ -21,7 +21,7 @@ export function defComponent<T>() {
  */
 export function defTag() {
 	return {
-		setName <K extends string>(key: K): Component<K, true> {
+		setName<K extends string>(key: K): Component<K, true> {
 			return { __key: key };
 		},
 	};

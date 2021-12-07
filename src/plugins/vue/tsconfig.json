@@ -3,7 +3,5 @@
 	"compilerOptions": {
 		"outDir": "../../dist/plugins"
 	},
-	"include": [
-		"./src",
-	]
+	"include": ["./src"]
 }

@@ -23,6 +23,7 @@
 		"prepublish": "pnpm build"
 	},
 	"dependencies": {
+		"@leonzalion/tsconfig": "^1.0.1",
 		"immer": "^9.0.7",
 		"just-extend": "^6.0.1",
 		"lion-architecture": "^1.0.3",

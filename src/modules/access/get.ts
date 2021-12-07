@@ -145,7 +145,7 @@ export function getModule<M extends ComponentMap>() {
 	return defineMethods({
 		get,
 		getOpt,
-		getComponentKey <K extends ComponentKey<M>>(
+		getComponentKey<K extends ComponentKey<M>>(
 			component: K | ComponentFromKey<M, K>
 		): K {
 			return (isComponent(component) ? component.__key : component) as K;
