@@ -31,7 +31,6 @@ importers:
       typescript: ^4.5.2
       utility-types: ^3.10.0
     dependencies:
-      '@leonzalion/tsconfig': 1.0.1
       immer: 9.0.7
       just-extend: 6.0.1
       lion-architecture: 1.0.3
@@ -41,6 +40,7 @@ importers:
       '@leonzalion/eslint-config': 1.0.0_eslint@8.4.0+typescript@4.5.2
       '@leonzalion/markdownlint-config': 1.0.0
       '@leonzalion/prettier-config': 1.0.2_prettier@2.5.1
+      '@leonzalion/tsconfig': 1.0.1
       '@types/jest': 27.0.3
       '@types/node': 16.11.11
       eslint: 8.4.0
@@ -712,7 +712,7 @@ packages:
 
   /@leonzalion/tsconfig/1.0.1:
     resolution: {integrity: sha512-fb6wGh6Q+5xo/ElIdgaydrwVRN5oszTesBKBJrQPZIQ1cn6nWCxpciiXFQhmPWpY0Mg68DYD64OK45UaL3OtNw==}
-    dev: false
+    dev: true
 
   /@nodelib/fs.scandir/2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
