@@ -79,15 +79,11 @@ export type InternalLionecsState<
 	>;
 };
 
-type InternalLionecsKeys<
-	M extends ComponentMap,
-	_X extends LionecsExtras
-> = InternalLionecsProperties<M> & InternalLionecsState<M>;
-
 export interface InternalLionecs<
 	M extends ComponentMap,
-	X extends LionecsExtras = LionecsExtras
-> extends InternalLionecsKeys<M, X> {}
+	_X extends LionecsExtras = LionecsExtras
+> extends InternalLionecsProperties<M>,
+		InternalLionecsState<M> {}
 
 export interface Lionecs<
 	M extends ComponentMap,
