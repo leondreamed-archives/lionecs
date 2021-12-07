@@ -73,7 +73,7 @@ export function handlerManagerModule<M extends ComponentMap>() {
 					this.createComponentStateListenerManager(
 						({ component, entity, oldComponentState }) => {
 							if (componentKeyToHandlers[component] !== undefined) {
-								for (const handler of componentKeyToHandlers[component]) {
+								for (const handler of componentKeyToHandlers[component]!) {
 									handler.callback({
 										extras: props.extras,
 										newComponentState: this.get(entity, component),
