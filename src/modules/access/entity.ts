@@ -35,6 +35,9 @@ export function entityModule<M extends ComponentMap>() {
 		entityFromKey(entityKey: EntityKey): Entity {
 			return { __key: entityKey };
 		},
+		getEntityKey(entity: Entity) {
+			return entity.__key;
+		},
 		getEntityMap<K extends ComponentKey<M>>(
 			component: K | ComponentFromKey<M, K>
 		): EntityMap<M, K> {
