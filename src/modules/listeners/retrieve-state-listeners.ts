@@ -39,7 +39,7 @@ export function retrieveStateListenerCallsModule<M extends ComponentMap>() {
 			for (const [entityKey, affectedEntityUpdates] of Object.entries(
 				affectedEntityUpdatesMap
 			)) {
-				for (const { listener } of this._entityListenerContexts.get(
+				for (const { listener, extras } of this._entityListenerContexts.get(
 					entityKey
 				) ?? []) {
 					const params: Parameters<EntityStateListener<M, Entity>> = [
@@ -48,6 +48,7 @@ export function retrieveStateListenerCallsModule<M extends ComponentMap>() {
 								({ componentKey }) => componentKey
 							),
 							entity: this.entityFromKey(entityKey),
+							extras,
 						},
 					];
 					stateListeners.push([listener, params]);
@@ -59,7 +60,7 @@ export function retrieveStateListenerCallsModule<M extends ComponentMap>() {
 				affectedComponentUpdatesMap
 			)) {
 				const component = componentString as ComponentKey<M>;
-				for (const { listener } of this._componentListenerContexts.get(
+				for (const { listener, extras } of this._componentListenerContexts.get(
 					component
 				) ?? []) {
 					// Looping through all the entities that were affected
@@ -74,6 +75,7 @@ export function retrieveStateListenerCallsModule<M extends ComponentMap>() {
 									componentUpdate.type === StateUpdateType.del
 										? undefined
 										: componentUpdate.oldComponentState,
+								extras,
 							},
 						];
 

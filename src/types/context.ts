@@ -7,7 +7,9 @@ type OptionalExtras<R extends Record<string, unknown> | undefined> =
 export type ComponentStateListener<
 	M extends ComponentMap,
 	K extends ComponentKey<M>,
-	R extends Record<string, unknown> | undefined = undefined
+	R extends Record<string, unknown> | undefined =
+		| Record<string, unknown>
+		| undefined
 > = (
 	props: {
 		component: K;
@@ -54,6 +56,11 @@ export type ComponentStateListenerContext<
 /**
  * A type which represents a state listener (either listening to an entity or a component).
  */
-export type StateListener<M extends ComponentMap> =
-	| EntityStateListener<M, Entity>
-	| ComponentStateListener<M, ComponentKey<M>>;
+export type StateListener<
+	M extends ComponentMap,
+	R extends Record<string, unknown> | undefined =
+		| Record<string, unknown>
+		| undefined
+> =
+	| EntityStateListener<M, Entity, R>
+	| ComponentStateListener<M, ComponentKey<M>, R>;
