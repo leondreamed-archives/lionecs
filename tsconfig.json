@@ -1,17 +1,14 @@
 {
 	"extends": "@leonzalion/tsconfig/tsconfig.json",
 	"compilerOptions": {
-		"outDir": "./dist",
 		"rootDir": "./src",
-		"baseUrl": ".",
+		"baseUrl": "./",
 		"paths": {
 			"~/*": [
 				"./src/*"
-			],
-			"~test/*": [
-				"./test/*"
 			]
 		},
+		"outDir": "./dist",
 	},
 	"include": [
 		"./src",

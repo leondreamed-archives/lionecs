@@ -18,7 +18,7 @@
 		"test": "jest",
 		"build": "rimraf dist && tsc && tsc-alias -p tsconfig.json",
 		"lint": "eslint --fix src",
-		"tc": "tsc --noEmit --project ./tsconfig.json && tsc --noEmit --project ./src/plugins/element/tsconfig.json",
+		"tc": "tsc --noEmit",
 		"prettier": "prettier --write src",
 		"prepublish": "pnpm build"
 	},
@@ -33,7 +33,7 @@
 		"@leonzalion/eslint-config": "^1.0.0",
 		"@leonzalion/markdownlint-config": "^1.0.0",
 		"@leonzalion/prettier-config": "^1.0.2",
-		"@leonzalion/tsconfig": "^1.0.2",
+		"@leonzalion/tsconfig": "^1.0.3",
 		"@types/jest": "^27.0.3",
 		"@types/node": "^16.11.11",
 		"eslint": "^8.4.0",
