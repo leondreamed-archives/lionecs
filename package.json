@@ -30,10 +30,10 @@
 		"rfdc": "^1.3.0"
 	},
 	"devDependencies": {
-		"@leonzalion/eslint-config": "^1.0.0",
-		"@leonzalion/markdownlint-config": "^1.0.0",
-		"@leonzalion/prettier-config": "^1.0.2",
-		"@leonzalion/tsconfig": "^1.0.3",
+		"@leonzalion/eslint-config": "latest",
+		"@leonzalion/markdownlint-config": "latest",
+		"@leonzalion/prettier-config": "latest",
+		"@leonzalion/tsconfig": "latest",
 		"@types/jest": "^27.0.3",
 		"@types/node": "^16.11.11",
 		"eslint": "^8.4.0",
