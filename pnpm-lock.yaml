@@ -37,10 +37,10 @@ importers:
       nanoid: 3.1.30
       rfdc: 1.3.0
     devDependencies:
-      '@leonzalion/eslint-config': 1.0.14_eslint@8.5.0+typescript@4.5.4
+      '@leonzalion/eslint-config': 1.0.18_eslint@8.5.0+typescript@4.5.4
       '@leonzalion/markdownlint-config': 1.0.0
       '@leonzalion/prettier-config': 1.0.2_prettier@2.5.1
-      '@leonzalion/tsconfig': 1.0.5
+      '@leonzalion/tsconfig': 1.0.6
       '@types/jest': 27.0.3
       '@types/node': 16.11.14
       eslint: 8.5.0
@@ -667,8 +667,8 @@ packages:
       chalk: 4.1.2
     dev: true
 
-  /@leonzalion/eslint-config/1.0.14_eslint@8.5.0+typescript@4.5.4:
-    resolution: {integrity: sha512-a4FS+zC92LkOdDZwzbQqUWe+N6v5nVMAN3KovtvDEt03C4qnFoMGXCBY/Qm/Jb+EEKMnGBS3kx4epWshRVIipw==}
+  /@leonzalion/eslint-config/1.0.18_eslint@8.5.0+typescript@4.5.4:
+    resolution: {integrity: sha512-UNZO90uSR7QBYYD3yT3MJUxsNwPzGcSl+QdiCnXm8+yQIZxPXncLO5QdLDISaTxtd54ww+/zEK0m4vZHcs8FbQ==}
     peerDependencies:
       eslint: ^8.4.0
     dependencies:
@@ -700,8 +700,8 @@ packages:
       - prettier
     dev: true
 
-  /@leonzalion/tsconfig/1.0.5:
-    resolution: {integrity: sha512-lvNPc8Bi3hpmfv2G55PPxQQFxXwqfl/K4G/M2ofvOSM2aqSwNAmscpQjvcz+1ls6WjvXiK07ekCpfeY5qlxdaQ==}
+  /@leonzalion/tsconfig/1.0.6:
+    resolution: {integrity: sha512-Av44eSag3VHFkhAFNmz6xmH680OOuMiLb2Yd/YqFB+QO4P+5+sPgygfm7ITw3WPt02Zs1vf+feleEWkZBThqtA==}
     dev: true
 
   /@nodelib/fs.scandir/2.1.5:
