@@ -50,10 +50,7 @@ export function entityModule<M extends ComponentMap>() {
 			this.batch(() => {
 				for (const componentString of Object.keys(this.state.components)) {
 					const component = componentString as ComponentKey<M>;
-					const componentState = this.getOpt(
-						entityToClone,
-						component
-					);
+					const componentState = this.getOpt(entityToClone, component);
 					if (componentState !== undefined) {
 						this.set(entity, component, componentState);
 					}

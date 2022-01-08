@@ -1,4 +1,3 @@
-
 import type { ComponentMap } from './component';
 import type { LionecsExtras } from './state';
 import type { Lionecs } from '~/types/lionecs';

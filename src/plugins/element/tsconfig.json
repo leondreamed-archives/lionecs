@@ -1,10 +1,7 @@
 {
 	"extends": "../../../tsconfig.json",
 	"compilerOptions": {
-		"lib": [
-			"DOM",
-			"DOM.Iterable"
-		],
+		"lib": ["DOM", "DOM.Iterable"]
 	},
 	"exclude": [],
 	"include": ["./src"]
