@@ -12,7 +12,7 @@ export function proxyModule<M extends ComponentMap>() {
 		 * `p(entity)[component] = value` is equivalent to `ecs.set(entity, component, value)`
 		 * `p(entity)[component].key = value` is equivalent to `ecs.update(entity, component, (oldState) => {
 		 *    oldState.key = value;
-		 *  })
+		 *  })`
 		 */
 		p<E extends Entity>(entity: E): EntityProxy<M, E> {
 			return new Proxy(
@@ -21,39 +21,62 @@ export function proxyModule<M extends ComponentMap>() {
 					get: (_target, key) => {
 						const componentKey = key as ComponentKey<M>;
 						const componentValue = this.getOpt(entity, componentKey);
-						// If the underlying data structure is an object, return a proxy
-						if (typeof componentValue === 'object' && componentValue !== null) {
-							const proxyHandler: ProxyHandler<{ value: unknown }> = {
+						// If the underlying data structure is an object and not an entity, return a proxy
+						if (
+							typeof componentValue === 'object' &&
+							componentValue !== null &&
+							!('__key' in componentValue)
+						) {
+							const proxyHandler: ProxyHandler<
+								Record<string, unknown> & { __keyArray: string[] }
+							> = {
 								get: (target, key) => {
-									// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-									const innerComponentValue = (target.value as any)[key];
-									// If the inner data structure is yet another object, return another proxy wrapping
+									const innerComponentValue = target[key as string];
+									// If the inner data structure is yet another object (and not an entity), return another proxy wrapping
 									// the inner object
 									if (
 										innerComponentValue !== null &&
-										typeof innerComponentValue === 'object'
+										typeof innerComponentValue === 'object' &&
+										!('__key' in innerComponentValue)
 									) {
 										return new Proxy(
-											// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-											{ value: innerComponentValue },
+											{
+												...innerComponentValue,
+												__keyArray: [...target.__keyArray, key],
+											},
 											proxyHandler
 										);
 									} else {
-										// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 										return innerComponentValue;
 									}
 								},
-								set: (_target, key, value) => {
+								set: (target, key, value) => {
 									this.update(entity, componentKey, (oldComponentState) => {
+										let objectToUpdate = oldComponentState as Record<
+											string,
+											any
+										>;
+										for (const objKey of target.__keyArray) {
+											// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+											objectToUpdate = objectToUpdate[objKey];
+										}
+
 										// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-										(oldComponentState as any)[key] = value;
+										objectToUpdate[key as string] = value;
+
 										return oldComponentState;
 									});
 									return true;
 								},
 							};
 
-							return new Proxy({ value: componentValue }, proxyHandler);
+							return new Proxy(
+								{
+									...(componentValue as Record<string, unknown>),
+									__keyArray: [],
+								},
+								proxyHandler
+							);
 						} else {
 							return componentValue;
 						}

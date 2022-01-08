@@ -64,6 +64,8 @@ test('creates', () => {
 
 	swapInventoryItems(player);
 
+	console.log(p(player).inventory.secondary);
+
 	expect(p(player).inventory.primary).toBe(null);
 	expect(p(player).inventory.secondary).toBe(sword);
 });
