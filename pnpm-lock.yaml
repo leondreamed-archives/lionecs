@@ -4,23 +4,23 @@ importers:
 
   .:
     specifiers:
-      '@leonzalion/configs': latest
-      '@types/jest': ^27.0.3
-      '@types/node': ^16.11.14
-      eslint: ^8.5.0
+      '@leonzalion/configs': ^1.0.13
+      '@types/jest': ^27.4.0
+      '@types/node': ^16.11.19
+      eslint: ^8.6.0
       execa: ^6.0.0
       husky: ^7.0.4
       immer: ^9.0.7
-      jest: ^27.4.5
+      jest: ^27.4.7
       just-extend: ^6.0.1
-      lint-staged: ^12.1.2
+      lint-staged: ^12.1.7
       lion-architecture: ^1.0.3
       liontypes: ^1.0.2
       nanoid: ^3.1.30
       prettier: ^2.5.1
       rfdc: ^1.3.0
       rimraf: ^3.0.2
-      rollup: ^2.61.1
+      rollup: ^2.63.0
       ts-jest: ^27.1.2
       ts-node: ^10.4.0
       tsc-alias: ^1.5.0
@@ -34,7 +34,7 @@ importers:
       nanoid: 3.1.30
       rfdc: 1.3.0
     devDependencies:
-      '@leonzalion/configs': 1.0.11_766453c47335cbed2174775e7834db5c
+      '@leonzalion/configs': 1.0.13_766453c47335cbed2174775e7834db5c
       '@types/jest': 27.4.0
       '@types/node': 16.11.19
       eslint: 8.6.0
@@ -660,8 +660,8 @@ packages:
       chalk: 4.1.2
     dev: true
 
-  /@leonzalion/configs/1.0.11_766453c47335cbed2174775e7834db5c:
-    resolution: {integrity: sha512-5KSUMdK3xWwcAFYrbIXI9L0ZCePFrXrDxwwha56Djsdvmy3ekeW6mRluoe6DUP8CGfMAB8/jjRzKM6syC8uvUw==}
+  /@leonzalion/configs/1.0.13_766453c47335cbed2174775e7834db5c:
+    resolution: {integrity: sha512-6BrFt+/mjo3ScNcfoqkTBK5UIwL2CeXyVblTew7Htu5sFGJZ4Uo7wK5LYlVjPv90RvOtFVb21qWPf5Xeq0R9+A==}
     peerDependencies:
       eslint: ^8.4.0
     dependencies:
@@ -5416,12 +5416,15 @@ packages:
     hasBin: true
     dependencies:
       '@eslint/eslintrc': 1.0.5
+      '@typescript-eslint/eslint-plugin': 5.9.0_bd2fd93dbcc607ad2f21b784bccfe0c8
+      '@typescript-eslint/parser': 5.9.0_eslint@8.6.0+typescript@4.5.4
       arrify: 3.0.0
       cosmiconfig: 7.0.1
       define-lazy-prop: 3.0.0
       eslint: 8.6.0
       eslint-config-prettier: 8.3.0_eslint@8.6.0
       eslint-config-xo: 0.39.0_eslint@8.6.0
+      eslint-config-xo-typescript: 0.47.1_50718c277c711d46fdc0916b9b606e5d
       eslint-formatter-pretty: 4.1.0
       eslint-import-resolver-webpack: 0.13.2_eslint-plugin-import@2.25.4
       eslint-plugin-ava: 13.2.0_eslint@8.6.0
