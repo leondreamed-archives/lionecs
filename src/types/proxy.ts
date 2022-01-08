@@ -1,7 +1,7 @@
 import type { ComponentKey, ComponentMap, TypeOfComponent } from './component';
 import type { BaseTypedEntity, Entity } from './entity';
 
-export type EntityPProxy<
+export type EntityProxy<
 	M extends ComponentMap,
 	E extends Entity
 > = E extends BaseTypedEntity<M, infer Req, infer Opt>

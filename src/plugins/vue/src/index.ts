@@ -1,16 +1,14 @@
-import { retrieveModuleProperties } from 'lion-architecture';
+import { retrieveModuleProperties, createInstance } from 'lion-architecture';
 import type {
 	ComponentMap,
 	InternalLionecs,
 	Lionecs,
 	LionecsExtras,
-} from 'lionecs';
-import rfdc from 'rfdc';
+} from '~/types';
 
 import * as vuePluginModules from './modules';
 import type { InternalVuePluginProperties, VuePluginProperties } from './types';
 
-const clone = rfdc();
 const vuePluginProperties = retrieveModuleProperties(
 	vuePluginModules
 ) as InternalVuePluginProperties<any>;
@@ -20,7 +18,7 @@ export function elementPlugin<M extends ComponentMap, X extends LionecsExtras>(
 ): Lionecs<M, X> {
 	const vuePluginEcs = this as InternalLionecs<M, X>;
 
-	Object.assign(vuePluginEcs, clone(vuePluginProperties));
+	Object.assign(vuePluginEcs, createInstance(vuePluginProperties, {}));
 
 	return vuePluginEcs as unknown as Lionecs<M, X> & VuePluginProperties<M>;
 }

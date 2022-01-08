@@ -27,7 +27,7 @@ export type EntityStateListener<
 > = (
 	props: {
 		entity: E;
-		componentKeys: ComponentKey<M>[];
+		componentKeys: Array<ComponentKey<M>>;
 	} & OptionalExtras<R>
 ) => void;
 

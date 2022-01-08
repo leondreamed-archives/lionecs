@@ -1,6 +1,5 @@
 import type { RemovePrivateProperties } from 'liontypes';
 
-import type { EntityKey } from '.';
 import type { ComponentKey, ComponentMap } from './component';
 import type {
 	ComponentStateListenerContext,
@@ -10,6 +9,7 @@ import type {
 import type { Entity } from './entity';
 import type { InternalLionecsProperties } from './properties';
 import type { LionecsExtras, LionecsState, StateUpdate } from './state';
+import type { EntityKey } from '.';
 
 export type InternalLionecsState<
 	M extends ComponentMap,
@@ -23,7 +23,7 @@ export type InternalLionecsState<
 	/**
 	 * An array of the component keys in the lionecs state.
 	 */
-	_componentKeys: ComponentKey<M>[];
+	_componentKeys: Array<ComponentKey<M>>;
 
 	/**
 	 * A map where the keys are entities and the value is an array of all the entity
@@ -31,7 +31,7 @@ export type InternalLionecsState<
 	 */
 	_entityListenerContexts: Map<
 		EntityKey,
-		EntityStateListenerContext<M, Entity>[]
+		Array<EntityStateListenerContext<M, Entity>>
 	>;
 
 	/**
@@ -40,7 +40,7 @@ export type InternalLionecsState<
 	 */
 	_componentListenerContexts: Map<
 		ComponentKey<M>,
-		ComponentStateListenerContext<M, ComponentKey<M>>[]
+		Array<ComponentStateListenerContext<M, ComponentKey<M>>>
 	>;
 
 	/**
@@ -50,7 +50,7 @@ export type InternalLionecsState<
 	 * function to trigger the listeners for the entities/components which were
 	 * updated in the `update` callback.
 	 */
-	_activeUpdates: StateUpdate<M, ComponentKey<M>>[];
+	_activeUpdates: Array<StateUpdate<M, ComponentKey<M>>>;
 
 	/**
 	 * A boolean that represents whether or not the `triggerListener` callback is

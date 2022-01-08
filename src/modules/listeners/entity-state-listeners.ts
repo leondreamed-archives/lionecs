@@ -24,6 +24,7 @@ export function entityStateListenersModule<M extends ComponentMap>() {
 			}
 
 			this._entityListenerContexts.get(entity.__key)!.push({
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 				listener: listener as any,
 				extras,
 			});

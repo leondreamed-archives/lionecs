@@ -1,15 +1,13 @@
-// eslint-disable-next-line max-classes-per-file
 import type { UnionToIntersection } from 'utility-types';
 
 import * as lionecsModules from '../modules';
 import type { ComponentMap } from './component';
 
-class MW<M extends ComponentMap> {
-	// eslint-disable-next-line class-methods-use-this
+class ModuleWrapper<M extends ComponentMap> {
 	t() {
 		return lionecsModules['' as keyof typeof lionecsModules]<M>();
 	}
 }
 
 export type InternalLionecsProperties<M extends ComponentMap> =
-	UnionToIntersection<ReturnType<MW<M>['t']>>;
+	UnionToIntersection<ReturnType<ModuleWrapper<M>['t']>>;

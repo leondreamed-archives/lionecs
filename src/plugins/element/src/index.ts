@@ -1,6 +1,5 @@
-import { retrieveModuleProperties } from 'lion-architecture';
-import type { ComponentMap, Lionecs, LionecsExtras } from 'lionecs';
-import rfdc from 'rfdc';
+import { retrieveModuleProperties, createInstance } from 'lion-architecture';
+import type { ComponentMap, Lionecs, LionecsExtras } from '~/types';
 
 import * as elementModules from './modules';
 import type {
@@ -18,7 +17,6 @@ const elementPluginProperties = retrieveModuleProperties(
 	elementModules
 ) as InternalElementPluginProperties<any>;
 
-const clone = rfdc();
 export function elementPlugin<M extends ComponentMap, X extends LionecsExtras>(
 	this: Lionecs<M, X>,
 	options?: ElementPluginOptions
@@ -30,7 +28,7 @@ export function elementPlugin<M extends ComponentMap, X extends LionecsExtras>(
 		elements: new Map(),
 	};
 
-	this.elements = Object.assign(clone(elementPluginProperties), internalState);
+	this.elements = createInstance(elementPluginProperties, internalState);
 
 	return this as Lionecs<M, X & ElementPluginExtras<M>>;
 }

@@ -1,6 +1,6 @@
 import type { Entity } from '~/types';
 import type { ComponentKey, ComponentMap } from '~/types/component';
-import type { EntityPProxy } from '~/types/proxy';
+import type { EntityProxy } from '~/types/proxy';
 import { useDefineMethods } from '~/utils/methods';
 
 export function proxyModule<M extends ComponentMap>() {
@@ -14,7 +14,7 @@ export function proxyModule<M extends ComponentMap>() {
 		 *    oldState.key = value;
 		 *  })
 		 */
-		p<E extends Entity>(entity: E): EntityPProxy<M, E> {
+		p<E extends Entity>(entity: E): EntityProxy<M, E> {
 			return new Proxy(
 				{},
 				{
@@ -25,6 +25,7 @@ export function proxyModule<M extends ComponentMap>() {
 						if (typeof componentValue === 'object' && componentValue !== null) {
 							const proxyHandler: ProxyHandler<{ value: unknown }> = {
 								get: (target, key) => {
+									// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 									const innerComponentValue = (target.value as any)[key];
 									// If the inner data structure is yet another object, return another proxy wrapping
 									// the inner object
@@ -33,15 +34,18 @@ export function proxyModule<M extends ComponentMap>() {
 										typeof innerComponentValue === 'object'
 									) {
 										return new Proxy(
+											// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 											{ value: innerComponentValue },
 											proxyHandler
 										);
 									} else {
+										// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 										return innerComponentValue;
 									}
 								},
 								set: (_target, key, value) => {
 									this.update(entity, componentKey, (oldComponentState) => {
+										// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 										(oldComponentState as any)[key] = value;
 										return oldComponentState;
 									});
@@ -60,7 +64,7 @@ export function proxyModule<M extends ComponentMap>() {
 						return true;
 					},
 				}
-			) as EntityPProxy<M, E>;
+			) as EntityProxy<M, E>;
 		},
 	});
 }

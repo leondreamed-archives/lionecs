@@ -23,8 +23,9 @@ export function handlerManagerModule<M extends ComponentMap>() {
 			E extends Entity,
 			R extends Record<string, unknown> = Record<never, never>
 		>() {
-			const handlers: ComponentStateChangeHandler<M, ComponentKey<M>, E, R>[] =
-				[];
+			const handlers: Array<
+				ComponentStateChangeHandler<M, ComponentKey<M>, E, R>
+			> = [];
 
 			let areHandlersActivated = false;
 			let handlerExtras: R | undefined;
@@ -50,7 +51,7 @@ export function handlerManagerModule<M extends ComponentMap>() {
 					}).each((entity) => {
 						callback({
 							entity: entity as Entity as E,
-							extras: handlerExtras as R,
+							extras: handlerExtras!,
 							newComponentState: this.get(entity, componentKey),
 							oldComponentState: undefined,
 						});
@@ -64,9 +65,10 @@ export function handlerManagerModule<M extends ComponentMap>() {
 			const activateHandlers = (props: RegisterHandlerListenersProps) => {
 				handlerExtras = props.extras;
 
+				// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 				const componentKeyToHandlers = {} as Record<
 					ComponentKey<M>,
-					ComponentStateChangeHandler<M, ComponentKey<M>, E, R>[]
+					Array<ComponentStateChangeHandler<M, ComponentKey<M>, E, R>>
 				>;
 
 				const { registerComponentStateListener } =
@@ -91,6 +93,7 @@ export function handlerManagerModule<M extends ComponentMap>() {
 					(componentKeyToHandlers[componentKey] ??= []).push(handler);
 					uniqueComponents.add(componentKey);
 				}
+
 				for (const component of uniqueComponents) {
 					registerComponentStateListener(component);
 				}

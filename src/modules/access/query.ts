@@ -8,17 +8,17 @@ import { useDefineMethods } from '~/utils/methods';
 
 type ComponentKeyOrComponent<
 	M extends ComponentMap,
-	RKS extends ComponentKey<M>[]
+	RequiredKeys extends Array<ComponentKey<M>>
 > = {
 	// Can either be an array of component keys or an array
 	// of components
-	[K in keyof RKS]:
-		| RKS[K]
-		| (K extends number ? ComponentFromKey<M, RKS[K]> : never);
+	[K in keyof RequiredKeys]:
+		| RequiredKeys[K]
+		| (K extends number ? ComponentFromKey<M, RequiredKeys[K]> : never);
 };
 
-type Query<M extends ComponentMap, KS extends ComponentKey<M>[]> = {
-	required: ComponentKeyOrComponent<M, KS>;
+type Query<M extends ComponentMap, Keys extends Array<ComponentKey<M>>> = {
+	required: ComponentKeyOrComponent<M, Keys>;
 };
 
 export function queryModule<M extends ComponentMap>() {
@@ -29,7 +29,9 @@ export function queryModule<M extends ComponentMap>() {
 		 * query is lazy and only iterates through the components when another function
 		 * is activated with the query.
 		 */
-		query<RKS extends ComponentKey<M>[]>(query: Query<M, RKS>) {
+		query<RequiredKeys extends Array<ComponentKey<M>>>(
+			query: Query<M, RequiredKeys>
+		) {
 			if (query.required.length === 0) {
 				throw new Error('At least one required component must be specified.');
 			}
@@ -62,7 +64,7 @@ export function queryModule<M extends ComponentMap>() {
 
 			const isMatchingEntity = (
 				entity: Entity
-			): entity is BaseTypedEntity<M, RKS[number]> => {
+			): entity is BaseTypedEntity<M, RequiredKeys[number]> => {
 				const minComponentKey = getMinimumComponentKey();
 				for (const requiredComponentKey of requiredComponentKeys) {
 					// No need to check whether the entity has the minComponentKey because we're iterating
@@ -74,6 +76,7 @@ export function queryModule<M extends ComponentMap>() {
 						return false;
 					}
 				}
+
 				return true;
 			};
 
@@ -92,6 +95,7 @@ export function queryModule<M extends ComponentMap>() {
 						_matchingEntityKeys.add(possibleEntityKey);
 					}
 				}
+
 				// Now that the matching entities set has been populated, we register
 				// a listener to watch all the required components so that the matching entities
 				// set can be updated
@@ -122,14 +126,16 @@ export function queryModule<M extends ComponentMap>() {
 			 * Loop through every entity that satisfies the component query
 			 * options.
 			 */
-			const each = (cb: (entity: BaseTypedEntity<M, RKS[number]>) => void) => {
+			const each = (
+				cb: (entity: BaseTypedEntity<M, RequiredKeys[number]>) => void
+			) => {
 				if (!_isQueryInitialized) initializeQuery();
 				for (const matchingEntityKey of _matchingEntityKeys) {
 					cb(this.entityFromKey(matchingEntityKey));
 				}
 			};
 
-			const first = (): BaseTypedEntity<M, RKS[number]> => {
+			const first = (): BaseTypedEntity<M, RequiredKeys[number]> => {
 				if (!_isQueryInitialized) initializeQuery();
 				return this.entityFromKey(_matchingEntityKeys.values().next().value);
 			};

@@ -34,7 +34,9 @@ export function mutationsModule<M extends ComponentMap>() {
 			component: K | ComponentFromKey<M, K>
 		) {
 			const componentKey = this.getComponentKey(component);
-			delete this.state.components[componentKey][entity.__key];
+			const entityMap = this.getEntityMap(componentKey);
+			// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+			delete entityMap[entity.__key];
 		},
 		set<K extends ComponentKey<M>>(
 			entity: Entity,
@@ -72,7 +74,9 @@ export function mutationsModule<M extends ComponentMap>() {
 			const oldComponentState = this.get(entity, componentKey);
 
 			if (oldComponentState === undefined) {
-				throw new Error(`The entity ${entity} does not have an old state.`);
+				throw new Error(
+					`The entity ${entity.__key} does not have an old state.`
+				);
 			}
 
 			let newComponentState: TypeOfComponent<M[K]>;

@@ -1,11 +1,10 @@
-import type { ComponentMap } from 'lionecs';
+import type { ComponentMap } from '~/types';
 import type { RemovePrivateProperties } from 'liontypes';
 import type { UnionToIntersection } from 'utility-types';
 
 import * as elementModules from './modules';
 
 class ElementMethodsWrapper<M extends ComponentMap> {
-	// eslint-disable-next-line class-methods-use-this
 	wrapped() {
 		return elementModules['' as keyof typeof elementModules]<M>();
 	}

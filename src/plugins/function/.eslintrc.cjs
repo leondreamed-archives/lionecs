@@ -1,7 +1,7 @@
 /* eslint-env node */
 
 module.exports = {
-	extends: '../../../.eslintrc.js',
+	extends: '../../../.eslintrc.cjs',
 	parserOptions: {
 		parser: '@typescript-eslint/parser',
 		project: ['./tsconfig.eslint.json'],

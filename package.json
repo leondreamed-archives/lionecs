@@ -5,19 +5,15 @@
 	"types": "./dist/index.d.ts",
 	"author": "Leon Si <contact@leonzalion.com>",
 	"license": "MIT",
-	"prettier": "@leonzalion/prettier-config",
-	"commitlint": {
-		"extends": [
-			"@commitlint/config-conventional"
-		]
-	},
+	"prettier": "@leonzalion/configs/prettier",
+	"commitlint": "@leonzalion/configs/commitlint",
 	"files": [
 		"dist"
 	],
 	"scripts": {
 		"test": "jest",
-		"build": "rimraf dist && tsc && tsc-alias -p tsconfig.json",
-		"lint": "eslint --fix src",
+		"build": "pnpm build --filter=./scripts",
+		"lint": "eslint --cache --fix src",
 		"tc": "tsc --noEmit",
 		"prettier": "prettier --write src",
 		"prepublish": "pnpm build"
@@ -30,10 +26,7 @@
 		"rfdc": "^1.3.0"
 	},
 	"devDependencies": {
-		"@leonzalion/eslint-config": "latest",
-		"@leonzalion/markdownlint-config": "latest",
-		"@leonzalion/prettier-config": "latest",
-		"@leonzalion/tsconfig": "latest",
+		"@leonzalion/configs": "latest",
 		"@types/jest": "^27.0.3",
 		"@types/node": "^16.11.14",
 		"eslint": "^8.5.0",

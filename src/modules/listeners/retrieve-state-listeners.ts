@@ -14,27 +14,32 @@ export function retrieveStateListenerCallsModule<M extends ComponentMap>() {
 
 	return defineMethods({
 		retrieveStateListenerCalls(
-			stateUpdates: StateUpdate<M, ComponentKey<M>>[]
-		): [StateListener<M>, Parameters<StateListener<M>>][] {
+			stateUpdates: Array<StateUpdate<M, ComponentKey<M>>>
+		): Array<[StateListener<M>, Parameters<StateListener<M>>]> {
 			// Map of entities to the updates that affected it
-			const affectedEntityUpdatesMap: Record<EntityKey, StateUpdate<M, any>[]> =
-				{};
+			const affectedEntityUpdatesMap: Record<
+				EntityKey,
+				Array<StateUpdate<M, any>>
+			> = {};
 
 			// Map of components to the updates that affected it
+			// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 			const affectedComponentUpdatesMap = {} as {
-				[K in ComponentKey<M>]: StateUpdate<M, ComponentKey<M>>[];
+				[K in ComponentKey<M>]: Array<StateUpdate<M, ComponentKey<M>>>;
 			};
 
 			for (const stateUpdate of stateUpdates) {
 				(affectedEntityUpdatesMap[stateUpdate.entity.__key] ??= []).push(
 					stateUpdate
 				);
-				(affectedComponentUpdatesMap[stateUpdate.componentKey] ??=
-					[] as StateUpdate<M, ComponentKey<M>>[]).push(stateUpdate);
+				(affectedComponentUpdatesMap[stateUpdate.componentKey] ??= [] as Array<
+					StateUpdate<M, ComponentKey<M>>
+				>).push(stateUpdate);
 			}
 
-			const stateListeners: [StateListener<M>, Parameters<StateListener<M>>][] =
-				[];
+			const stateListeners: Array<
+				[StateListener<M>, Parameters<StateListener<M>>]
+			> = [];
 			// Save all entity listeners
 			for (const [entityKey, affectedEntityUpdates] of Object.entries(
 				affectedEntityUpdatesMap
@@ -44,7 +49,9 @@ export function retrieveStateListenerCallsModule<M extends ComponentMap>() {
 				) ?? []) {
 					const params: Parameters<EntityStateListener<M, Entity>> = [
 						{
+							// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 							componentKeys: affectedEntityUpdates.map(
+								// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 								({ componentKey }) => componentKey
 							),
 							entity: this.entityFromKey(entityKey),
@@ -70,7 +77,7 @@ export function retrieveStateListenerCallsModule<M extends ComponentMap>() {
 						> = [
 							{
 								component,
-								entity: componentUpdate.entity as any,
+								entity: componentUpdate.entity,
 								oldComponentState:
 									componentUpdate.type === StateUpdateType.del
 										? undefined

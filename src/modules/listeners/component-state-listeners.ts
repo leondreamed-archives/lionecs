@@ -49,6 +49,7 @@ export function componentStateListenersModule<M extends ComponentMap>() {
 			}
 
 			this._componentListenerContexts.get(componentKey)!.push({
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 				listener: listener as any,
 				extras,
 			});

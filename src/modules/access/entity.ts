@@ -25,7 +25,7 @@ export function entityModule<M extends ComponentMap>() {
 					for (const [componentKey, componentValue] of Object.entries(
 						props.components
 					)) {
-						this.set(entity, componentKey as ComponentKey<M>, componentValue!);
+						this.set(entity, componentKey as ComponentKey<M>, componentValue);
 					}
 				});
 			}
@@ -52,7 +52,7 @@ export function entityModule<M extends ComponentMap>() {
 					const component = componentString as ComponentKey<M>;
 					const componentState = this.getOpt(
 						entityToClone,
-						component as ComponentKey<M>
+						component
 					);
 					if (componentState !== undefined) {
 						this.set(entity, component, componentState);

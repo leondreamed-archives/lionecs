@@ -18,12 +18,14 @@ const lionecsProperties = retrieveModuleProperties(
 export function createLionecs<M extends ComponentMap, X extends LionecsExtras>({
 	components: componentsMap,
 }: CreateLionecsProps<M>) {
+	// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 	const components = {} as Record<string, EntityMap<M, ComponentKey<M>>>;
 	for (const component of Object.keys(componentsMap)) {
 		components[component] = {};
 	}
 
 	const internalState: InternalLionecsState<M> = {
+		// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 		state: { components } as LionecsState<M>,
 		_componentKeys: Object.keys(components),
 		_entityListenerContexts: new Map(),

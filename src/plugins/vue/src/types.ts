@@ -1,4 +1,4 @@
-import type { ComponentMap } from 'lionecs';
+import type { ComponentMap } from '~/types';
 import type { RemovePrivateProperties } from 'liontypes';
 import type { UnionToIntersection } from 'utility-types';
 

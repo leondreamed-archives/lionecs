@@ -17,7 +17,7 @@ export function getModule<M extends ComponentMap>() {
 		optional?: boolean;
 	};
 
-	// get(state, entity, component, options)
+	// For overload `get(state, entity, component, options)`
 	function get<
 		E extends Entity,
 		K extends E extends BaseTypedEntity<M, infer Req, infer Opt>
@@ -39,7 +39,7 @@ export function getModule<M extends ComponentMap>() {
 			: TypeOfComponent<M[K]>
 		: TypeOfComponent<M[K]> | undefined;
 
-	// get(entity, component, options)
+	// For overload `get(entity, component, options)`
 	function get<
 		E extends Entity,
 		K extends E extends BaseTypedEntity<M, infer Req, infer Opt>
@@ -64,7 +64,7 @@ export function getModule<M extends ComponentMap>() {
 		this: InternalLionecs<M>,
 		...args: unknown[]
 	): TypeOfComponent<M[K]> {
-		// get(entity, component, options)
+		// Case: get(entity, component, options)
 		if ('__key' in (args[0] as Entity)) {
 			const [entity, component, options] = args as [
 				Entity,
@@ -78,13 +78,13 @@ export function getModule<M extends ComponentMap>() {
 
 			if (!optional && componentState === undefined) {
 				throw new Error(
-					`State not found for component ${component} on entity ${entity}.`
+					`State not found for component ${componentKey} on entity ${entity.__key}.`
 				);
 			}
 
 			return componentState as TypeOfComponent<M[K]>;
 		}
-		// get(state, entity, component, options)
+		// Case: get(state, entity, component, options)
 		else {
 			const [state, entity, component, options] = args as [
 				LionecsState<M>,
@@ -99,7 +99,7 @@ export function getModule<M extends ComponentMap>() {
 
 			if (!optional && componentState === undefined) {
 				throw new Error(
-					`State not found for component ${component} on entity ${entity}.`
+					`State not found for component ${componentKey} on entity ${entity.__key}.`
 				);
 			}
 
@@ -122,7 +122,7 @@ export function getModule<M extends ComponentMap>() {
 		this: InternalLionecs<M>,
 		...args: unknown[]
 	): TypeOfComponent<M[K]> | undefined {
-		// getOpt(state, entity, component)
+		// Case: getOpt(state, entity, component)
 		if (args.length === 3) {
 			const [state, entity, component] = args as [
 				LionecsState<M>,
@@ -133,7 +133,9 @@ export function getModule<M extends ComponentMap>() {
 			return state.components[componentKey][entity.__key] as TypeOfComponent<
 				M[K]
 			>;
-		} else {
+		}
+		// Case: getOpt(entity, component)
+		else {
 			const [entity, component] = args as [Entity, K | ComponentFromKey<M, K>];
 			const componentKey = this.getComponentKey(component);
 			return this.state.components[componentKey][
@@ -148,7 +150,7 @@ export function getModule<M extends ComponentMap>() {
 		getComponentKey<K extends ComponentKey<M>>(
 			component: K | ComponentFromKey<M, K>
 		): K {
-			return (isComponent(component) ? component.__key : component) as K;
+			return isComponent(component) ? component.__key : component;
 		},
 	});
 }
