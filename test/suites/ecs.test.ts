@@ -57,9 +57,8 @@ test('creates', () => {
 	expect(p(enemy).health).toBe(40);
 
 	function swapInventoryItems(entity: TypedEntity<Component.Inventory>) {
-		const primaryItem = p(entity).inventory.primary;
-		p(entity).inventory.primary = p(entity).inventory.secondary;
-		p(entity).inventory.secondary = primaryItem;
+		const inventory = p(entity).inventory;
+		[inventory.primary, inventory.secondary] = [inventory.secondary, inventory.primary];
 	}
 
 	swapInventoryItems(player);
