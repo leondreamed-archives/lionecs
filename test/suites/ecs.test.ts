@@ -2,9 +2,9 @@ import type {
 	EnemyEntity,
 	PlayerEntity,
 	WeaponEntity,
-} from '~test/defs/entity';
-import type { TypedEntity } from '~test/types/entity';
-import { createEcs } from '~test/utils/ecs';
+} from '~test/defs/entity.js';
+import type { TypedEntity } from '~test/types/entity.js';
+import { createEcs } from '~test/utils/ecs.js';
 
 import type * as Component from '../defs/component';
 
