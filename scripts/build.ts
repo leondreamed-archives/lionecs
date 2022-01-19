@@ -1,18 +1,18 @@
+import { rmDist, copyPackageFiles } from 'lion-system';
 import * as process from 'node:process';
+import * as fs from 'node:fs';
 import { execaCommandSync as exec } from 'execa';
-import fs from 'fs-extra';
 
-process.chdir('..');
-
-fs.rmSync('dist', { force: true, recursive: true });
+rmDist();
 exec('tsc');
 exec('tsc-alias -p tsconfig.json');
+copyPackageFiles();
 
 for (const pluginDir of fs.readdirSync('src/plugins')) {
 	const pluginPath = `src/plugins/${pluginDir}`;
 	const pluginDestPath = `dist/plugin/${pluginDir}`;
 
-	fs.mkdirpSync('dist/plugin');
+	fs.mkdirSync('dist/plugin', { recursive: true });
 	exec(`tsc -p ${pluginPath}/tsconfig.json --outDir ${pluginDestPath}`);
 	exec(`tsc-alias -p ${pluginPath}/tsconfig.json`);
 
@@ -25,4 +25,4 @@ for (const pluginDir of fs.readdirSync('src/plugins')) {
 	}
 }
 
-fs.copyFileSync('package.json', 'dist/package.json');
+
