@@ -13,6 +13,7 @@
 		]
 	},
 	"scripts": {
+		"release": "lionp",
 		"test": "jest",
 		"build": "node-ts ./scripts/build.ts",
 		"lint": "eslint --cache --fix .",
@@ -62,6 +63,8 @@
 			"pnpm run lint",
 			"pnpm run prettier"
 		]
+	},
+	"publishConfig": {
+		"directory": "dist"
 	}
-
 }
