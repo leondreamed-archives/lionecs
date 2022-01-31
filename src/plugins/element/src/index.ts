@@ -1,13 +1,19 @@
 import { retrieveModuleProperties, createInstance } from 'lion-architecture';
-import type { ComponentMap, Lionecs, LionecsExtras } from '~/types';
 
 import * as elementModules from './modules';
 import type {
+	ElementPlugin,
 	ElementPluginExtras,
 	ElementPluginOptions,
 	InternalElementPluginProperties,
 	InternalElementPluginState,
 } from './types';
+import type {
+	ComponentMap,
+	InternalLionecs,
+	Lionecs,
+	LionecsExtras,
+} from '~/types';
 
 export const elementPluginOptionsDefaults: ElementPluginOptions = {
 	setIdAttribute: true,
@@ -21,6 +27,8 @@ export function elementPlugin<M extends ComponentMap, X extends LionecsExtras>(
 	this: Lionecs<M, X>,
 	options?: ElementPluginOptions
 ): Lionecs<M, X & ElementPluginExtras<M>> {
+	const lionecs = this as InternalLionecs<M, X> & ElementPluginExtras<M>;
+
 	options = { ...elementPluginOptionsDefaults, ...options };
 
 	const internalState: InternalElementPluginState = {
@@ -28,7 +36,10 @@ export function elementPlugin<M extends ComponentMap, X extends LionecsExtras>(
 		elements: new Map(),
 	};
 
-	this.elements = createInstance(elementPluginProperties, internalState);
+	lionecs.element = createInstance(
+		elementPluginProperties,
+		internalState
+	) as ElementPlugin<M>;
 
-	return this as Lionecs<M, X & ElementPluginExtras<M>>;
+	return lionecs as Lionecs<M, X & ElementPluginExtras<M>>;
 }

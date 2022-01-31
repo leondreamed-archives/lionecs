@@ -10,10 +10,7 @@ import type {
 } from '../types';
 
 export function createElementModule<M extends ComponentMap>() {
-	const defineMethods = useDefineMethods<
-		M,
-		InternalElementPluginExtras<C, S>
-	>();
+	const defineMethods = useDefineMethods<M, InternalElementPluginExtras<M>>();
 
 	return defineMethods({
 		createElementProperty({

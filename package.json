@@ -28,7 +28,7 @@
 		"rfdc": "^1.3.0"
 	},
 	"devDependencies": {
-		"@leonzalion/configs": "latest",
+		"@leonzalion/configs": "^1.0.55",
 		"@types/jest": "^27.4.0",
 		"@types/node": "^16.11.19",
 		"eslint": "^8.6.0",
@@ -36,7 +36,7 @@
 		"husky": "^7.0.4",
 		"jest": "^27.4.7",
 		"lint-staged": "^12.1.7",
-		"lion-system": "^1.0.3",
+		"lion-system": "^1.0.9",
 		"lionp": "^1.0.14",
 		"liontypes": "^1.0.2",
 		"prettier": "^2.5.1",

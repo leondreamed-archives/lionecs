@@ -1,11 +1,11 @@
-import { rmDist, copyPackageFiles } from 'lion-system';
-import * as process from 'node:process';
 import * as fs from 'node:fs';
+import { rmDist, copyPackageFiles, chProjectDir } from 'lion-system';
 import { execaCommandSync as exec } from 'execa';
 
+chProjectDir(import.meta.url);
 rmDist();
 exec('tsc');
-exec('tsc-alias -p tsconfig.json');
+exec('tsc-alias');
 copyPackageFiles();
 
 for (const pluginDir of fs.readdirSync('src/plugins')) {
@@ -24,5 +24,3 @@ for (const pluginDir of fs.readdirSync('src/plugins')) {
 		);
 	}
 }
-
-
