@@ -5,7 +5,7 @@
 Install LionECS from npm using your favourite package manager (I recommend [pnpm](https://pnpm.io/)):
 
 ```shell script
-pnpm install lionecs
+pnpm add lionecs
 ```
 
 ## Usage
