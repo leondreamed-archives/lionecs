@@ -5,17 +5,13 @@ const defineEntities = useDefineEntities<typeof Component>();
 
 const entities = defineEntities({
 	player: {
-		required: [Component.health, Component.inventory, Component.name] as const,
+		required: [Component.health, Component.inventory, Component.name],
 	},
 	enemy: {
-		required: [Component.health, Component.damage] as const,
+		required: [Component.health, Component.damage],
 	},
 	weapon: {
-		required: [
-			Component.inventoryItem,
-			Component.name,
-			Component.damage,
-		] as const,
+		required: [Component.inventoryItem, Component.name, Component.damage],
 	},
 });
 
