@@ -36,7 +36,7 @@ export type Component = typeof Component;
 import { Component } from './components.js';
 import { useDefineEntities } from 'lionecs';
 
-const defineEntities = useDefineEntities<typeof Component>();
+const defineEntities = useDefineEntities<Component>();
 
 const GameEntity = defineEntities({
   player: [Component.health, Component.inventory, Component.name],

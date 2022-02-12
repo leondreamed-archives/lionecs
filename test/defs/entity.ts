@@ -1,7 +1,7 @@
 import { Component } from './component.js';
 import { useDefineEntities } from '~/exports.js';
 
-const defineEntities = useDefineEntities<typeof Component>();
+const defineEntities = useDefineEntities<Component>();
 
 const GameEntity = defineEntities({
 	player: [Component.health, Component.inventory, Component.name],
