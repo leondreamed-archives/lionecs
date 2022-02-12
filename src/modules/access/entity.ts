@@ -1,14 +1,11 @@
 import { nanoid } from 'nanoid';
 
 import type {
-	Component,
 	ComponentFromKey,
 	ComponentKey,
 	ComponentMap,
-	KeyOfComponent,
 } from '~/types/component.js';
 import type {
-	BaseTypedEntity,
 	CreateEntityComponents,
 	Entity,
 	EntityKey,
