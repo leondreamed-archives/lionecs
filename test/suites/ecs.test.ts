@@ -12,30 +12,24 @@ test('creates', () => {
 	const ecs = createEcs();
 	const p = ecs.p.bind(ecs);
 
-	const sword = ecs.createEntity<WeaponEntity>({
-		components: {
-			damage: 10,
-			inventoryItem: true,
-			name: 'MySword',
-		},
+	const sword = ecs.entity<WeaponEntity>({
+		damage: 10,
+		inventoryItem: true,
+		name: 'MySword',
 	});
 
-	const enemy = ecs.createEntity<EnemyEntity>({
-		components: {
-			damage: 5,
-			health: 50,
-		},
+	const enemy = ecs.entity<EnemyEntity>({
+		damage: 5,
+		health: 50,
 	});
 
-	const player = ecs.createEntity<PlayerEntity>({
-		components: {
-			health: 100,
-			inventory: {
-				primary: sword,
-				secondary: null,
-			},
-			name: 'Leon',
+	const player = ecs.entity<PlayerEntity>({
+		health: 100,
+		inventory: {
+			primary: sword,
+			secondary: null,
 		},
+		name: 'Leon',
 	});
 
 	function attack({
@@ -58,7 +52,10 @@ test('creates', () => {
 
 	function swapInventoryItems(entity: TypedEntity<Component.Inventory>) {
 		const inventory = p(entity).inventory;
-		[inventory.primary, inventory.secondary] = [inventory.secondary, inventory.primary];
+		[inventory.primary, inventory.secondary] = [
+			inventory.secondary,
+			inventory.primary,
+		];
 	}
 
 	swapInventoryItems(player);

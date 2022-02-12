@@ -81,18 +81,18 @@ const ecs = createLionecs({ components: Component });
 const p = ecs.p.bind(ecs);
 
 // TypeScript IntelliSense works here!
-const sword = ecs.createEntity<WeaponEntity>({
+const sword = ecs.entity<WeaponEntity>({
   damage: 10,
   inventoryItem: true,
   name: 'MySword',
 });
 
-const enemy = ecs.createEntity<EnemyEntity>({
+const enemy = ecs.entity<EnemyEntity>({
   damage: 5,
   health: 50,
 });
 
-const player = ecs.createEntity<PlayerEntity>({
+const player = ecs.entity<PlayerEntity>({
   health: 100,
   inventory: {
     primary: sword,

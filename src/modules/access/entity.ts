@@ -17,7 +17,7 @@ export function entityModule<M extends ComponentMap>() {
 	const defineMethods = useDefineMethods<M>();
 
 	return defineMethods({
-		createEntity<E extends Entity>(
+		entity<E extends Entity>(
 			components?: CreateEntityComponents<M, E>
 		): E {
 			const entity = this.entityFromKey(nanoid()) as E;
@@ -47,7 +47,7 @@ export function entityModule<M extends ComponentMap>() {
 			return this.state.components[componentKey];
 		},
 		cloneEntity<E extends Entity>(entityToClone: E): E {
-			const entity = this.createEntity<E>();
+			const entity = this.entity<E>();
 
 			this.batch(() => {
 				for (const componentString of Object.keys(this.state.components)) {
