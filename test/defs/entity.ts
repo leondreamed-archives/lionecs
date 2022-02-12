@@ -4,15 +4,9 @@ import { useDefineEntities } from '~/exports.js';
 const defineEntities = useDefineEntities<typeof Component>();
 
 const entities = defineEntities({
-	player: {
-		required: [Component.health, Component.inventory, Component.name],
-	},
-	enemy: {
-		required: [Component.health, Component.damage],
-	},
-	weapon: {
-		required: [Component.inventoryItem, Component.name, Component.damage],
-	},
+	player: [Component.health, Component.inventory, Component.name],
+	enemy: [Component.health, Component.damage],
+	weapon: [Component.inventoryItem, Component.name, Component.damage],
 });
 
 export type PlayerEntity = typeof entities.player;
