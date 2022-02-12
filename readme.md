@@ -4,7 +4,7 @@
 
 Install LionECS from npm using your favourite package manager (I recommend [pnpm](https://pnpm.io/)):
 
-```shell script
+```bash
 pnpm add lionecs
 ```
 
@@ -14,40 +14,35 @@ components.ts
 
 ```typescript
 import type { Entity } from 'lionecs';
-import { defComponent } from 'lionecs';
+import { defComponent, defsToComponents } from 'lionecs';
 
-export const name = defComponent<string>().name('name');
-export type Name = typeof name;
-
-export const health = defComponent<number>().name('health');
-export type Health = typeof health;
-
-export const inventory =
-  defComponent<{ primary: Entity | null; secondary: Entity | null }>().name(
+export const Component = defsToComponents({
+  name: defComponent<string>().name('name'),
+  health: defComponent<number>().name('health'),
+  inventory: defComponent<{ primary: Entity | null; secondary: Entity | null }>().name(
     'inventory'
-  );
-export type Inventory = typeof inventory;
+  ),
+  inventoryItem: defComponent<true>().name('inventoryItem'),
+  damage: defComponent<number>().name('damage'),
+});
 
-export const inventoryItem = defComponent<true>().name('inventoryItem');
-export type InventoryItem = typeof inventoryItem;
-
-export const damage = defComponent<number>().name('damage');
-export type Damage = typeof damage;
+// Avoids specifying `typeof Component` at every "type site" (the type equivalent of a call site)
+export type Component = typeof Component;
 ```
 
 entities.ts
 
 ```typescript
-import * as Component from './component.js';
+import { Component } from './components.js';
 import { useDefineEntities } from 'lionecs';
 
 const defineEntities = useDefineEntities<typeof Component>();
 
-const entities = defineEntities<{
-  player: [Component.Health | Component.Inventory | Component.Name];
-  enemy: [Component.Health | Component.Damage];
-  weapon: [Component.InventoryItem | Component.Name | Component.Damage];
-}>();
+const entities = defineEntities({
+  player: [Component.health, Component.inventory, Component.name],
+  enemy: [Component.health, Component.damage],
+  weapon: [Component.inventoryItem, Component.name, Component.damage],
+});
 
 export type PlayerEntity = typeof entities.player;
 export type EnemyEntity = typeof entities.enemy;
@@ -58,11 +53,11 @@ index.ts
 
 ```typescript
 import { createLionecs } from 'lionecs';
-import * as Component from './components';
-import { TypedEntity } from './types';
+import * as Component from './component.js';
+import type { TypedEntity } from 'lionecs';
 
 const ecs = createLionecs({ components: Component });
-const p = ecs.p.bind(ecs);
+const p = ecs.useProxy();
 
 // TypeScript IntelliSense works here!
 const sword = ecs.entity<WeaponEntity>({
@@ -89,8 +84,8 @@ function attack({
   attacker,
   defender,
 }: {
-  attacker: TypedEntity<Component.Damage>;
-  defender: TypedEntity<Component.Health>;
+  attacker: TypedEntity<Component['damage']>;
+  defender: TypedEntity<Component['health']>;
 }) {
   // TypeScript IntelliSense also works here!
   p(defender).health -= p(attacker).damage;
@@ -105,7 +100,7 @@ attack({ attacker: sword, defender: enemy });
 
 console.log(p(enemy).health); // Outputs: 40
 
-function swapInventoryItems(entity: TypedEntity<Component.Inventory>) {
+function swapInventoryItems(entity: TypedEntity<Component['inventory']>) {
   const inventory = p(entity).inventory;
   [inventory.primary, inventory.secondary] = [inventory.secondary, inventory.primary];
 }
