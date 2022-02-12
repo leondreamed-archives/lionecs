@@ -9,17 +9,19 @@ export function useDefineEntities<M extends ComponentMap>() {
 	return function defineEntities<
 		Entities extends Record<
 			string,
-			[
-				requiredComponents: Component<string, unknown>,
-				optionalComponents?: Component<string, unknown>
-			]
+			{
+				required: readonly Component<M, string, unknown>[];
+				optional?: readonly Component<M, string, unknown>[];
+			}
 		>
-	>(): {
+	>(
+		_e: Entities
+	): {
 		[K in keyof Entities]: BaseTypedEntity<
 			M,
-			KeyOfComponent<Entities[K]['0']>,
-			Entities[K]['1'] extends Component<string, unknown>
-				? KeyOfComponent<Entities[K]['1']>
+			KeyOfComponent<Entities[K]['required'][number]>,
+			Entities[K]['optional'] extends Component<M, string, unknown>[]
+				? KeyOfComponent<Entities[K]['optional'][number]>
 				: never
 		>;
 	} {

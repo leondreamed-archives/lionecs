@@ -62,15 +62,5 @@ export function entityModule<M extends ComponentMap>() {
 
 			return entity;
 		},
-		defineEntity: function <
-			RequiredComponents extends Component<string, unknown>,
-			OptionalComponents extends Component<string, unknown> | never = never
-		>(): BaseTypedEntity<
-			M,
-			KeyOfComponent<RequiredComponents>,
-			KeyOfComponent<OptionalComponents>
-		> {
-			return undefined as any;
-		},
 	});
 }

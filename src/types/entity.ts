@@ -27,20 +27,20 @@ export interface BaseTypedEntity<
 	};
 }
 
-export type BaseDefineTypedEntity<
-	M extends ComponentMap,
-	R extends Component<string, unknown>,
-	O extends Component<string, unknown> | never = never
-> = BaseTypedEntity<M, KeyOfComponent<R>, KeyOfComponent<O>>;
-
-export type BaseExtendTypedEntity<
-	M extends ComponentMap,
-	Parent extends Entity,
-	Child extends Entity
-> = Parent extends BaseTypedEntity<M, infer PR, infer PO>
-	? Child extends BaseTypedEntity<M, infer CR, infer CO>
-		? BaseTypedEntity<M, PR | CR, NonNullable<PO | CO>>
-		: never
+/**
+ * An entity with certain components.
+ */
+export type TypedEntity<
+	RequiredComponents extends Component<ComponentMap, string, unknown>,
+	OptionalComponents extends
+		| Component<ComponentMap, string, unknown>
+		| never = never
+> = RequiredComponents extends Component<infer M, infer _K, infer _T>
+	? BaseTypedEntity<
+			M,
+			KeyOfComponent<RequiredComponents>,
+			KeyOfComponent<OptionalComponents>
+	  >
 	: never;
 
 export type CreateEntityComponents<

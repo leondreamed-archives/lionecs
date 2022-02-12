@@ -14,8 +14,7 @@ export type {
 	StateListener,
 } from './types/context.js';
 export type {
-	BaseDefineTypedEntity,
-	BaseExtendTypedEntity,
+	TypedEntity,
 	BaseTypedEntity,
 	CreateEntityComponents,
 	Entity,
