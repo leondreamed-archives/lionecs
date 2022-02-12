@@ -43,7 +43,7 @@ test('creates', () => {
 
 	attack({ attacker: enemy, defender: player });
 
-	expect(p(player).health).toBe(95);
+	expect(ecs.get(player, Component.health)).toBe(95);
 
 	attack({ attacker: sword, defender: enemy });
 

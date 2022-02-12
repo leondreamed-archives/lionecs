@@ -10,9 +10,9 @@ pnpm add lionecs
 
 ## Usage
 
-components.ts
-
 ```typescript
+// components.ts
+
 import type { Entity } from 'lionecs';
 import { defComponent, defsToComponents } from 'lionecs';
 
@@ -30,9 +30,9 @@ export const Component = defsToComponents({
 export type Component = typeof Component;
 ```
 
-entities.ts
-
 ```typescript
+// entities.ts
+
 import { Component } from './components.js';
 import { useDefineEntities } from 'lionecs';
 
@@ -49,11 +49,9 @@ export type EnemyEntity = typeof entities.enemy;
 export type WeaponEntity = typeof entities.weapon;
 ```
 
-index.ts
-
 ```typescript
 import { createLionecs } from 'lionecs';
-import * as Component from './component.js';
+import { Component } from './components.js';
 import type { TypedEntity } from 'lionecs';
 
 const ecs = createLionecs({ components: Component });
@@ -93,11 +91,11 @@ function attack({
 
 attack({ attacker: enemy, defender: player });
 
-// Equivalent to ecs.get(player, Component.health)
-console.log(p(player).health); // Outputs: 95
+console.log(ecs.get(player, Component.health)); // Outputs: 95
 
 attack({ attacker: sword, defender: enemy });
 
+// Equivalent to ecs.get(enemy, Component.health)
 console.log(p(enemy).health); // Outputs: 40
 
 function swapInventoryItems(entity: TypedEntity<Component['inventory']>) {
