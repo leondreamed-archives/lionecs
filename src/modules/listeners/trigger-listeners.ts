@@ -1,6 +1,6 @@
-import type { ComponentKey, ComponentMap } from '~/types/component';
-import type { StateUpdate } from '~/types/state';
-import { useDefineMethods } from '~/utils/methods';
+import type { ComponentKey, ComponentMap } from '~/types/component.js';
+import type { StateUpdate } from '~/types/state.js';
+import { useDefineMethods } from '~/utils/methods.js';
 
 export function triggerListenersModule<M extends ComponentMap>() {
 	const defineMethods = useDefineMethods<M>();

@@ -5,11 +5,11 @@ import type {
 	ComponentKey,
 	ComponentMap,
 	TypeOfComponent,
-} from '~/types/component';
-import type { Entity } from '~/types/entity';
-import type { StateUpdate } from '~/types/state';
-import { StateUpdateType } from '~/types/state';
-import { useDefineMethods } from '~/utils/methods';
+} from '~/types/component.js';
+import type { Entity } from '~/types/entity.js';
+import type { StateUpdate } from '~/types/state.js';
+import { StateUpdateType } from '~/types/state.js';
+import { useDefineMethods } from '~/utils/methods.js';
 
 export function mutationsModule<M extends ComponentMap>() {
 	const defineMethods = useDefineMethods<M>();

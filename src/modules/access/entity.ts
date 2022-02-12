@@ -4,26 +4,28 @@ import type {
 	ComponentFromKey,
 	ComponentKey,
 	ComponentMap,
-} from '~/types/component';
+} from '~/types/component.js';
 import type {
-	CreateEntityProps,
+	CreateEntityComponents,
 	Entity,
 	EntityKey,
 	EntityMap,
-} from '~/types/entity';
-import { useDefineMethods } from '~/utils/methods';
+} from '~/types/entity.js';
+import { useDefineMethods } from '~/utils/methods.js';
 
 export function entityModule<M extends ComponentMap>() {
 	const defineMethods = useDefineMethods<M>();
 
 	return defineMethods({
-		createEntity<E extends Entity>(props?: CreateEntityProps<M, E>): E {
+		createEntity<E extends Entity>(
+			components?: CreateEntityComponents<M, E>
+		): E {
 			const entity = this.entityFromKey(nanoid()) as E;
 
-			if (props !== undefined) {
+			if (components !== undefined) {
 				this.batch(() => {
 					for (const [componentKey, componentValue] of Object.entries(
-						props.components
+						components
 					)) {
 						this.set(entity, componentKey as ComponentKey<M>, componentValue);
 					}

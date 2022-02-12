@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid';
 
-import type { ComponentMap } from '~/types';
+import type { ComponentMap } from '~/types/index.js';
 import { useDefineMethods } from '~/utils/methods';
 
 import type {

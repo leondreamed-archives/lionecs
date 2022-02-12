@@ -1,7 +1,7 @@
-import type { Component, ComponentMap, KeyOfComponent } from '~/index';
-import type { BaseDefineTypedEntity, BaseTypedEntity } from '~/types';
+import type { Component, ComponentMap, KeyOfComponent } from '~/exports.js';
+import type { BaseDefineTypedEntity, BaseTypedEntity } from '~/types/index.js';
 
-import type { TComponentMap } from './component';
+import type { TComponentMap } from './component.js';
 
 export type DefineTypedEntity<
 	R extends Component<string, unknown>,

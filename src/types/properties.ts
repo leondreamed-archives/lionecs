@@ -1,7 +1,7 @@
 import type { UnionToIntersection } from 'utility-types';
 
-import * as lionecsModules from '../modules';
-import type { ComponentMap } from './component';
+import * as lionecsModules from '../modules/index.js';
+import type { ComponentMap } from './component.js';
 
 class ModuleWrapper<M extends ComponentMap> {
 	t() {

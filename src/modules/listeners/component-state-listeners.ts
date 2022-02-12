@@ -2,10 +2,10 @@ import type {
 	ComponentFromKey,
 	ComponentKey,
 	ComponentMap,
-} from '~/types/component';
-import type { ComponentStateListener } from '~/types/context';
-import type {} from '~/types/state';
-import { useDefineMethods } from '~/utils/methods';
+} from '~/types/component.js';
+import type { ComponentStateListener } from '~/types/context.js';
+import type {} from '~/types/state.js';
+import { useDefineMethods } from '~/utils/methods.js';
 
 export function componentStateListenersModule<M extends ComponentMap>() {
 	const defineMethods = useDefineMethods<M>();

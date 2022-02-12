@@ -2,10 +2,10 @@ import type {
 	ComponentFromKey,
 	ComponentKey,
 	ComponentMap,
-} from '~/types/component';
-import type { Entity } from '~/types/entity';
-import type { ComponentStateChangeHandler } from '~/types/handlers';
-import { useDefineMethods } from '~/utils/methods';
+} from '~/types/component.js';
+import type { Entity } from '~/types/entity.js';
+import type { ComponentStateChangeHandler } from '~/types/handlers.js';
+import { useDefineMethods } from '~/utils/methods.js';
 
 export function handlerManagerModule<M extends ComponentMap>() {
 	const defineMethods = useDefineMethods<M>();

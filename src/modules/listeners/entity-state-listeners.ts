@@ -1,7 +1,7 @@
-import type { ComponentMap } from '~/types/component';
-import type { EntityStateListener } from '~/types/context';
-import type { Entity } from '~/types/entity';
-import { useDefineMethods } from '~/utils/methods';
+import type { ComponentMap } from '~/types/component.js';
+import type { EntityStateListener } from '~/types/context.js';
+import type { Entity } from '~/types/entity.js';
+import { useDefineMethods } from '~/utils/methods.js';
 
 export function entityStateListenersModule<M extends ComponentMap>() {
 	const defineMethods = useDefineMethods<M>();

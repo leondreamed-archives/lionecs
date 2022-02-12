@@ -1,5 +1,5 @@
-import type { ComponentKey, ComponentMap, TypeOfComponent } from './component';
-import type { BaseTypedEntity, Entity } from './entity';
+import type { ComponentKey, ComponentMap, TypeOfComponent } from './component.js';
+import type { BaseTypedEntity, Entity } from './entity.js';
 
 export type EntityProxy<
 	M extends ComponentMap,

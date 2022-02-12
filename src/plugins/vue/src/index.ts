@@ -4,10 +4,10 @@ import type {
 	InternalLionecs,
 	Lionecs,
 	LionecsExtras,
-} from '~/types';
+} from '~/types/index.js';
 
-import * as vuePluginModules from './modules';
-import type { InternalVuePluginProperties, VuePluginProperties } from './types';
+import * as vuePluginModules from './modules/index.js';
+import type { InternalVuePluginProperties, VuePluginProperties } from './types.js';
 
 const vuePluginProperties = retrieveModuleProperties(
 	vuePluginModules

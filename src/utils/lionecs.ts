@@ -1,11 +1,11 @@
 import { createInstance, retrieveModuleProperties } from 'lion-architecture';
 
-import * as lionecsModules from '../modules';
-import type { ComponentKey, ComponentMap } from '../types/component';
-import type { EntityMap } from '../types/entity';
-import type { InternalLionecsState, Lionecs } from '../types/lionecs';
-import type { InternalLionecsProperties } from '../types/properties';
-import type { LionecsExtras, LionecsState } from '../types/state';
+import * as lionecsModules from '../modules/index.js';
+import type { ComponentKey, ComponentMap } from '../types/component.js';
+import type { EntityMap } from '../types/entity.js';
+import type { InternalLionecsState, Lionecs } from '../types/lionecs.js';
+import type { InternalLionecsProperties } from '../types/properties.js';
+import type { LionecsExtras, LionecsState } from '../types/state.js';
 
 type CreateLionecsProps<M extends ComponentMap> = {
 	components: M;
@@ -18,14 +18,12 @@ const lionecsProperties = retrieveModuleProperties(
 export function createLionecs<M extends ComponentMap, X extends LionecsExtras>({
 	components: componentsMap,
 }: CreateLionecsProps<M>) {
-	// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 	const components = {} as Record<string, EntityMap<M, ComponentKey<M>>>;
 	for (const component of Object.keys(componentsMap)) {
 		components[component] = {};
 	}
 
 	const internalState: InternalLionecsState<M> = {
-		// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 		state: { components } as LionecsState<M>,
 		_componentKeys: Object.keys(components),
 		_entityListenerContexts: new Map(),

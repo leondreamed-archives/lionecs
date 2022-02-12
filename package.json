@@ -14,6 +14,7 @@
 	},
 	"scripts": {
 		"release": "lionp",
+		"prepare": "lion-git-hooks",
 		"test": "jest",
 		"build": "node-ts ./scripts/build.ts",
 		"lint": "eslint --cache --fix .",
@@ -24,16 +25,16 @@
 		"immer": "^9.0.7",
 		"just-extend": "^6.0.1",
 		"lion-architecture": "^1.0.3",
+		"lion-git-hooks": "^1.0.3",
 		"nanoid": "^3.1.30",
 		"rfdc": "^1.3.0"
 	},
 	"devDependencies": {
-		"@leonzalion/configs": "^1.0.55",
+		"@leonzalion/configs": "^1.0.64",
 		"@types/jest": "^27.4.0",
 		"@types/node": "^16.11.19",
 		"eslint": "^8.6.0",
 		"execa": "^6.0.0",
-		"husky": "^7.0.4",
 		"jest": "^27.4.7",
 		"lint-staged": "^12.1.7",
 		"lion-system": "^1.0.9",
@@ -42,21 +43,14 @@
 		"prettier": "^2.5.1",
 		"rimraf": "^3.0.2",
 		"rollup": "^2.63.0",
-		"simple-git-hooks": "^2.7.0",
 		"sync-index": "^1.0.5",
 		"ts-jest": "^27.1.2",
 		"ts-jest-resolver": "^2.0.0",
 		"ts-node": "^10.4.0",
 		"tsc-alias": "^1.5.0",
 		"tsconfig-paths": "^3.12.0",
-		"tsm": "^2.2.1",
 		"typescript": "^4.5.4",
 		"utility-types": "^3.10.0"
-	},
-	"simple-git-hooks": {
-		"pre-commit": "pnpm exec node-ts ./scripts/hooks/pre-commit.ts",
-		"pre-push": "pnpm exec node-ts ./scripts/hooks/pre-push.ts",
-		"commit-msg": "pnpm exec node-ts ./scripts/hooks/commit-msg.ts $@"
 	},
 	"lint-staged": {
 		"*.{js,ts}": [

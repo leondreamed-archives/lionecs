@@ -3,12 +3,12 @@ import type {
 	ComponentKey,
 	ComponentMap,
 	TypeOfComponent,
-} from '~/types/component';
-import type { BaseTypedEntity, Entity } from '~/types/entity';
-import type { InternalLionecs } from '~/types/lionecs';
-import type { LionecsState } from '~/types/state';
-import { isComponent } from '~/utils/component';
-import { useDefineMethods } from '~/utils/methods';
+} from '~/types/component.js';
+import type { BaseTypedEntity, Entity } from '~/types/entity.js';
+import type { InternalLionecs } from '~/types/lionecs.js';
+import type { LionecsState } from '~/types/state.js';
+import { isComponent } from '~/utils/component.js';
+import { useDefineMethods } from '~/utils/methods.js';
 
 export function getModule<M extends ComponentMap>() {
 	const defineMethods = useDefineMethods<M>();

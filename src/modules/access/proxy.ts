@@ -1,7 +1,7 @@
-import type { Entity } from '~/types';
-import type { ComponentKey, ComponentMap } from '~/types/component';
-import type { EntityProxy } from '~/types/proxy';
-import { useDefineMethods } from '~/utils/methods';
+import type { Entity } from '~/types/index.js';
+import type { ComponentKey, ComponentMap } from '~/types/component.js';
+import type { EntityProxy } from '~/types/proxy.js';
+import { useDefineMethods } from '~/utils/methods.js';
 
 export function proxyModule<M extends ComponentMap>() {
 	const defineMethods = useDefineMethods<M>();

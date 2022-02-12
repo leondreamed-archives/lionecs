@@ -1,8 +1,8 @@
-import type { ComponentMap } from '~/types';
+import type { ComponentMap } from '~/types/index.js';
 import type { RemovePrivateProperties } from 'liontypes';
 import type { UnionToIntersection } from 'utility-types';
 
-import * as vueModules from './modules';
+import * as vueModules from './modules/index.js';
 
 export type ElementProperty = {
 	elementId: string;

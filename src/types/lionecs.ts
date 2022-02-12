@@ -1,15 +1,15 @@
 import type { RemovePrivateProperties } from 'liontypes';
 
-import type { ComponentKey, ComponentMap } from './component';
+import type { ComponentKey, ComponentMap } from './component.js';
 import type {
 	ComponentStateListenerContext,
 	EntityStateListenerContext,
 	StateListener,
-} from './context';
-import type { Entity } from './entity';
-import type { InternalLionecsProperties } from './properties';
-import type { LionecsExtras, LionecsState, StateUpdate } from './state';
-import type { EntityKey } from '.';
+} from './context.js';
+import type { Entity } from './entity.js';
+import type { InternalLionecsProperties } from './properties.js';
+import type { LionecsExtras, LionecsState, StateUpdate } from './state.js';
+import type { EntityKey } from './entity.js';
 
 export type InternalLionecsState<
 	M extends ComponentMap,

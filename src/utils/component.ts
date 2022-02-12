@@ -1,4 +1,4 @@
-import type { Component } from '~/types/component';
+import type { Component } from '~/types/component.js';
 
 export function isComponent<N extends string, T>(
 	component: any

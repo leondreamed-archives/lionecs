@@ -82,29 +82,23 @@ const p = ecs.p.bind(ecs);
 
 // TypeScript IntelliSense works here!
 const sword = ecs.createEntity<WeaponEntity>({
-  components: {
-    damage: 10,
-    inventoryItem: true,
-    name: 'MySword',
-  },
+  damage: 10,
+  inventoryItem: true,
+  name: 'MySword',
 });
 
 const enemy = ecs.createEntity<EnemyEntity>({
-  components: {
-    damage: 5,
-    health: 50,
-  },
+  damage: 5,
+  health: 50,
 });
 
 const player = ecs.createEntity<PlayerEntity>({
-  components: {
-    health: 100,
-    inventory: {
-      primary: sword,
-      secondary: null,
-    },
-    name: 'Leon',
+  health: 100,
+  inventory: {
+    primary: sword,
+    secondary: null,
   },
+  name: 'Leon',
 });
 
 function attack({

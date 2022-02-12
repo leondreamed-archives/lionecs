@@ -1,8 +1,8 @@
-import type { ComponentMap } from '~/types/component';
-import type { Lionecs } from '~/types/lionecs';
-import type { LionecsPlugin } from '~/types/plugins';
-import type { LionecsExtras } from '~/types/state';
-import { useDefineMethods } from '~/utils/methods';
+import type { ComponentMap } from '~/types/component.js';
+import type { Lionecs } from '~/types/lionecs.js';
+import type { LionecsPlugin } from '~/types/plugins.js';
+import type { LionecsExtras } from '~/types/state.js';
+import { useDefineMethods } from '~/utils/methods.js';
 
 export function usePluginModule<M extends ComponentMap>() {
 	const defineMethods = useDefineMethods<M>();

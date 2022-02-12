@@ -1,5 +1,5 @@
-import type { InternalLionecs, LionecsExtras } from '../types';
-import type { ComponentMap } from '~/types/component';
+import type { InternalLionecs, LionecsExtras } from '../types/index.js';
+import type { ComponentMap } from '~/types/component.js';
 
 export function useDefineMethods<
 	M extends ComponentMap,

@@ -6,9 +6,9 @@ import type {
 	ComponentKey,
 	ComponentMap,
 	TypeOfComponent,
-} from '~/types/component';
-import type { BaseTypedEntity, Entity } from '~/types/entity';
-import { useDefineMethods } from '~/utils/methods';
+} from '~/types/component.js';
+import type { BaseTypedEntity, Entity } from '~/types/entity.js';
+import { useDefineMethods } from '~/utils/methods.js';
 
 export function refModule<M extends ComponentMap>() {
 	const defineMethods = useDefineMethods<M>();

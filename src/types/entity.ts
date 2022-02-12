@@ -4,7 +4,7 @@ import type {
 	ComponentMap,
 	KeyOfComponent,
 	TypeOfComponent,
-} from './component';
+} from './component.js';
 
 export type EntityKey = string;
 export type Entity = { __key: EntityKey };
@@ -43,12 +43,13 @@ export type BaseExtendTypedEntity<
 		: never
 	: never;
 
-export type CreateEntityProps<M extends ComponentMap, E extends Entity> = {
-	components: E extends BaseTypedEntity<M, infer Req, infer Opt>
-		? {
-				[K in Req]: TypeOfComponent<M[K]>;
-		  } & {
-				[K in Opt]?: TypeOfComponent<M[K]>;
-		  }
-		: { [K in ComponentKey<M>]?: TypeOfComponent<M[K]> };
-};
+export type CreateEntityComponents<
+	M extends ComponentMap,
+	E extends Entity
+> = E extends BaseTypedEntity<M, infer Req, infer Opt>
+	? {
+			[K in Req]: TypeOfComponent<M[K]>;
+	  } & {
+			[K in Opt]?: TypeOfComponent<M[K]>;
+	  }
+	: { [K in ComponentKey<M>]?: TypeOfComponent<M[K]> };

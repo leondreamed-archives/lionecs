@@ -1,6 +1,6 @@
-import type { DefineTypedEntity } from '~test/types/entity';
+import type { DefineTypedEntity } from '~test/types/entity.js';
 
-import type * as Component from './component';
+import type * as Component from './component.js';
 
 export type PlayerEntity = DefineTypedEntity<
 	Component.Health | Component.Inventory | Component.Name

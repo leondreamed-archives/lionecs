@@ -1,5 +1,5 @@
-import type { ComponentKey, ComponentMap, TypeOfComponent } from './component';
-import type { Entity } from './entity';
+import type { ComponentKey, ComponentMap, TypeOfComponent } from './component.js';
+import type { Entity } from './entity.js';
 
 export type ComponentStateChangeHandler<
 	M extends ComponentMap,

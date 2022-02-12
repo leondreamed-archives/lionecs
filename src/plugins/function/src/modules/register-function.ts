@@ -1,4 +1,4 @@
-import type { ComponentMap } from '~/types';
+import type { ComponentMap } from '~/types/index.js';
 import { useDefineMethods } from '~/utils/methods';
 
 export function registerFunctionModule<M extends ComponentMap>() {

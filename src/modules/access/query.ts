@@ -1,10 +1,10 @@
-import type { BaseTypedEntity, Entity, EntityKey } from '~/types';
+import type { BaseTypedEntity, Entity, EntityKey } from '~/types/index.js';
 import type {
 	ComponentFromKey,
 	ComponentKey,
 	ComponentMap,
-} from '~/types/component';
-import { useDefineMethods } from '~/utils/methods';
+} from '~/types/component.js';
+import { useDefineMethods } from '~/utils/methods.js';
 
 type ComponentKeyOrComponent<
 	M extends ComponentMap,

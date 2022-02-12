@@ -1,5 +1,5 @@
-import type { Entity } from '~/index';
-import { defComponent } from '~/index';
+import type { Entity } from '~/exports.js';
+import { defComponent } from '~/exports.js';
 
 export const name = defComponent<string>().setName('name');
 export type Name = typeof name;

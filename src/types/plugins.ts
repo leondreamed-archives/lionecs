@@ -1,6 +1,6 @@
-import type { ComponentMap } from './component';
-import type { LionecsExtras } from './state';
-import type { Lionecs } from '~/types/lionecs';
+import type { ComponentMap } from './component.js';
+import type { LionecsExtras } from './state.js';
+import type { Lionecs } from '~/types/lionecs.js';
 
 export type LionecsPlugin<
 	M extends ComponentMap,

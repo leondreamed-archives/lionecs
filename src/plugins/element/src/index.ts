@@ -1,19 +1,19 @@
 import { retrieveModuleProperties, createInstance } from 'lion-architecture';
 
-import * as elementModules from './modules';
+import * as elementModules from './modules/index.js';
 import type {
 	ElementPlugin,
 	ElementPluginExtras,
 	ElementPluginOptions,
 	InternalElementPluginProperties,
 	InternalElementPluginState,
-} from './types';
+} from './types.js';
 import type {
 	ComponentMap,
 	InternalLionecs,
 	Lionecs,
 	LionecsExtras,
-} from '~/types';
+} from '~/types/index.js';
 
 export const elementPluginOptionsDefaults: ElementPluginOptions = {
 	setIdAttribute: true,
