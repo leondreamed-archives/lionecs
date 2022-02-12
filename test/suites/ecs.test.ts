@@ -1,28 +1,24 @@
 import { TypedEntity } from '~/exports.js';
 import { Component } from '~test/defs/component.js';
-import type {
-	EnemyEntity,
-	PlayerEntity,
-	WeaponEntity,
-} from '~test/defs/entity.js';
+import type { GameEntity } from '~test/defs/entity.js';
 import { createEcs } from '~test/utils/ecs.js';
 
 test('creates', () => {
 	const ecs = createEcs();
 	const p = ecs.useProxy();
 
-	const sword = ecs.entity<WeaponEntity>({
+	const sword = ecs.entity<GameEntity['weapon']>({
 		damage: 10,
 		inventoryItem: true,
 		name: 'MySword',
 	});
 
-	const enemy = ecs.entity<EnemyEntity>({
+	const enemy = ecs.entity<GameEntity['enemy']>({
 		damage: 5,
 		health: 50,
 	});
 
-	const player = ecs.entity<PlayerEntity>({
+	const player = ecs.entity<GameEntity['player']>({
 		health: 100,
 		inventory: {
 			primary: sword,

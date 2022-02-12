@@ -38,38 +38,37 @@ import { useDefineEntities } from 'lionecs';
 
 const defineEntities = useDefineEntities<typeof Component>();
 
-const entities = defineEntities({
+const GameEntity = defineEntities({
   player: [Component.health, Component.inventory, Component.name],
   enemy: [Component.health, Component.damage],
   weapon: [Component.inventoryItem, Component.name, Component.damage],
 });
 
-export type PlayerEntity = typeof entities.player;
-export type EnemyEntity = typeof entities.enemy;
-export type WeaponEntity = typeof entities.weapon;
+export type GameEntity = typeof GameEntity;
 ```
 
 ```typescript
 import { createLionecs } from 'lionecs';
 import { Component } from './components.js';
 import type { TypedEntity } from 'lionecs';
+import type { GameEntity } from './entities.js';
 
 const ecs = createLionecs({ components: Component });
 const p = ecs.useProxy();
 
 // TypeScript IntelliSense works here!
-const sword = ecs.entity<WeaponEntity>({
+const sword = ecs.entity<GameEntity['weapon']>({
   damage: 10,
   inventoryItem: true,
   name: 'MySword',
 });
 
-const enemy = ecs.entity<EnemyEntity>({
+const enemy = ecs.entity<GameEntity['enemy']>({
   damage: 5,
   health: 50,
 });
 
-const player = ecs.entity<PlayerEntity>({
+const player = ecs.entity<GameEntity['player']>({
   health: 100,
   inventory: {
     primary: sword,
