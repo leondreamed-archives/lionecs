@@ -16,14 +16,14 @@ export type EntityMap<
 
 export interface BaseTypedEntity<
 	M extends ComponentMap,
-	R extends ComponentKey<M>,
-	O extends ComponentKey<M> | never = never
+	RequiredComponentKeys extends ComponentKey<M>,
+	OptionalComponentKeys extends ComponentKey<M> | never = never
 > extends Entity {
 	__required?: {
-		[K in R]: true;
+		[K in RequiredComponentKeys]: true;
 	};
 	__optional?: {
-		[K in O]: true;
+		[K in OptionalComponentKeys]: true;
 	};
 }
 

@@ -16,58 +16,42 @@ components.ts
 import type { Entity } from 'lionecs';
 import { defComponent } from 'lionecs';
 
-export const name = defComponent<string>().setName('name');
+export const name = defComponent<string>().name('name');
 export type Name = typeof name;
 
-export const health = defComponent<number>().setName('health');
+export const health = defComponent<number>().name('health');
 export type Health = typeof health;
 
 export const inventory =
-  defComponent<{ primary: Entity | null; secondary: Entity | null }>().setName(
+  defComponent<{ primary: Entity | null; secondary: Entity | null }>().name(
     'inventory'
   );
 export type Inventory = typeof inventory;
 
-export const inventoryItem = defComponent<true>().setName('inventoryItem');
+export const inventoryItem = defComponent<true>().name('inventoryItem');
 export type InventoryItem = typeof inventoryItem;
 
-export const damage = defComponent<number>().setName('damage');
+export const damage = defComponent<number>().name('damage');
 export type Damage = typeof damage;
-```
-
-types.ts
-
-```typescript
-// Unfortunate boilerplate due to TypeScript generics limitations
-
-export type DefineTypedEntity<
-  R extends Component<string, unknown>,
-  O extends Component<string, unknown> | never = never
-> = BaseDefineTypedEntity<typeof Component, R, O>;
-
-export type TypedEntity<
-  R extends Component<string, unknown>,
-  O extends Component<string, unknown> | never = never
-> = BaseTypedEntity<ComponentMap, KeyOfComponent<R>, KeyOfComponent<O>>;
 ```
 
 entities.ts
 
 ```typescript
-import type * as Component from './component';
-import type { DefineTypedEntity } from './types';
+import * as Component from './component.js';
+import { useDefineEntities } from 'lionecs';
 
-export type PlayerEntity = DefineTypedEntity<
-  Component.Health | Component.Inventory | Component.Name
->;
+const defineEntities = useDefineEntities<typeof Component>();
 
-export type EnemyEntity = DefineTypedEntity<
-  Component.Health | Component.Damage
->;
+const entities = defineEntities<{
+  player: [Component.Health | Component.Inventory | Component.Name];
+  enemy: [Component.Health | Component.Damage];
+  weapon: [Component.InventoryItem | Component.Name | Component.Damage];
+}>();
 
-export type WeaponEntity = DefineTypedEntity<
-  Component.InventoryItem | Component.Name | Component.Damage
->;
+export type PlayerEntity = typeof entities.player;
+export type EnemyEntity = typeof entities.enemy;
+export type WeaponEntity = typeof entities.weapon;
 ```
 
 index.ts

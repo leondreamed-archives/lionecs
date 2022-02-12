@@ -1,16 +1,18 @@
+import { BaseTypedEntity, KeyOfComponent } from '~/exports.js';
 import type {
 	EnemyEntity,
 	PlayerEntity,
 	WeaponEntity,
 } from '~test/defs/entity.js';
-import type { TypedEntity } from '~test/types/entity.js';
 import { createEcs } from '~test/utils/ecs.js';
 
 import type * as Component from '../defs/component';
 
+type ComponentsMap = typeof Component;
+
 test('creates', () => {
 	const ecs = createEcs();
-	const p = ecs.p.bind(ecs);
+	const p = ecs.useProxy();
 
 	const sword = ecs.entity<WeaponEntity>({
 		damage: 10,
@@ -36,8 +38,8 @@ test('creates', () => {
 		attacker,
 		defender,
 	}: {
-		attacker: TypedEntity<Component.Damage>;
-		defender: TypedEntity<Component.Health>;
+		attacker: BaseTypedEntity<ComponentsMap, KeyOfComponent<Component.Damage>>;
+		defender: BaseTypedEntity<ComponentsMap, KeyOfComponent<Component.Health>>;
 	}) {
 		p(defender).health -= p(attacker).damage;
 	}
@@ -50,7 +52,9 @@ test('creates', () => {
 
 	expect(p(enemy).health).toBe(40);
 
-	function swapInventoryItems(entity: TypedEntity<Component.Inventory>) {
+	function swapInventoryItems(
+		entity: BaseTypedEntity<ComponentsMap, KeyOfComponent<Component.Inventory>>
+	) {
 		const inventory = p(entity).inventory;
 		[inventory.primary, inventory.secondary] = [
 			inventory.secondary,

@@ -1,11 +1,14 @@
 import { nanoid } from 'nanoid';
 
 import type {
+	Component,
 	ComponentFromKey,
 	ComponentKey,
 	ComponentMap,
+	KeyOfComponent,
 } from '~/types/component.js';
 import type {
+	BaseTypedEntity,
 	CreateEntityComponents,
 	Entity,
 	EntityKey,
@@ -17,9 +20,7 @@ export function entityModule<M extends ComponentMap>() {
 	const defineMethods = useDefineMethods<M>();
 
 	return defineMethods({
-		entity<E extends Entity>(
-			components?: CreateEntityComponents<M, E>
-		): E {
+		entity<E extends Entity>(components?: CreateEntityComponents<M, E>): E {
 			const entity = this.entityFromKey(nanoid()) as E;
 
 			if (components !== undefined) {
@@ -60,6 +61,16 @@ export function entityModule<M extends ComponentMap>() {
 			});
 
 			return entity;
+		},
+		defineEntity: function <
+			RequiredComponents extends Component<string, unknown>,
+			OptionalComponents extends Component<string, unknown> | never = never
+		>(): BaseTypedEntity<
+			M,
+			KeyOfComponent<RequiredComponents>,
+			KeyOfComponent<OptionalComponents>
+		> {
+			return undefined as any;
 		},
 	});
 }
