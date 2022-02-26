@@ -17,7 +17,7 @@ export function refModule<M extends ComponentMap>() {
 		optional: boolean;
 	};
 
-	// get(entity, component, options)
+	// `get(entity, component, options)`
 	const { useLionecsRef } = defineMethods({
 		useLionecsRef: function <
 			E extends Entity,
@@ -42,7 +42,7 @@ export function refModule<M extends ComponentMap>() {
 		> {
 			const componentKey = this.getComponentKey(component);
 			const componentStateRef = ref<TypeOfComponent<M[K]>>(
-				this.get(entity, componentKey)
+				this.get(entity, componentKey) as TypeOfComponent<M[K]>
 			);
 
 			// Registers a listener
@@ -50,18 +50,23 @@ export function refModule<M extends ComponentMap>() {
 				entity,
 				listener: ({ componentKeys }) => {
 					if (componentKeys.includes(componentKey)) {
-						const newComponentState = this.get(entity, componentKey);
+						const newComponentState = this.get(
+							entity,
+							componentKey
+						) as TypeOfComponent<M[K]>;
 						if (!options?.optional && newComponentState === undefined) {
 							throw new Error(
-								`Property ${component} of entity ${entity} was specified as required, but undefined was found.`
+								`Property ${componentKey} of entity ${entity.__key} was specified as required, but undefined was found.`
 							);
 						}
-						componentStateRef.value = newComponentState;
+
+						(componentStateRef.value as any) = newComponentState;
 					}
 				},
 			});
 
-			return componentStateRef;
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-return
+			return componentStateRef as any;
 		},
 	});
 
