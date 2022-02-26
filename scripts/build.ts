@@ -10,11 +10,18 @@ copyPackageFiles();
 
 for (const pluginDir of fs.readdirSync('src/plugins')) {
 	const pluginPath = `src/plugins/${pluginDir}`;
-	const pluginDestPath = `dist/plugin/${pluginDir}`;
+	const tempPluginDestPath = `dist/temp-plugin/${pluginDir}`;
 
-	fs.mkdirSync('dist/plugin', { recursive: true });
-	exec(`tsc -p ${pluginPath}/tsconfig.json --outDir ${pluginDestPath}`);
+	exec(`tsc -p ${pluginPath}/tsconfig.json --outDir ${tempPluginDestPath}`);
 	exec(`tsc-alias -p ${pluginPath}/tsconfig.json`);
+
+	const pluginDestPath = `dist/plugins`;
+	fs.mkdirSync(pluginDestPath, { recursive: true });
+
+	fs.renameSync(
+		`${tempPluginDestPath}/plugins/${pluginDir}/src`,
+		`${pluginDestPath}/${pluginDir}`
+	);
 
 	// Copies the plugin's package.json if it has one
 	if (fs.existsSync(`${pluginPath}/package.json`)) {
@@ -23,4 +30,8 @@ for (const pluginDir of fs.readdirSync('src/plugins')) {
 			`${pluginDestPath}/package.json`
 		);
 	}
+
+	fs.rmSync(tempPluginDestPath, { force: true, recursive: true });
 }
+
+fs.rmSync('dist/temp-plugin', { recursive: true });
