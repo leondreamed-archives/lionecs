@@ -15,8 +15,8 @@ export function proxyModule<M extends ComponentMap>() {
 		 *  })`
 		 */
 		useProxy() {
-			return <E extends Entity>(entity: E): EntityProxy<M, E> => {
-				return new Proxy(
+			return <E extends Entity>(entity: E): EntityProxy<M, E> =>
+				new Proxy(
 					{},
 					{
 						get: (_target, key) => {
@@ -89,7 +89,6 @@ export function proxyModule<M extends ComponentMap>() {
 						},
 					}
 				) as EntityProxy<M, E>;
-			};
 		},
 	});
 }

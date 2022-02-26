@@ -23,7 +23,7 @@ export function retrieveStateListenerCallsModule<M extends ComponentMap>() {
 			> = {};
 
 			// Map of components to the updates that affected it
-			// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+
 			const affectedComponentUpdatesMap = {} as {
 				[K in ComponentKey<M>]: Array<StateUpdate<M, ComponentKey<M>>>;
 			};

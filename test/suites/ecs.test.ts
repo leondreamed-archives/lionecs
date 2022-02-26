@@ -1,4 +1,4 @@
-import { TypedEntity } from '~/exports.js';
+import type { TypedEntity } from '~/exports.js';
 import { Component } from '~test/defs/component.js';
 import type { GameEntity } from '~test/defs/entity.js';
 import { createEcs } from '~test/utils/ecs.js';
@@ -46,7 +46,7 @@ test('creates', () => {
 	expect(p(enemy).health).toBe(40);
 
 	function swapInventoryItems(entity: TypedEntity<Component['inventory']>) {
-		const inventory = p(entity).inventory;
+		const { inventory } = p(entity);
 		[inventory.primary, inventory.secondary] = [
 			inventory.secondary,
 			inventory.primary,

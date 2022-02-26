@@ -1,6 +1,5 @@
-import { createLionecs } from '~/exports.js';
-
 import { Component } from '../defs/component.js';
+import { createLionecs } from '~/exports.js';
 
 export function createEcs() {
 	const ecs = createLionecs({

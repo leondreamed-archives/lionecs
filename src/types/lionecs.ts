@@ -6,10 +6,9 @@ import type {
 	EntityStateListenerContext,
 	StateListener,
 } from './context.js';
-import type { Entity } from './entity.js';
+import type { Entity, EntityKey } from './entity.js';
 import type { InternalLionecsProperties } from './properties.js';
 import type { LionecsExtras, LionecsState, StateUpdate } from './state.js';
-import type { EntityKey } from './entity.js';
 
 export type InternalLionecsState<
 	M extends ComponentMap,

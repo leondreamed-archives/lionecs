@@ -1,4 +1,8 @@
-import type { ComponentKey, ComponentMap, TypeOfComponent } from './component.js';
+import type {
+	ComponentKey,
+	ComponentMap,
+	TypeOfComponent,
+} from './component.js';
 import type { BaseTypedEntity, Entity } from './entity.js';
 
 type OptionalExtras<R extends Record<string, unknown> | undefined> =

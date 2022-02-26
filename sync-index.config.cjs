@@ -1,3 +1,3 @@
 module.exports = {
-	folders: ['src/utils', 'src/types'],
+	folders: ['src/utils', 'src/modules/*', 'src/types']
 }

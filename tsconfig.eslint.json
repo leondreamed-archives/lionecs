@@ -3,6 +3,7 @@
 	"include": [
 		".eslintrc.cjs",
 		"jest.config.js",
+		"sync-index.config.cjs",
 		"scripts",
 		"src"
 	],

@@ -1,4 +1,4 @@
-import {
+import type {
 	BaseTypedEntity,
 	Component,
 	ComponentMap,
@@ -6,12 +6,13 @@ import {
 } from '~/exports.js';
 
 export function useDefineEntities<M extends ComponentMap>() {
-	type ComponentsArray = readonly Component<M, string, unknown>[];
+	type ComponentsArray = ReadonlyArray<Component<M, string, unknown>>;
 	type ComponentsObject = {
 		required: ComponentsArray;
 		optional?: ComponentsArray;
 	};
 
+	// eslint-disable-next-line func-names
 	return function defineEntities<
 		Entities extends Record<
 			string,
@@ -30,9 +31,10 @@ export function useDefineEntities<M extends ComponentMap>() {
 						: never
 			  >
 			: Entities[K] extends ComponentsArray
-			? BaseTypedEntity<M, KeyOfComponent<Entities[K][number]>, never>
+			? BaseTypedEntity<M, KeyOfComponent<Entities[K][number]>>
 			: never;
 	} {
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 		return {} as any;
 	};
 }

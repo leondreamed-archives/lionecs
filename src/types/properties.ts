@@ -11,3 +11,11 @@ class ModuleWrapper<M extends ComponentMap> {
 
 export type InternalLionecsProperties<M extends ComponentMap> =
 	UnionToIntersection<ReturnType<ModuleWrapper<M>['t']>>;
+
+// eslint-disable-next-line no-warning-comments
+/* TODO: When TypeScript 4.7 comes out
+const moduleWrapper = <M extends ComponentMap>() => lionecsModules['' as keyof typeof lionecsModules]<M>();
+
+export type InternalLionecsProperties<M extends ComponentMap> =
+	UnionToIntersection<ReturnType<typeof moduleWrapper<M>>>;
+*/

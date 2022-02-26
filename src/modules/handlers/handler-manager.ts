@@ -65,7 +65,6 @@ export function handlerManagerModule<M extends ComponentMap>() {
 			const activateHandlers = (props: RegisterHandlerListenersProps) => {
 				handlerExtras = props.extras;
 
-				// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
 				const componentKeyToHandlers = {} as Record<
 					ComponentKey<M>,
 					Array<ComponentStateChangeHandler<M, ComponentKey<M>, E, R>>

@@ -1,1 +1,1 @@
-export * from './handler-manager';
+export * from './handler-manager.js';

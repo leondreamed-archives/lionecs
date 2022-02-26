@@ -1,13 +1,16 @@
 import { retrieveModuleProperties, createInstance } from 'lion-architecture';
+
+import * as vuePluginModules from './modules/index.js';
+import type {
+	InternalVuePluginProperties,
+	VuePluginProperties,
+} from './types.js';
 import type {
 	ComponentMap,
 	InternalLionecs,
 	Lionecs,
 	LionecsExtras,
 } from '~/types/index.js';
-
-import * as vuePluginModules from './modules/index.js';
-import type { InternalVuePluginProperties, VuePluginProperties } from './types.js';
 
 const vuePluginProperties = retrieveModuleProperties(
 	vuePluginModules
