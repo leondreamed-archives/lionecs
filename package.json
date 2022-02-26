@@ -6,6 +6,11 @@
 	"types": "index.d.ts",
 	"author": "Leon Si <contact@leonzalion.com>",
 	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/leonzalion/lionecs"
+	},
+	"homepage": "https://github.com/leonzalion/lionecs#readme",
 	"prettier": "@leonzalion/configs/prettier.cjs",
 	"commitlint": {
 		"extends": [
