@@ -2,7 +2,7 @@
 	"extends": "./tsconfig.json",
 	"include": [
 		".eslintrc.cjs",
-		"jest.config.js",
+		"vitest.config.ts",
 		"sync-index.config.cjs",
 		"scripts",
 		"src"

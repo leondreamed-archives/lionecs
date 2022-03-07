@@ -1,3 +1,4 @@
+import { test, expect } from 'vitest'
 import type { TypedEntity } from '~/exports.js';
 import { Component } from '~test/defs/component.js';
 import type { GameEntity } from '~test/defs/entity.js';
